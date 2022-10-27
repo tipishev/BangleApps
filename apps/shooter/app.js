@@ -103,10 +103,9 @@ class Player {
 
 class Camera {
   constructor(focalLength) {
-
     this.width = WIDTH;
     this.height = HEIGHT * 0.8;
-    this.resolution = 10;
+    this.resolution = 20;
     this.spacing = this.width / this.resolution;
     this.focalLength = focalLength || 0.8;
     this.range = 6;
@@ -177,10 +176,6 @@ class Camera {
     }
   }
 
-  drawControls(controls) {
-    controls.render();
-  }
-
   drawWeapon() {
     g.drawImage(gun_image(), WIDTH / 4, HEIGHT * 0.6, {
       scale: 0.7
@@ -240,13 +235,11 @@ class Camera {
   }
 
   render(player, map, controls) {
-    //g.clear().setBgColor(COLORS.white);
     this.drawSky();
     this.drawFloor();
     this.drawColumns(player, map);
     this.drawWeapon();
     this.drawMiniMap(player, map);
-    //this.drawControls(controls);
   }
 }
 
@@ -311,7 +304,6 @@ class Map {
     return this.cells[x][y];
   }
 
-
   cast(point, angle, range) {
     const sin = Math.sin(angle);
     const cos = Math.cos(angle);
@@ -360,38 +352,33 @@ class Map {
   }
 }
 
-const main = () => {
-  const map = new Map(CELLS);
-  const player = new Player(5.5, 2.5, WEST);
-  const camera = new Camera(0.8);
+const map = new Map(CELLS);
+const player = new Player(5.5, 2.5, WEST);
+const camera = new Camera(0.8);
 
-  Bangle.on("swipe",
-    function(directionLR, directionUD){
-    if (directionLR === 0 && directionUD === -1) {
-      // up
-        player.step(+STEP_SIZE);
-        camera.render(player, map);
-        Bangle.buzz(100);
-    } else if (directionLR === -1 && directionUD === 0) {
-      // left
-        player.turn(-PI / 8);
-        camera.render(player, map);
-        Bangle.buzz(100);
-    } else if (directionLR === +1 && directionUD === 0) {
-      // right
-        player.turn(+PI / 8);
-        camera.render(player, map);
-        Bangle.buzz(100);
-    } else if (directionLR === 0 && directionUD === 1) {
-      // down
-        player.step(-STEP_SIZE);
-        camera.render(player, map);
-        Bangle.buzz(100);
-    }
-  });
+camera.render(player, map);
 
-  camera.render(player, map);
-};
-
-
-main();
+Bangle.on("swipe",
+  function(directionLR, directionUD){
+  if (directionLR === 0 && directionUD === -1) {
+    // up
+      player.step(+STEP_SIZE);
+      camera.render(player, map);
+      Bangle.buzz(100);
+  } else if (directionLR === -1 && directionUD === 0) {
+    // left
+      player.turn(-PI / 8);
+      camera.render(player, map);
+      Bangle.buzz(100);
+  } else if (directionLR === +1 && directionUD === 0) {
+    // right
+      player.turn(+PI / 8);
+      camera.render(player, map);
+      Bangle.buzz(100);
+  } else if (directionLR === 0 && directionUD === 1) {
+    // down
+      player.step(-STEP_SIZE);
+      camera.render(player, map);
+      Bangle.buzz(100);
+  }
+});

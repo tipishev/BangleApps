@@ -1,0 +1,180 @@
+/**
+ * Title screen
+ */
+
+function title_image() {
+  return require("heatshrink").decompress(atob("0F4yEAmOtAP4B/AP4BRwm0IP4B/AP4B/AP4Bfwm0IP5V/M/4B/AP67/AP4B/UP4B/AP4B/AP4B/AP4B/AOOE2hB/AP4B/AP4B/AP4B/AP4B/ANcQsYB/AP4BhVf4B/QZYBPK/4B/XdZH/Qf4BLwm0SZPfvQBFBa4BLC/YLPN86zHEaZHbSeYlLApaDHAJ577C94LPN86rTI8aT5A5IDHQY4BPPcZXHVc7PnN86rvYfYPFA6KDHRI6TvPcYLrN9arvYfYPFA6KDHRI6TTba5fRC7oLjN861NMdrbzAK59Bwm0QpKXJMeYXfZ95vbU46rPN/bDbAK6HPSd4BLYe7bbN7arvW/ZrHAIOE2gLJAJqVLQ/4L/N8a3LMd63vNY4BXEYopJb863rF84/nXZYfTPcaTnNY4BVD4onFApJXfPc4vvH869JEaJHPPa6TnNY4BXN44BFB54B/AP4BVXaoB/NboBVFaJv/AP7TrI/5rrAK4tPHZ5rvU/bTvNe6XvAL4pLae4vzHe63NAP5rlAKrBRF7oB/AP4B/AM8QsYBFEsoBJO/4B/AP4B/AIcQsYBLF/4B/AP7znIP5PPAIonnAJZ7/AP7x3IP5PPAIojjFZaH/AP7t7Iv5NNAI53jFsoB/AP7FZAYoB/JpIFDKM4pDQP4B/eP7B/KKpTfEo4BNQ/4B/d/JF/JppTHK6ojLAJ5//AP7t3JP5NNJ7onLAJobDQv4B/euZD/KKJVFLbIjHAJKJ/AP7p1ZI5J/IIpLFAJIXHFqIBRRP4B/eOLnhE4pPxAJ4nVGaJtpAP4B/Z5ofdJNYBREaYrlAP4B/dsLHLBYYlXJ84BLCI4jRFqoB/AP4BvYJ7FVbuJLJHJZnVQcoB/AP7ndXbbVrJ6Y3FCaIrVAI/SlIB/AP4BfWqq9PaNpTTAOsx1oB/AP4BpW7oTDac5JLAP4BF6UpAP4B/ALqphZsb/ZAP4BVmOtAP4B/AIKdnWrL/5AP4BD6UpAP4B/TcYZRe/4B/VrYB/ANaPjbP4B/ANr/tAPptJRLrT/AP4B9f7IBVN/4B/AP4B/ALPT8oBJJf4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4B/AP4BDA=="));
+}
+
+var CONSTANTS = {
+  TITLE_MENU_MAIN: 0,
+  TITLE_MENU_OPTIONS: 1
+};
+
+function title() {
+  this.img = new Image();
+  this.img_loaded = false;
+  this.menu_id = -1;
+  this.text_h = 11;
+}
+
+function title_set_menu(id) {
+  if (title.menu_id != id) title.menu_selector = 0;
+  title.menu_id = id;
+
+  title.menu = []; // TODO Uint8Array?
+
+  if (id == TITLE_MENU_MAIN) {
+    if (avatar_continue) title.menu[0] = "Continue";
+    else title.menu[0] = "Start";
+
+    title.menu[1] = "Options";
+  }
+  else if (id == TITLE_MENU_OPTIONS) {
+    if (OPTIONS.animation) title.menu[0] = "Animations are on";
+    else title.menu[0] = "Animations are off";
+
+    if (OPTIONS.music) title.menu[1] = "Music is on";
+    else title.menu[1] = "Music is off";
+
+    if (OPTIONS.sfx) title.menu[2] = "Sounds are on";
+    else title.menu[2] = "Sounds are off";
+
+    if (OPTIONS.minimap) title.menu[3] = "Minimap is on";
+    else title.menu[3] = "Minimap is off";
+
+    title.menu[4] = "Back";
+  }
+
+  redraw = true;
+}
+
+function title_init() {
+  title.img.src = "images/backgrounds/title.png";
+  title.img.onload = function() {title_onload();};
+  title_set_menu(CONSTANTS.TITLE_MENU_MAIN);
+  redraw = true;
+}
+
+function title_onload() {
+  title.img_loaded = true;
+}
+
+function title_logic() {
+  title.menu_confirm = false;
+
+  // move past title screen by clicking or pressing the action button
+  if (pressing.mouse && !input_lock.mouse) {  
+    for (var i=0; i<title.menu.length; i++) {
+      var pos = {x:0, y:50+(i*title.text_h), w:160, h:title.text_h};
+      if (isWithin(mouse_pos, pos)) {
+        title.menu_selector = i;
+        input_lock.mouse = true;
+        title.menu_confirm = true;
+        redraw = true;
+      }
+    }
+  }
+  else if (pressing.action && !input_lock.action) {
+    input_lock.action = true;
+    title.menu_confirm = true;
+  }
+  else if (pressing.up && !input_lock.up) {
+    input_lock.up = true;
+    if (title.menu_selector > 0) {
+      title.menu_selector--;
+      redraw = true;
+    }
+  }
+  else if (pressing.down && !input_lock.down) {
+    input_lock.down = true;
+    if (title.menu_selector < title.menu.length-1) {
+      title.menu_selector++;
+      redraw = true;
+    }
+  }
+
+  if (title.menu_confirm == true) {
+    if (title.menu_id == TITLE_MENU_MAIN) {
+      if (title.menu_selector == 0) {
+        if (avatar_continue) title_continue();
+        else title_start();
+      }
+      else if (title.menu_selector == 1) {
+        title_set_menu(TITLE_MENU_OPTIONS);
+      }
+    }
+    else if (title.menu_id == TITLE_MENU_OPTIONS) {
+      if (title.menu_selector == 0) {
+        OPTIONS.animation = !OPTIONS.animation;
+        title_set_menu(TITLE_MENU_OPTIONS);
+      }
+      else if (title.menu_selector == 1) {
+        OPTIONS.music = !OPTIONS.music;
+        title_set_menu(TITLE_MENU_OPTIONS);
+      }
+      else if (title.menu_selector == 2) {
+        OPTIONS.sfx = !OPTIONS.sfx;
+        title_set_menu(TITLE_MENU_OPTIONS);
+      }
+      else if (title.menu_selector == 3) {
+         OPTIONS.minimap = !OPTIONS.minimap;
+         title_set_menu(TITLE_MENU_OPTIONS);
+      }
+      else if (title.menu_selector == 4) {
+        title_set_menu(TITLE_MENU_MAIN);
+      }
+      var json_save = JSON.stringify(OPTIONS);
+      setCookie("options",json_save,90);
+    }
+  }
+}
+
+function title_render() {
+
+  if (!bitfont.loaded || !title.img_loaded) {
+    redraw = true;
+    return;
+  }
+
+  ctx.drawImage(title.img, 0, 0, 160*SCALE, 120*SCALE);
+
+  for (var i=0; i<title.menu.length; i++) {
+    if (title.menu_selector == i) {
+      bitfont_render("[ "+title.menu[i]+" ]", 80, 50+(i*title.text_h), JUSTIFY_CENTER);
+    }
+    else {
+      bitfont_render(title.menu[i], 80, 50+(i*title.text_h), JUSTIFY_CENTER);
+    }
+  }
+
+  if (title.menu_id == TITLE_MENU_MAIN) {
+    bitfont_render("by Clint Bellanger 2013", 80, 100, JUSTIFY_CENTER);
+    bitfont_render("ft. music by Yubatake", 80, 110, JUSTIFY_CENTER);
+  }
+}
+
+function title_start() {
+  gamestate = STATE_DIALOG;
+  shop_set(8);
+  dialog.option[2].msg1 = "Wake up";
+  mazemap_set_music(atlas.maps[mazemap.current_id].music);
+  redraw = true;
+}
+
+function title_continue() {
+  mazemap_set_music(atlas.maps[mazemap.current_id].music);
+  gamestate = STATE_EXPLORE;
+  redraw = true;
+}
+
+exports.title_render = function() {
+  g
+    .clear()
+    .setBgColor(0,0,0)
+    .setColor(1,1,1)
+    .drawImage(title_image(), 8, 0)
+    .setFontVector(30)
+    .drawString("START", 10, 80)
+    .drawString("CONTINUE", 10, 140);
+};
