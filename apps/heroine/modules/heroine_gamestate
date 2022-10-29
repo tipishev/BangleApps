@@ -1,0 +1,70 @@
+/**
+ Primary game state switcher
+ */
+
+var STATE_EXPLORE = 0;
+var STATE_COMBAT = 1;
+var STATE_INFO = 2;
+var STATE_DIALOG = 3;
+var STATE_TITLE = 4;
+
+// exports
+
+exports.STATE_EXPLORE = 0;
+exports.STATE_COMBAT = 1;
+exports.STATE_INFO = 2;
+exports.STATE_DIALOG = 3;
+exports.STATE_TITLE = 4;
+
+// TODO expose logic/render inputs/outputs for each state to callers
+exports.init = function() {
+  var gamestate = STATE_EXPLORE;
+  return gamestate;
+};
+
+exports.logic = function(gamestate, input, ctx) {
+  print(`updating logic for state ${gamestate}, input: ${input}, ctx: ${ctx}`);
+  switch(gamestate) {
+    case STATE_EXPLORE:
+	  return explore_m.logic(ctx.explore, ctx.avatar, input, ctx.mazemap);
+      /*result.explore = explore;
+      result.avatar = avatar;
+      result.mazemap = mazemap;
+      result.redraw = redraw;*/
+	case STATE_INFO:
+	  info_logic();
+	  break;
+	case STATE_COMBAT:
+	  combat_logic();
+	  break;
+    case STATE_DIALOG:
+      dialog_logic();
+      break;
+	case STATE_TITLE:
+	  title_logic();
+	  break;
+  }
+};
+
+exports.render = function(gamestate, mazemap, avatar) {
+
+  //bitfont_determinecolor();
+
+  switch(gamestate) {
+    case STATE_EXPLORE:
+	  explore_m.render(mazemap, avatar);
+	  break;
+	case STATE_INFO:
+	  info_render();
+	  break;
+	case STATE_COMBAT:
+	  combat_render();
+	  break;
+    case STATE_DIALOG:
+      dialog_render();
+      break;
+	case STATE_TITLE:
+	  title_render();
+	  break;
+  }
+};

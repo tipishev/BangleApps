@@ -8,12 +8,19 @@ Bangle.drawWidgets();
 // load modules
 
 // short for avatar_module
+var gamestate_m = require("heroine_gamestate");
 var avatar_m = require("heroine_avatar");
 var mazemap_m = require("heroine_mazemap");
+var explore_m = require("heroine_explore");
 
+var gamestate = gamestate_m.init();
 var avatar = avatar_m.init();
 var mazemap = mazemap_m.init();
-mazemap_m.render(mazemap, avatar.x, avatar.y, avatar.facing);
+var explore = explore_m.init();
+
+//mazemap_m.render(mazemap, avatar.x, avatar.y, avatar.facing);
+
+
 
 // controls
 // TODO move to a separate module
@@ -30,62 +37,19 @@ Bangle.on("swipe",
     } else if (directionLR === 0 && directionUD === 1) {
       input.down = true;
     }
+    var ctx = {}; // context
+    // TODO restrict context based on gamestate requirements?
+    ctx.avatar = avatar;
+    ctx.mazemap = mazemap;
+    var logic_result = gamestate_m.logic(gamestate, input, ctx);
+    // TODO update only entities in the result.
+    explore = logic_result.explore;
+    avatar = logic_result.avatar;
+    mazemap = logic_result.mazemap;
+    ctx = {};
+    ctx.avatar = avatar;
+    ctx.mazemap = mazemap;
+    if (logic_result.redraw) {
+      gamestate_m.render(gamestate, ctx);
+    }
   });
-
-// TODO pass the savefile
-
-/*
-var redraw = false;
-var init_complete = false;
-
-//---- Main Loop --------------------------------------------------
-
-setInterval(function() {
-  if (!init_complete) return;
-  logic();
-  render();
-}, 1000/FPS);
-
-//---- Logic Function ---------------------------------------------
-
-function logic() {
-  gamestate_logic();
-}
-
-//---- Render Function ---------------------------------------------
-
-function render() {
-
-  // only render if something has changed
-  if (!redraw) return;
-  redraw = false;
-
-  gamestate_render();
-}
-
-//---- Init Function -----------------------------------------------
-
-  // load some user preferences
-  var json_save = getCookie("options");
-  if (json_save != null) {
-    OPTIONS = JSON.parse(json_save);
-  }
-
-  // initialize all game units
-  bitfont_init();
-  tileset_init();
-  mazemap_init();
-  info_init();
-  minimap_init();
-  avatar_init();
-  action_init();
-  enemy_init();
-  combat_init();
-  dialog_init();
-  boss_init();
-  title_init();
-  sounds_init();
-  treasure_init();
-
-  init_complete = true;
-}*/

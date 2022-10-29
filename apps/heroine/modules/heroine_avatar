@@ -2,6 +2,10 @@
  Maze Avatar
  **/
 
+
+// module imports
+var tileset_m = require("heroine_tileset");
+
 //---- Private Functions ---------------------------------------------
 
 function reset() {
@@ -29,8 +33,8 @@ function reset() {
 function move(avatar, mazemap, dx, dy) {
   var result = {};
   var redraw = false;
-  var target_tile = mazemap.get_tile(avatar.x+dx, avatar.y+dy);
-  if (require("heroine_tileset").is_walkable[target_tile]) {
+  var target_tile = mazemap_m.get_tile(mazemap, avatar.x+dx, avatar.y+dy);
+  if (tileset_m.is_walkable(target_tile)) {
     avatar.x += dx;
     avatar.y += dy;
     redraw = true;

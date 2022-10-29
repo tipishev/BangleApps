@@ -41,15 +41,6 @@ function render_tile(mazemap, pos_x, pos_y, position) {
 }
 
 // Note: x,y flipped to ease map making
-function mazemap_get_tile(pos_x, pos_y) {
-
-  if (mazemap_bounds_check(pos_x, pos_y)) {
-    return mazemap.tiles[pos_y][pos_x];
-  }
-  else return 0;
-}
-
-// Note: x,y flipped to ease map making
 function mazemap_set_tile(pos_x, pos_y, tile_id) {
   if (mazemap_bounds_check(pos_x, pos_y)) {
     mazemap.tiles[pos_y][pos_x] = tile_id;
@@ -61,6 +52,14 @@ function mazemap_set_tile(pos_x, pos_y, tile_id) {
 exports.init = function() {
   var mazemap = {};
   return set(mazemap, 0);
+};
+
+// Note: x,y flipped to ease map making
+exports.get_tile = function(mazemap, pos_x, pos_y) {
+  if (bounds_check(mazemap, pos_x, pos_y)) {
+    return mazemap.tiles[pos_y][pos_x];
+  }
+  else return 0;
 };
 
 /**
@@ -156,8 +155,6 @@ exports.render = function(mazemap, x, y, facing) {
     render_tile(mazemap, x,y+1,11);
     render_tile(mazemap, x,y,12);
   }
-  // TODO move buzzing to a separate module
-  Bangle.buzz(100);  // to alert on finished render
 };
 
 
@@ -166,6 +163,7 @@ exports.render = function(mazemap, x, y, facing) {
  * If the avatar is on an exit tile, move them to the new map
  */
 exports.check_exit = function(mazemap, avatar) {
+  var result = {};
   var atlas = atlas_m.atlas();
   for (var i=0; i<atlas.maps[mazemap.current_id].exits.length; i++) {
 
@@ -175,11 +173,12 @@ exports.check_exit = function(mazemap, avatar) {
       avatar.x = atlas.maps[mazemap.current_id].exits[i].dest_x;
       avatar.y = atlas.maps[mazemap.current_id].exits[i].dest_y;
       set(mazemap, atlas.maps[mazemap.current_id].exits[i].dest_map);
-
-      return [mazemap, avatar];
+      result.mazemap = mazemap;
+      result.avatar = avatar;
+      return result;
     }
   }
-  return [mazemap, avatar];
+  return false; // yeah, yeah, an unpure shortcut.
 };
 
 exports.check_shop = function (mazemap, avatar) {
