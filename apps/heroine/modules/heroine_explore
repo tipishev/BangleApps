@@ -52,14 +52,13 @@ exports.logic = function (explore, avatar, input, mazemap) {
 	  explore.message = atlas.maps[mazemap.current_id].name;
 	  // don't allow a random encounter when switching maps
       // avatar_save();  // FIXME implement saving
+	}
+  }
       result.explore = explore;
       result.avatar = avatar;
       result.mazemap = mazemap;
       result.redraw = redraw;
 	  return result;
-	}
-  }
-
   /*
   // check shop
   if (avatar.moved) {

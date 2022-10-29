@@ -7,11 +7,10 @@ Bangle.drawWidgets();
 
 // load modules
 
-// short for avatar_module
-var gamestate_m = require("heroine_gamestate");
 var avatar_m = require("heroine_avatar");
-var mazemap_m = require("heroine_mazemap");
+var gamestate_m = require("heroine_gamestate");
 var explore_m = require("heroine_explore");
+var mazemap_m = require("heroine_mazemap");
 
 var gamestate = gamestate_m.init();
 var avatar = avatar_m.init();
@@ -20,11 +19,10 @@ var explore = explore_m.init();
 
 //mazemap_m.render(mazemap, avatar.x, avatar.y, avatar.facing);
 
-
-
 // controls
 // TODO move to a separate module
 Bangle.on("swipe",
+    // produce intput object
     function(directionLR, directionUD){
     Bangle.buzz(100);
     var input = {};
@@ -37,8 +35,11 @@ Bangle.on("swipe",
     } else if (directionLR === 0 && directionUD === 1) {
       input.down = true;
     }
+
+    // pack all context for logic
     var ctx = {}; // context
     // TODO restrict context based on gamestate requirements?
+    ctx.explore = explore;
     ctx.avatar = avatar;
     ctx.mazemap = mazemap;
     var logic_result = gamestate_m.logic(gamestate, input, ctx);
@@ -46,6 +47,7 @@ Bangle.on("swipe",
     explore = logic_result.explore;
     avatar = logic_result.avatar;
     mazemap = logic_result.mazemap;
+
     ctx = {};
     ctx.avatar = avatar;
     ctx.mazemap = mazemap;

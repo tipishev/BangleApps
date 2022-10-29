@@ -10,11 +10,11 @@ var STATE_TITLE = 4;
 
 // exports
 
-exports.STATE_EXPLORE = 0;
-exports.STATE_COMBAT = 1;
-exports.STATE_INFO = 2;
-exports.STATE_DIALOG = 3;
-exports.STATE_TITLE = 4;
+exports.STATE_EXPLORE = STATE_EXPLORE;
+exports.STATE_COMBAT = STATE_COMBAT;
+exports.STATE_INFO = STATE_INFO;
+exports.STATE_DIALOG = STATE_DIALOG;
+exports.STATE_TITLE = STATE_TITLE;
 
 // TODO expose logic/render inputs/outputs for each state to callers
 exports.init = function() {
@@ -23,7 +23,6 @@ exports.init = function() {
 };
 
 exports.logic = function(gamestate, input, ctx) {
-  print(`updating logic for state ${gamestate}, input: ${input}, ctx: ${ctx}`);
   switch(gamestate) {
     case STATE_EXPLORE:
 	  return explore_m.logic(ctx.explore, ctx.avatar, input, ctx.mazemap);
