@@ -33,6 +33,11 @@ function import_context(ctx) {
   mazemap = ctx.mazemap;
 }
 
+function render() {
+  gamestate_m.render(export_context());
+  Bangle.buzz(100);  // half-an-hour later...
+}
+
 // initialize objects
 
 avatar = avatar_m.init();
@@ -40,7 +45,7 @@ explore = explore_m.init();
 gamestate = gamestate_m.init();
 mazemap = mazemap_m.init();
 
-//mazemap_m.render(mazemap, avatar.x, avatar.y, avatar.facing);
+render();
 
 // controls
 // TODO move to a separate module
@@ -64,9 +69,7 @@ Bangle.on("swipe",
     var logic_result = gamestate_m.logic(logic_ctx);
     import_context(logic_result);
 
-
     if (logic_result.redraw) {
-      gamestate_m.render(export_context());
-      Bangle.buzz(100);  // half-an-hour later...
+      render();
     }
   });
