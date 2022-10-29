@@ -18,18 +18,13 @@ exports.STATE_TITLE = STATE_TITLE;
 
 // TODO expose logic/render inputs/outputs for each state to callers
 exports.init = function() {
-  var gamestate = STATE_EXPLORE;
-  return gamestate;
+  return STATE_EXPLORE;
 };
 
-exports.logic = function(gamestate, input, ctx) {
-  switch(gamestate) {
+exports.logic = function(ctx) {
+  switch(ctx.gamestate) {
     case STATE_EXPLORE:
-	  return explore_m.logic(ctx.explore, ctx.avatar, input, ctx.mazemap);
-      /*result.explore = explore;
-      result.avatar = avatar;
-      result.mazemap = mazemap;
-      result.redraw = redraw;*/
+	  return explore_m.logic(ctx);
 	case STATE_INFO:
 	  info_logic();
 	  break;
@@ -45,25 +40,25 @@ exports.logic = function(gamestate, input, ctx) {
   }
 };
 
-exports.render = function(gamestate, mazemap, avatar) {
+exports.render = function(ctx) {
 
   //bitfont_determinecolor();
 
-  switch(gamestate) {
+  switch(ctx.gamestate) {
     case STATE_EXPLORE:
-	  explore_m.render(mazemap, avatar);
+	  explore_m.render(ctx);
 	  break;
 	case STATE_INFO:
-	  info_render();
+	  //info_render();
 	  break;
 	case STATE_COMBAT:
-	  combat_render();
+	  //combat_render();
 	  break;
     case STATE_DIALOG:
-      dialog_render();
+      //dialog_render();
       break;
 	case STATE_TITLE:
-	  title_render();
+	  //title_render();
 	  break;
   }
 };
