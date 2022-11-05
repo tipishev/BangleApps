@@ -4,7 +4,7 @@
 
 
 // module imports
-var tileset_m = require("heroine_tileset");
+const tileset_m = require("heroine_tileset");
 
 //---- Private Functions ---------------------------------------------
 
@@ -53,10 +53,10 @@ function move(avatar, mazemap, dx, dy) {
 function turn_left(avatar) {
   var result = {};
   result.redraw = true; // turning always causes a redraw
-  if (avatar.facing == "north") avatar.facing = "west";
-  else if (avatar.facing == "west") avatar.facing = "south";
+  if      (avatar.facing == "north") avatar.facing = "west";
+  else if (avatar.facing == "west")  avatar.facing = "south";
   else if (avatar.facing == "south") avatar.facing = "east";
-  else if (avatar.facing == "east") avatar.facing = "north";
+  else if (avatar.facing == "east")  avatar.facing = "north";
   result.avatar = avatar;
   return result;
   //avatar_save();
@@ -75,7 +75,6 @@ function turn_right(avatar) {
 }
 
 // exports
-
 
 // TODO handle savefile loading
 exports.init = function() {

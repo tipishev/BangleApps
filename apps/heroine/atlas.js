@@ -4,7 +4,7 @@
  */
 
 // module imports
-var enemy_m = require("heroine_enemy");
+const enemy_m = require("heroine_enemy");
 
 // exports
 

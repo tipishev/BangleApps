@@ -4,19 +4,23 @@
  Includes the images for enemies
  */
 
-var ENEMY_SHADOW_TENDRILS = 0;
-var ENEMY_IMP = 1;
-var ENEMY_SHADOW_SOUL = 2;
-var ENEMY_ZOMBIE = 3;
-var ENEMY_SKELETON = 4;
-var ENEMY_DRUID = 5;
-var ENEMY_MIMIC = 6;
-var ENEMY_DEATH_SPEAKER = 7;
+// module imports
+const power_m = require("heroine_power");
 
-var ENEMY_CATEGORY_SHADOW = 0;
-var ENEMY_CATEGORY_DEMON = 1;
-var ENEMY_CATEGORY_UNDEAD = 2;
-var ENEMY_CATEGORY_AUTOMATON = 3;
+// constants
+const ENEMY_SHADOW_TENDRILS = 0;
+const ENEMY_IMP = 1;
+const ENEMY_SHADOW_SOUL = 2;
+const ENEMY_ZOMBIE = 3;
+const ENEMY_SKELETON = 4;
+const ENEMY_DRUID = 5;
+const ENEMY_MIMIC = 6;
+const ENEMY_DEATH_SPEAKER = 7;
+
+const ENEMY_CATEGORY_SHADOW = 0;
+const ENEMY_CATEGORY_DEMON = 1;
+const ENEMY_CATEGORY_UNDEAD = 2;
+const ENEMY_CATEGORY_AUTOMATON = 3;
 
 function bone_shield_image() {
   return require("heatshrink").decompress(atob("0F4wcBkmSpIC/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4CdoI76gI75yHBGV8gHfUAHfNIsALIww7voY7scBMSHeIyDAQchwQFCjcEBw8kmw7hGQgIIj8EgQ73yH/gkwYo47rhoICyP7HYUMWws2hI7tw/YGQQ7FkO2HcWwHZ4IDHeU+cYI7I+w7i3wjGgI7DgEAww73gE/9kG4I7Fho7ikE+HZMgg3//+x4MMgQ70m3f//+gI7Fh47s2FJgE2gEMeII7EpFv+A4eHYc2HZMB20Ah+AgFsHeMAmA7C4/sn0AsESHYhKBHdU2hA7B/9t2A7Fod/Hcc/4EEAoRED4A7B7buBAAI7IyBWGO7P/HYYvBkEGgA7B7EMmA7Fjd9HYWAgI7f7Y7CkOCBYI7DgFv/w7JkAQBHb03/9gHYRlCVoUwgdtHwI7GwFJgEG4I7eg47E+A7Eg0bsDvFyHbtkAHYM2Hb0kHYkguDdCHYXbHQQ7FvkApFv+0JHb0G//sFgMgvw0DAAPYAogyBw3fHch3BHYc+dIOwHwsb///4A7C8ECoY7hgHfHYcw7//2x0C7bvBjd/HgMEmw7E3w7h9uCHYI1Bv/+HYM2//twEbt47BsAIBHYKABHcX9HYgyBHYM3//9HYW/HYXbHYe2Hb8GHYZBB7ZtB7EB247B2A7B23/sO27b4D2A4cAQWG799EYUAj47FF4Mbto7BgEwHYRNBHcGAdII7Djd/+w7BNwP/+A7B3/bgOw48AR4I7ijA7F/v24EN2wvB+0Dtu3/EBw3HsA7k7Fv+0JeoMf/uAgCzD20AIIPYOgMHtg7B/uCWcMPHYfD9o7BGoPbdgJBB237d4PHtk2j/tHcGQHYkA4dt2EAhkAAAMGAQM27dgmHfsA7kgZuB4I7BgEPHYIABj4DCAAnfAQXsiQ7hsI7Eho7DjY7H7Y7kyQ7C7A7BjdsHwW27/v/w9Hg3ftg7hgA7EFgXAgO24H9PoNt///gF/BYOGj47ioEAmCqCgdv//YgE24HtwEDtu2HgILBhkw7dgHDw7Em0bsCzBGQPABAPbHYnbtu3I4I7kpA7EGQKtBWwPb/j1CwC2B/0YWYI7lg0DHYYyBAAPDAYQACPQMAHYUEHcY4BggvCHYYAEgy8BmEAd4Q7lgEkGYZ0Bg3DhgHCmzsBAAUw7A4fAQYnBhMkOgQ4BtkAcYMSHY8AjA7jAQgyCgFsiAFBBAY7BAoSMCHc4CBFoR0BcYNAGooEBgIjRA=="));
@@ -56,8 +60,8 @@ function zombie_image(){
 return require("heatshrink").decompress(atob("0F4wcBkmSpIC/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4C/AX4CagGSgIFBhI70pEAiEYkmQHwQ70gA4BgHBHe4ABgw71d4J4C2yz4AAUJHelAhuw4A73gEN23YgEwdmY7E7cBwA72gEG7cAgQ72sA9BHe8DtkwHe+Qgdym3AO/GAgw74gGQHYUwHGVIdQMAAgZ3zgH/wEAiVIhA/BHeOQn///0AsFAHeh3C//Ahp6Bgg728kAgP/HesfHYIHB//gHedAgf//mSp471gEAv47C/A7zyA7DyfP4A7zwHAgEPHYP/HekG7A7C+Y74gP/Hesgmw7DAAI78/kSHeXBd4I7D/+CHeEAHYR3C50AHeUB2w7D/1OgEfHecJgEOg/yHYXwHeOwWwMB4HypA7ypA7E/H+HYMD/0BHecAn47BhED//4HeJyBgEHHYL1Bv475kFwgcEHd0NHYivBhMkgHbsA7toEN20IHYIABvA7DtkSHd/AHQUIvw7BwA7wtuGHYcBh0BkmBjFtwQ7uwA4BHYUgwI7BgEOmA7txkSoFBdQI7EgMCoA7tyA7BAwOAdoI7ByEJBQY7xAQI7BBwMAgQ7spEQHYJ0BHYQEBGtQCGkB6BHfC2CgI7/Hf47ygA7BhMgHGQCCpA76pI7+d+6zEHe8BHfkAAQOBHepyBhA73oA7EyA71pMgWwWigg7zgFJgVJgA71yA7DkEE0lAHecCpESHYMAHemAHYckHYNQAoQ7vgESOIeAimSXII73gg7ydII7EwMgiUgHe+AHoQ7wkVAgQ7EgEQgA7wOoMCdQL1CBQNAHfC6CHeNJGwOQHIQKBpEJd+FIdIQADiQ7wpECAgJ2CgEBBQQDCHdkAHYwABHYMAfAZ3rgCpBHYYKDO951HBQVAHFw+IHfACCxIEBfIQ71PQUSHe4C/AX4C/AX4C/AX4CE"));
 }
 
-var power = require("heroine_power");
-
+function enemy_init()
+{
 var enemy = {};
 enemy.img = [];
 enemy.stats = [];
@@ -74,29 +78,31 @@ enemy.img[ENEMY_ZOMBIE] = zombie_image;
 // set enemy stats
 
 enemy.stats[ENEMY_SHADOW_TENDRILS] = {name:"Shadow Tendrils", hp:6, atk_min:2, atk_max:5, gold_min:1, gold_max:2, category:ENEMY_CATEGORY_SHADOW};
-enemy.stats[ENEMY_SHADOW_TENDRILS].powers = [power.ENEMY_POWER_ATTACK];
+enemy.stats[ENEMY_SHADOW_TENDRILS].powers = [power_m.ENEMY_POWER_ATTACK];
 
 enemy.stats[ENEMY_IMP] = {name:"Imp", hp:7, atk_min:2, atk_max:6, gold_min:1, gold_max:3, category:ENEMY_CATEGORY_DEMON};
-enemy.stats[ENEMY_IMP].powers = [power.ENEMY_POWER_ATTACK, power.ENEMY_POWER_ATTACK, power.ENEMY_POWER_SCORCH];
+enemy.stats[ENEMY_IMP].powers = [power_m.ENEMY_POWER_ATTACK, power_m.ENEMY_POWER_ATTACK, power_m.ENEMY_POWER_SCORCH];
 
 enemy.stats[ENEMY_SHADOW_SOUL] = {name:"Shadow Soul", hp:8, atk_min:3, atk_max:8, gold_min:2, gold_max:4, category:ENEMY_CATEGORY_SHADOW};
-enemy.stats[ENEMY_SHADOW_SOUL].powers = [power.ENEMY_POWER_ATTACK, power.ENEMY_POWER_ATTACK, power.ENEMY_POWER_MPDRAIN];
+enemy.stats[ENEMY_SHADOW_SOUL].powers = [power_m.ENEMY_POWER_ATTACK, power_m.ENEMY_POWER_ATTACK, power_m.ENEMY_POWER_MPDRAIN];
 
 enemy.stats[ENEMY_ZOMBIE] = {name:"Zombie", hp:12, atk_min:4, atk_max:10, gold_min:3, gold_max:6, category:ENEMY_CATEGORY_UNDEAD};
-enemy.stats[ENEMY_ZOMBIE].powers = [power.ENEMY_POWER_ATTACK, power.ENEMY_POWER_ATTACK, power.ENEMY_POWER_HPDRAIN];
+enemy.stats[ENEMY_ZOMBIE].powers = [power_m.ENEMY_POWER_ATTACK, power_m.ENEMY_POWER_ATTACK, power_m.ENEMY_POWER_HPDRAIN];
 
 enemy.stats[ENEMY_SKELETON] = {name:"Skeleton", hp:18, atk_min:6, atk_max:12, gold_min:5, gold_max:8, category:ENEMY_CATEGORY_UNDEAD};
-enemy.stats[ENEMY_SKELETON].powers = [power.ENEMY_POWER_ATTACK];
+enemy.stats[ENEMY_SKELETON].powers = [power_m.ENEMY_POWER_ATTACK];
 
 enemy.stats[ENEMY_DRUID] = {name:"Druid", hp:16, atk_min:7, atk_max:14, gold_min:7, gold_max:12, category:ENEMY_CATEGORY_DEMON};
-enemy.stats[ENEMY_DRUID].powers = [power.ENEMY_POWER_ATTACK, power.ENEMY_POWER_SCORCH, power.ENEMY_POWER_HPDRAIN, power.ENEMY_POWER_MPDRAIN];
+enemy.stats[ENEMY_DRUID].powers = [power_m.ENEMY_POWER_ATTACK, power_m.ENEMY_POWER_SCORCH, power_m.ENEMY_POWER_HPDRAIN, power_m.ENEMY_POWER_MPDRAIN];
 
 enemy.stats[ENEMY_MIMIC] = {name:"Mimic", hp:30, atk_min:10, atk_max:16, gold_min:16, gold_max:25, category:ENEMY_CATEGORY_AUTOMATON};
-enemy.stats[ENEMY_MIMIC].powers = [power.ENEMY_POWER_ATTACK];
+enemy.stats[ENEMY_MIMIC].powers = [power_m.ENEMY_POWER_ATTACK];
 
 enemy.stats[ENEMY_DEATH_SPEAKER] = {name:"Death Speaker", hp:84, atk_min:8, atk_max:15, gold_min:225, gold_max:275, category:ENEMY_CATEGORY_DEMON};
-enemy.stats[ENEMY_DEATH_SPEAKER].powers = [power.ENEMY_POWER_ATTACK, power.ENEMY_POWER_SCORCH];
+enemy.stats[ENEMY_DEATH_SPEAKER].powers = [power_m.ENEMY_POWER_ATTACK, power_m.ENEMY_POWER_SCORCH];
 
+return enemy;
+}
 
 
 // export stuff
@@ -119,4 +125,4 @@ exports.enemy_render = function enemy_render(enemy_id) {
   g.drawImage(enemy.img[enemy_id]());
 };
 
-exports.enemy = enemy;
+exports.enemy = enemy_init();
