@@ -4,10 +4,10 @@
 
 // module imports
 
-var atlas_m = require("heroine_atlas");
-var avatar_m = require("heroine_avatar");
-var mazemap_m = require("heroine_mazemap");
-var tileset_m = require("heroine_tileset");
+const atlas_m = require("heroine_atlas");
+const avatar_m = require("heroine_avatar");
+const mazemap_m = require("heroine_mazemap");
+const tileset_m = require("heroine_tileset");
 
 // exports
 
@@ -142,6 +142,7 @@ exports.render = function(ctx) {
   tileset_m.background_render(atlas.maps[mazemap.current_id].background);
   mazemap_m.render(mazemap, avatar.x, avatar.y, avatar.facing);
 
+  g.drawString(avatar.facing, 80, 26);
   /*
   // HUD elements
   // direction
