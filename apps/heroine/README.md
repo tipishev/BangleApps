@@ -1,6 +1,6 @@
 # Heroine Dusk
 
-![Screenshot](screenshot.png)
+![Screenshot](./screenshot.png)
 
 Heroine Dusk™ is a basic dungeon crawl made using an old aesthetic.
 
@@ -27,5 +27,5 @@ Game site: http://heroinedusk.com
 
 ## Creator
 
-Heroine Dusk is created by Clint Bellanger http://clintbellanger.net
-Ported to Bangle.js 2 by Timofey Tipishev tipishev@gmail.com
+* Heroine Dusk is created by Clint Bellanger http://clintbellanger.net
+* Ported to Bangle.js 2 by Timofey Tipishev tipishev@gmail.com

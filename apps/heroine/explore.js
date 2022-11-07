@@ -6,6 +6,7 @@
 
 const atlas_m = require("heroine_atlas");
 const avatar_m = require("heroine_avatar");
+const bitfont_m = require("heroine_bitfont");
 const mazemap_m = require("heroine_mazemap");
 const tileset_m = require("heroine_tileset");
 
@@ -142,7 +143,7 @@ exports.render = function(ctx) {
   tileset_m.background_render(atlas.maps[mazemap.current_id].background);
   mazemap_m.render(mazemap, avatar.x, avatar.y, avatar.facing);
 
-  g.drawString(avatar.facing, 80, 26);
+  bitfont_m.render(avatar.facing, 50, 32);
   /*
   // HUD elements
   // direction
