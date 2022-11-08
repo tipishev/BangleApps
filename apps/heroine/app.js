@@ -3,9 +3,9 @@
 
 // load and draw widgets
 
-g.clear()
-Bangle.loadWidgets();
-Bangle.drawWidgets();
+g.clear();
+//Bangle.loadWidgets();
+//Bangle.drawWidgets();
 
 // load modules
 
