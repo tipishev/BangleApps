@@ -1356,22 +1356,6 @@ exports.tile_render = function(tileset_index, tile_number) {
   g.drawImage(tile_images[tileset_index][tile_number](), x_offset, y_offset);
 };
 
-// render a complete 13-tile visibility cone
-exports.tiles_render = function tiles_render(tileset_indices) {
-  if (tileset_indices.length !== 13) return;
-  var tile_offset, x, y, image, target_tileset;
-  for (var tile_index = 0; tile_index < 12; tile_index++) {
-    target_tileset = tileset_indices[tile_index];
-    if (target_tileset == 0) continue;  // don't render void
-    tile_offset = TILE_OFFSETS[tile_index];
-    x = tile_offset[0] + SCREEN_OFFSET_X;
-    y = tile_offset[1] + SCREEN_OFFSET_Y;
-    image = tile_images[target_tileset][tile_index]();
-    // for some reason g.drawImages is slower than one-by-one
-    g.drawImage(image, x, y);
-  }
-};
-
 // answer if a tile is walkable
 exports.is_walkable = function(tileset_index) {
   return is_walkable[tileset_index];
