@@ -45,10 +45,10 @@ exports.logic = function (ctx) {
 
   explore.message = "";
 
-  avatar_explore_result = avatar_m.explore(avatar, input, mazemap);
+  const explore_result = avatar_m.explore(avatar, input, mazemap);
 
-  avatar = avatar_explore_result.avatar;
-  redraw = avatar_explore_result.redraw;
+  avatar = explore_result.avatar;
+  redraw = explore_result.redraw;
 
   // check map exit
   if (avatar.moved) {
@@ -139,15 +139,24 @@ exports.logic = function (ctx) {
 exports.render = function(ctx) {
   var avatar = ctx.avatar;
   var mazemap = ctx.mazemap;
+  var explore = ctx.explore;
   var atlas = atlas_m.atlas();
   tileset_m.background_render(atlas.maps[mazemap.current_id].background);
   mazemap_m.render(mazemap, avatar.x, avatar.y, avatar.facing);
-
-  bitfont_m.render(avatar.facing, 50, 34);
-  /*
   // HUD elements
+
   // direction
-  bitfont_render(avatar.facing, 80, 2, JUSTIFY_CENTER);
+  bitfont_m.render(avatar.facing, 60, 34);
+
+  // if there is treasure to display, put the message higher
+  if (explore.gold_value > 0 || explore.treasure_id > 0) {
+    bitfont_m.render(explore.message, 20, 70);
+  }
+  else {
+    bitfont_m.render(explore.message, 20, 100);
+  }
+
+  /*
 
   info_render_button();
 
@@ -155,13 +164,7 @@ exports.render = function(ctx) {
     minimap_render();
   }
 
-  // if there is treasure to display, put the message higher
-  if (explore.gold_value > 0 || explore.treasure_id > 0) {
-    bitfont_render(explore.message, 80, 70, JUSTIFY_CENTER);
-  }
-  else {
-    bitfont_render(explore.message, 80, 100, JUSTIFY_CENTER);
-  }
+
 
   // if a map event has rewarded gold to the player
   // display it on the ground here
