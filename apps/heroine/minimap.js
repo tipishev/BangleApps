@@ -3,12 +3,11 @@
  * Shown in the Info screen
  */
 
-// FIXME wrap constants in a function
 const heatshrink_m = require("heatshrink");
 const atlas_m = require("heroine_atlas");
 const tileset_m = require("heroine_tileset");
 
-const ICON_SIZE = 14; // pixels
+const ICON_SIZE = 3; // pixels
 
 // explained by the position of game canvas offset
 // TODO deduplicate with tileset.js constants
@@ -24,16 +23,12 @@ exports.render = function(ctx) {
   const mazemap = ctx.mazemap;
   const avatar = ctx.avatar;
 
-  const BLACK = "#000";
-  const WHITE = "#FFF";
-  const BLUE = "#00F";
-  const RED = "#F00";
+  const BLACK = "#000", WHITE = "#FFF", BLUE = "#00F", RED = "#F00";
 
   const atlas = atlas_m.atlas();
 
-  let x;
-  let y;
-  var target_tile;
+  let x, y;
+  let target_tile;
 
   // render map
   for (let x=0; x<mazemap.width; x++) {
@@ -49,7 +44,6 @@ exports.render = function(ctx) {
 	}
   }
 
-
   // render exits
   for (let i=0; i<atlas.maps[mazemap.current_id].exits.length; i++) {
     exit_x = atlas.maps[mazemap.current_id].exits[i].exit_x;
@@ -57,27 +51,14 @@ exports.render = function(ctx) {
     render_square(exit_x, exit_y, BLUE);
   }
 
-  /*
-
   // render shops
-  for (var i=0; i<atlas.maps[mazemap.current_id].shops.length; i++) {
+  for (let i=0; i<atlas.maps[mazemap.current_id].shops.length; i++) {
     exit_x = atlas.maps[mazemap.current_id].shops[i].exit_x;
 	exit_y = atlas.maps[mazemap.current_id].shops[i].exit_y;
-	draw_x = exit_x * ICON_SIZE + left_x;
-	draw_y = exit_y * ICON_SIZE + top_y;
-	render_icon(draw_x, draw_y, ICON_EXIT);
+    render_square(exit_x, exit_y, BLUE);
   }
-  */
 
-  // render avatar cursor
-  //var cursor_direction;
-  //if (avatar.facing == "west") cursor_direction = CURSOR_WEST;
-  //else if (avatar.facing == "north") cursor_direction = CURSOR_NORTH;
-  //else if (avatar.facing == "east") cursor_direction = CURSOR_EAST;
-  //else if (avatar.facing == "south") cursor_direction = CURSOR_SOUTH;
-  //render_cursor(draw_x, draw_y, cursor_direction);
   render_cursor(avatar.x, avatar.y, avatar.facing, RED);
-
 };
 
 // x and y are logical coordinate, e.g. (0, 0)
@@ -90,90 +71,33 @@ function render_square(x, y, color) {
 }
 
 function render_cursor(x, y, direction, color) {
-  print(direction);
+  const TOP_LEFT_X = MARGIN_LEFT + x * ICON_SIZE;
+  const TOP_LEFT_Y = MARGIN_TOP + y * ICON_SIZE;
+
+  function rectangle(x1_offset, y1_offset, x2_offset, y2_offset) {
+    return [TOP_LEFT_X + ICON_SIZE * x1_offset, TOP_LEFT_Y + ICON_SIZE * y1_offset,
+            TOP_LEFT_X + ICON_SIZE * x2_offset, TOP_LEFT_Y + ICON_SIZE * y2_offset];
+  }
+
+  const HORIZONTAL_MIDDLE_RECTANGLE = rectangle(0, 1/3, 1, 2/3);
+  const VERTICAL_MIDDLE_RECTANGLE = rectangle(1/3, 0, 2/3, 1);
+
   let base_rectangle, direction_rectangle;
   if (direction === "south") {
-    // horizontal top
-    base_rectangle = [MARGIN_LEFT + x * ICON_SIZE,
-                      MARGIN_TOP + y * ICON_SIZE,
-                      MARGIN_LEFT + x * ICON_SIZE + ICON_SIZE,
-                      MARGIN_TOP + y * ICON_SIZE + ICON_SIZE / 3];
-    // vertical middle
-    direction_rectangle = [MARGIN_LEFT + x * ICON_SIZE + ICON_SIZE/3,
-                           MARGIN_TOP + y * ICON_SIZE,
-                           MARGIN_LEFT + x * ICON_SIZE + ICON_SIZE * 2/3,
-                           MARGIN_TOP + y * ICON_SIZE + ICON_SIZE];
+    base_rectangle = rectangle(0, 0, 1, 1/3);  // horizontal top
+    direction_rectangle = VERTICAL_MIDDLE_RECTANGLE;
   } else if (direction === "north") {
-      // horizontal bottom
-    base_rectangle = [MARGIN_LEFT + x * ICON_SIZE,
-                      MARGIN_TOP + y * ICON_SIZE + ICON_SIZE * 2/3,
-                      MARGIN_LEFT + x * ICON_SIZE + ICON_SIZE,
-                      MARGIN_TOP + y * ICON_SIZE + ICON_SIZE];
-    // vertical middle
-    direction_rectangle = [MARGIN_LEFT + x * ICON_SIZE + ICON_SIZE/3,
-                           MARGIN_TOP + y * ICON_SIZE,
-                           MARGIN_LEFT + x * ICON_SIZE + ICON_SIZE*2/3,
-                           MARGIN_TOP + y * ICON_SIZE + ICON_SIZE];
+    base_rectangle = rectangle(0, 2/3, 1, 1);  // horizontal bottom
+    direction_rectangle = VERTICAL_MIDDLE_RECTANGLE;
   } else if (direction === "east") {
-    // vertical left
-    base_rectangle = [MARGIN_LEFT + x * ICON_SIZE,
-                      MARGIN_TOP + y * ICON_SIZE,
-                      MARGIN_LEFT + x * ICON_SIZE + ICON_SIZE * 1/3,
-                      MARGIN_TOP + y * ICON_SIZE + ICON_SIZE];
-    // horizontal middle
-    direction_rectangle = [MARGIN_LEFT + x * ICON_SIZE,
-                           MARGIN_TOP + y * ICON_SIZE + ICON_SIZE * 1/3,
-                           MARGIN_LEFT + x * ICON_SIZE + ICON_SIZE,
-                           MARGIN_TOP + y * ICON_SIZE + ICON_SIZE * 2/3];
+    base_rectangle = rectangle(0, 0, 1/3, 1); // vertical left
+    direction_rectangle = HORIZONTAL_MIDDLE_RECTANGLE;
   }else if (direction === "west") {
-   // vertical right
-    base_rectangle = [MARGIN_LEFT + x * ICON_SIZE + ICON_SIZE * 2/3,
-                      MARGIN_TOP + y * ICON_SIZE,
-                      MARGIN_LEFT + x * ICON_SIZE + ICON_SIZE,
-                      MARGIN_TOP + y * ICON_SIZE + ICON_SIZE];
-    // horizontal middle
-    direction_rectangle = [MARGIN_LEFT + x * ICON_SIZE,
-                           MARGIN_TOP + y * ICON_SIZE + ICON_SIZE * 1/3,
-                           MARGIN_LEFT + x * ICON_SIZE + ICON_SIZE,
-                           MARGIN_TOP + y * ICON_SIZE + ICON_SIZE * 2/3];
+    base_rectangle = rectangle(2/3, 0, 1, 1); // vertical right
+    direction_rectangle = HORIZONTAL_MIDDLE_RECTANGLE;
   }
   g.setColor(color)
    .fillRect(base_rectangle[0], base_rectangle[1], base_rectangle[2], base_rectangle[3])
    .fillRect(direction_rectangle[0], direction_rectangle[1], direction_rectangle[2], direction_rectangle[3])
   ;
-
-  /*g.fillPoly([
-              // top left
-              MARGIN_LEFT + x * ICON_SIZE,
-              MARGIN_TOP + y * ICON_SIZE,
-
-              // top right
-              MARGIN_LEFT + x * ICON_SIZE + ICON_SIZE - 1,
-              MARGIN_TOP + y * ICON_SIZE,
-
-              // bottom middle
-              MARGIN_LEFT + x * ICON_SIZE + (ICON_SIZE - 1)/ 2,
-              MARGIN_TOP + y * ICON_SIZE + (ICON_SIZE - 1) * 1.3]);*/
 }
-
-
-/*
-function render_cursor(screen_x, screen_y, cursor_dir) {
- ctx.drawImage(
-    minimap.cursor,
-    cursor_dir * MINIMAP_ICON_SIZE * PRESCALE,
-	0,
-	MINIMAP_ICON_SIZE * PRESCALE,
-    MINIMAP_ICON_SIZE * PRESCALE,
-    screen_x * SCALE,
-    screen_y * SCALE,
-    MINIMAP_ICON_SIZE * SCALE,
-    MINIMAP_ICON_SIZE * SCALE
-  );
-}
-*/
-
-
-/*
-minimap_m = require("heroine_minimap"); ctx = {mazemap: mazemap, avatar: avatar}; minimap_m.render(ctx);
-*/

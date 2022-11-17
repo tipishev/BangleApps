@@ -8,6 +8,7 @@ const atlas_m = require("heroine_atlas");
 const avatar_m = require("heroine_avatar");
 const bitfont_m = require("heroine_bitfont");
 const mazemap_m = require("heroine_mazemap");
+const minimap_m = require("heroine_minimap");
 const tileset_m = require("heroine_tileset");
 
 // exports
@@ -156,6 +157,10 @@ exports.render = function(ctx) {
     bitfont_m.render(explore.message, 20, 100);
   }
 
+  //if (OPTIONS.minimap) {
+    minimap_m.render(ctx);
+  //}
+
   /*
 
   info_render_button();
@@ -163,8 +168,6 @@ exports.render = function(ctx) {
   if (OPTIONS.minimap) {
     minimap_render();
   }
-
-
 
   // if a map event has rewarded gold to the player
   // display it on the ground here
