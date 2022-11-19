@@ -15,6 +15,7 @@
     {"name":"heroine_explore","url":"explore.js"},
     {"name":"heroine_gamestate","url":"gamestate.js"},
     {"name":"heroine_mazemap","url":"mazemap.js"},
+    {"name":"heroine_minimap","url":"minimap.js"},
     {"name":"heroine_power","url":"power.js"},
     {"name":"heroine_tileset","url":"tileset.js"},
     {"name":"heroine_title","url":"title.js"},
