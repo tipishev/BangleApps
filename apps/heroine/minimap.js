@@ -3,21 +3,68 @@
  * Shown in the Info screen
  */
 
-const heatshrink_m = require("heatshrink");
 const atlas_m = require("heroine_atlas");
+// const heatshrink_m = require("heatshrink");
 const tileset_m = require("heroine_tileset");
+const storage_m = require("Storage");
 
-const ICON_SIZE = 3; // pixels
+const ICON_SIZE = 5; // pixels
 
 // explained by the position of game canvas offset
 // TODO deduplicate with tileset.js constants
+// maybe via a global settings module
 const GLOBAL_MARGIN_LEFT = 8;
 const GLOBAL_MARGIN_TOP = 32;
 
 const MARGIN_LEFT = GLOBAL_MARGIN_LEFT + 2;
 const MARGIN_TOP = GLOBAL_MARGIN_TOP + 2;
 
+
+function render_square2(graphics, x, y) {
+  graphics.fillRect(x * ICON_SIZE,
+                    y * ICON_SIZE,
+                    x * ICON_SIZE + (ICON_SIZE - 1),
+                    y * ICON_SIZE + (ICON_SIZE - 1));
+}
+
+/*
+Pre-render a set of images for fast drawing instead
+of real-time iteration over all map's tiles.
+Generate an object with 2 1-bpp images:
+-map
+-doors and shops
+*/
+function generate_map_images(mazemap) {
+  const width = mazemap.width * ICON_SIZE;
+  const height = mazemap.height * ICON_SIZE;
+
+  const walkable = Graphics.createArrayBuffer(width, height, 1);
+  const walls = Graphics.createArrayBuffer(width, height, 1);
+  //const doors = Graphics.createArrayBuffer(width, height, 1);
+
+  for (let x=0; x<mazemap.width; x++) {
+    for (let y=0; y<mazemap.height; y++) {
+      target_tile = mazemap_m.get_tile(mazemap, x, y);
+      if (tileset_m.is_walkable(target_tile)) {
+        render_square2(walkable, x, y);
+      }
+      else if (target_tile != 0) {
+       render_square2(walls, x, y);
+      }
+  }
+}
+let walkable_image = walkable.asImage();
+let walls_image = walls.asImage();
+walkable_image.transparent = 0;
+walls_image.transparent = 0;
+// TODO compress with heatshrink
+return {"walkable": walkable_image,
+        "walls": walls_image};
+}
+
 // exports
+
+exports.generate_map_images = generate_map_images;
 
 exports.render = function(ctx) {
   const mazemap = ctx.mazemap;
@@ -30,25 +77,20 @@ exports.render = function(ctx) {
   let x, y;
   let target_tile;
 
-  // render map
-  for (let x=0; x<mazemap.width; x++) {
-    for (let y=0; y<mazemap.height; y++) {
-      target_tile = mazemap_m.get_tile(mazemap, x, y);
-      let color;
-      if (tileset_m.is_walkable(target_tile)) {
-        render_square(x, y, WHITE);
-	  }
-      else if (target_tile != 0) {
-         render_square(x, y, BLACK);
-      }
-	}
-  }
+
+  //images = generate_map_images(mazemap);
+  images = storage_m.readJSON("heroine_minimap_1");
+  g.setColor(BLACK)
+   .drawImage(images.walls, MARGIN_LEFT, MARGIN_TOP)
+   .setColor(WHITE)
+   .drawImage(images.walkable, MARGIN_LEFT, MARGIN_TOP);
+
 
   // render exits
   for (let i=0; i<atlas.maps[mazemap.current_id].exits.length; i++) {
     exit_x = atlas.maps[mazemap.current_id].exits[i].exit_x;
 	exit_y = atlas.maps[mazemap.current_id].exits[i].exit_y;
-    render_square(exit_x, exit_y, BLUE);
+    render_square(g, exit_x, exit_y, BLUE);
   }
 
   // render shops
@@ -62,8 +104,8 @@ exports.render = function(ctx) {
 };
 
 // x and y are logical coordinate, e.g. (0, 0)
-function render_square(x, y, color) {
-  g.setColor(color)
+function render_square(graphics, x, y, color) {
+  graphics.setColor(color)
    .fillRect(MARGIN_LEFT + x * ICON_SIZE,
              MARGIN_TOP + y * ICON_SIZE,
              MARGIN_LEFT + x * ICON_SIZE + (ICON_SIZE - 1),
@@ -97,7 +139,12 @@ function render_cursor(x, y, direction, color) {
     direction_rectangle = HORIZONTAL_MIDDLE_RECTANGLE;
   }
   g.setColor(color)
-   .fillRect(base_rectangle[0], base_rectangle[1], base_rectangle[2], base_rectangle[3])
-   .fillRect(direction_rectangle[0], direction_rectangle[1], direction_rectangle[2], direction_rectangle[3])
-  ;
+   .fillRect(base_rectangle[0],
+             base_rectangle[1],
+             base_rectangle[2],
+             base_rectangle[3])
+   .fillRect(direction_rectangle[0],
+             direction_rectangle[1],
+             direction_rectangle[2],
+             direction_rectangle[3]);
 }
