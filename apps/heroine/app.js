@@ -13,10 +13,11 @@ var avatar_m = require("heroine_avatar");
 var gamestate_m = require("heroine_gamestate");
 var explore_m = require("heroine_explore");
 var mazemap_m = require("heroine_mazemap");
+var minimap_m = require("heroine_minimap");
 
 // declare objects
 
-var avatar, explore, gamestate, mazemap;
+let avatar, explore, gamestate, mazemap, minimap;
 
 function export_context() {
   var ctx = {};
@@ -24,6 +25,7 @@ function export_context() {
   ctx.gamestate = gamestate;
   ctx.explore = explore;
   ctx.mazemap = mazemap;
+  ctx.minimap = minimap;
   return ctx;
 }
 
@@ -32,6 +34,7 @@ function import_context(ctx) {
   gamestate = ctx.gamestate;
   explore = ctx.explore;
   mazemap = ctx.mazemap;
+  minimap = ctx.minimap;
 }
 
 function render() {
@@ -45,6 +48,7 @@ avatar = avatar_m.init();
 explore = explore_m.init();
 gamestate = gamestate_m.init();
 mazemap = mazemap_m.init();
+minimap = minimap_m.set_map(minimap_m.init(), mazemap);
 
 render();
 

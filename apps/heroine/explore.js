@@ -40,6 +40,7 @@ exports.logic = function (ctx) {
   var explore = ctx.explore;
   var input = ctx.input;
   var mazemap = ctx.mazemap;
+  var minimap = ctx.minimap;
 
   var result = {};
   var atlas = atlas_m.atlas();
@@ -56,6 +57,8 @@ exports.logic = function (ctx) {
     var check_exit_result = mazemap_m.check_exit(mazemap, avatar);
     if (check_exit_result !== false) {
       mazemap = check_exit_result.mazemap;
+      minimap = minimap_m.set_map(minimap, mazemap);
+
       avatar = check_exit_result.avatar;
 	  // display the name of the new map
 	  explore.message = atlas.maps[mazemap.current_id].name;
@@ -67,6 +70,7 @@ exports.logic = function (ctx) {
       result.explore = explore;
       result.gamestate = gamestate;
       result.mazemap = mazemap;
+      result.minimap = minimap;
       result.redraw = redraw;
 	  return result;
   /*
@@ -139,8 +143,9 @@ exports.logic = function (ctx) {
 
 exports.render = function(ctx) {
   var avatar = ctx.avatar;
-  var mazemap = ctx.mazemap;
   var explore = ctx.explore;
+  var mazemap = ctx.mazemap;
+
   var atlas = atlas_m.atlas();
   tileset_m.background_render(atlas.maps[mazemap.current_id].background);
   mazemap_m.render(mazemap, avatar.x, avatar.y, avatar.facing);
