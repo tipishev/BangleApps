@@ -14,16 +14,15 @@ const tileset_m = require("heroine_tileset");
 // exports
 
 exports.init = function() {
-  var explore = {};
-  explore.encounter_chance = 0;
-  explore.encounter_increment = 0.05;
-  explore.encounter_max = 0.30;
-  explore.message = "";
-
+  return {
+  encounter_chance: 0,
+  encounter_increment: 0.05,
+  encounter_max: 0.30,
+  message: "",
   // found items for rendering
-  explore.treasure_id = 0;
-  explore.gold_value = 0;
-  return explore;
+  treasure_id: 0,
+  gold_value: 0,
+  };
 };
 
 
@@ -35,15 +34,16 @@ exports.init = function() {
  */
 exports.logic = function (ctx) {
 
-  var avatar = ctx.avatar;
-  var gamestate = ctx.gamestate;
-  var explore = ctx.explore;
-  var input = ctx.input;
-  var mazemap = ctx.mazemap;
-  var minimap = ctx.minimap;
+  let avatar = ctx.avatar;
+  let gamestate = ctx.gamestate;
+  let explore = ctx.explore;
+  let input = ctx.input;
+  let mazemap = ctx.mazemap;
+  let minimap = ctx.minimap;
 
-  var result = {};
-  var atlas = atlas_m.atlas();
+  let atlas = atlas_m.atlas();
+
+  let result = {};
 
   explore.message = "";
 
