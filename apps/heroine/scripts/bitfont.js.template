@@ -13,14 +13,21 @@ const SCALE = 5;
 render = function(text, x, y) {
   text = text.toUpperCase();
   print(`rendering ${text}`);
-  g.setFontCustom(bg_font, 65, "$widths_block", 8|(SCALE<<8))
+
+  for (let i = 0; i < text.length; i++) {
+    char = text[i];
+
+  g.setFontCustom(bg_font, 65, "\7\7\7", 8|(SCALE<<8))
     .setColor(0,1,0)
-    .drawString(text, x, y)
-    .setFontCustom(fg_font, 65, "$widths_block", 8|(SCALE<<8))
+    .drawString(char, x, y)
+    .setFontCustom(fg_font, 65, "\7\7\7", 8|(SCALE<<8))
     .setColor(0,0,0)
-    .drawString(text, x, y)
-  ;
+    .drawString(char, x, y);
+    // for a nice 1 pixel border between letters
+    x += (g.stringWidth(char) - SCALE);
+  }
 };
 
 // showtime!
-g.clear() && render("ABC", 20, 20)
+g.clear();
+render("CABBA", 20, 20);
