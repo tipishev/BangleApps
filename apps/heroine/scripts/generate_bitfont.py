@@ -1,7 +1,9 @@
+#!/usr/bin/env python
+
 from PIL import Image
 
 FILE_TO_CHAR = {
-    # 1: '!',
+    1: '!',
     # 2: '"',
     # 3: '#',
     # 4: '$',
@@ -27,10 +29,15 @@ FILE_TO_CHAR = {
     36: 'D',
 }
 
+
 def to_color(red, green, blue, alpha):
-    if alpha == 0: return 'transparent'
-    elif red == 0: return 'black'
-    elif red == 255: return 'white'
+    if alpha == 0:
+        return 'transparent'
+    elif red == 0:
+        return 'black'
+    elif red == 255:
+        return 'white'
+
 
 def to_columns(filename):
     image = Image.open(filename)
@@ -47,20 +54,23 @@ def to_columns(filename):
         columns.append(column)
     return columns
 
+
 def to_background_bit(color):
     return {'black': 1, 'white': 0, 'transparent': 0}[color]
+
 
 def to_foreground_bit(color):
     return {'black': 0, 'white': 1, 'transparent': 0}[color]
 
-def to_hexes(columns, function):
-    return ([hex(int(''.join([str(function(color))
-            for color in column]), 2))
+
+def to_hexadecimals(columns, function):
+    return ([hex(int(''.join([str(function(color)) for color in column]), 2))
             for column in columns])
 
+
 def to_char_dict(columns, character):
-    background = to_hexes(columns, to_background_bit) 
-    foreground = to_hexes(columns, to_foreground_bit) 
+    background = to_hexadecimals(columns, to_background_bit)
+    foreground = to_hexadecimals(columns, to_foreground_bit)
     width = len(columns)
     return {
             'character': character,
@@ -69,21 +79,25 @@ def to_char_dict(columns, character):
             'foreground': foreground
             }
 
+
 def get_char_dicts():
     result = []
     for number, character in FILE_TO_CHAR.items():
-        filename = f'{number}.png'
+        filename = f'glyphs/{number}.png'
         columns = to_columns(filename)
         char_dict = to_char_dict(columns, character)
         result.append(char_dict)
     return result
 
+
 def main():
-      char_dicts = get_char_dicts()
-      for char_dict in char_dicts:
-          hexes = ', '.join(char_dict['background'])
-          character = char_dict['character']
-          line = f'{hexes}, // {character}'
-          print(line)
+    char_dicts = get_char_dicts()
+    for char_dict in char_dicts:
+        hexes = ', '.join(char_dict['background'])
+        character = char_dict['character']
+        width = char_dict['width']
+        line = f'{hexes}, // {character} {width}'
+        print(line)
+
 
 main()
