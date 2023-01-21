@@ -1,0 +1,26 @@
+// TODO pack into a binary string for performance
+
+const bg_font = E.toString([
+$bg_block
+]);
+
+const fg_font = E.toString([
+$fg_block
+]);
+
+// TODO add justify aka g.setFontAlign
+const SCALE = 5;
+render = function(text, x, y) {
+  text = text.toUpperCase();
+  print(`rendering ${text}`);
+  g.setFontCustom(bg_font, 65, "$widths_block", 8|(SCALE<<8))
+    .setColor(0,1,0)
+    .drawString(text, x, y)
+    .setFontCustom(fg_font, 65, "$widths_block", 8|(SCALE<<8))
+    .setColor(0,0,0)
+    .drawString(text, x, y)
+  ;
+};
+
+// showtime!
+g.clear() && render("ABC", 20, 20)
