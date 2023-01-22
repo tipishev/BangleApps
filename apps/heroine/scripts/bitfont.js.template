@@ -8,8 +8,10 @@ const fg_font = E.toString([
 $fg_block
 ]);
 
+const widths = E.toString([$widths_block]);
+
 // TODO add justify aka g.setFontAlign
-const SCALE = 5;
+const SCALE = 2;
 render = function(text, x, y) {
   text = text.toUpperCase();
   print(`rendering ${text}`);
@@ -17,11 +19,11 @@ render = function(text, x, y) {
   for (let i = 0; i < text.length; i++) {
     char = text[i];
 
-  g.setFontCustom(bg_font, 65, "\7\7\7", 8|(SCALE<<8))
-    .setColor(0,1,0)
-    .drawString(char, x, y)
-    .setFontCustom(fg_font, 65, "\7\7\7", 8|(SCALE<<8))
+  g.setFontCustom(bg_font, 65, widths, 8|(SCALE<<8))
     .setColor(0,0,0)
+    .drawString(char, x, y)
+    .setFontCustom(fg_font, 65, widths, 8|(SCALE<<8))
+    .setColor(1,1,1)
     .drawString(char, x, y);
     // for a nice 1 pixel border between letters
     x += (g.stringWidth(char) - SCALE);

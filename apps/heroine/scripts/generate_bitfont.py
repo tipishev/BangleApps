@@ -28,29 +28,29 @@ FILE_TO_CHAR = {
     33: 'A',
     34: 'B',
     35: 'C',
-    #  36: 'D',
-    #  37: 'E',
-    #  38: 'F',
-    #  39: 'G',
-    #  40: 'H',
-    #  41: 'I',
-    #  42: 'J',
-    #  43: 'K',
-    #  44: 'L',
-    #  45: 'M',
-    #  46: 'N',
-    #  47: 'O',
-    #  48: 'P',
-    #  49: 'Q',
-    #  50: 'R',
-    #  51: 'S',
-    #  52: 'T',
-    #  53: 'U',
-    #  54: 'V',
-    #  55: 'W',
-    #  56: 'X',
-    #  57: 'Y',
-    #  58: 'Z'
+    36: 'D',
+    37: 'E',
+    38: 'F',
+    39: 'G',
+    40: 'H',
+    41: 'I',
+    42: 'J',
+    43: 'K',
+    44: 'L',
+    45: 'M',
+    46: 'N',
+    47: 'O',
+    48: 'P',
+    49: 'Q',
+    50: 'R',
+    51: 'S',
+    52: 'T',
+    53: 'U',
+    54: 'V',
+    55: 'W',
+    56: 'X',
+    57: 'Y',
+    58: 'Z'
 }
 
 
@@ -123,7 +123,7 @@ def generate_template_values():
 
         # singular
         width = character_dict['width']
-        widths_block += f'\\{width}'
+        widths_block += f'{width},'
 
         bg_hexes = ', '.join(character_dict['bg'])
         fg_hexes = ', '.join(character_dict['fg'])
