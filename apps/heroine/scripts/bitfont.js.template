@@ -1,34 +1,33 @@
-// TODO pack into a binary string for performance
 
-const bg_font = E.toString([
+// TODO look into atob/btoa compression speedup
+const BG_FONT = E.toString([
 $bg_block
 ]);
 
-const fg_font = E.toString([
+const FG_FONT = E.toString([
 $fg_block
 ]);
 
-const widths = E.toString([$widths_block]);
+const WIDTHS = E.toString([$widths_block]);
 
-const SCALE = 2;
-
+const SCALE = 1;
 const ASCII_SPACE_CODE = 32;
+
 
 // TODO add justify aka g.setFontAlign
 exports.render = function(text, x, y) {
   text = text.toUpperCase();
-  print(`rendering ${text}`);
+  //print(`rendering ${text}`);
 
   for (let i = 0; i < text.length; i++) {
     char = text[i];
-
-  g.setFontCustom(bg_font, ASCII_SPACE_CODE, widths, 8|(SCALE<<8))
-    .setColor(0,0,0)
-    .drawString(char, x, y)
-    .setFontCustom(fg_font, ASCII_SPACE_CODE, widths, 8|(SCALE<<8))
-    .setColor(1,1,1)
-    .drawString(char, x, y);
-    // for a nice 1 pixel border between letters
-    x += (g.stringWidth(char) - SCALE);
+    g.setFontCustom(BG_FONT, ASCII_SPACE_CODE, WIDTHS, 8|(SCALE<<8))
+     .setColor(0,0,0)
+     .drawString(char, x, y)
+     .setFontCustom(FG_FONT, ASCII_SPACE_CODE, WIDTHS, 8|(SCALE<<8))
+     .setColor(1,1,1)
+     .drawString(char, x, y);
+     // for a nice 1 pixel border between letters
+     x += (g.stringWidth(char) - SCALE);
   }
 };
