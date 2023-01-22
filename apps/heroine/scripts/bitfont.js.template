@@ -1,4 +1,10 @@
 
+// explained by the position of game canvas offset
+// TODO deduplicate with tileset.js constants
+// maybe via a global settings module
+const GLOBAL_MARGIN_LEFT = 8;
+const GLOBAL_MARGIN_TOP = 32;
+
 // TODO look into atob/btoa compression speedup
 const BG_FONT = E.toString([
 $bg_block
@@ -14,11 +20,22 @@ const SCALE = 1;
 const ASCII_SPACE_CODE = 32;
 
 
-// TODO add justify aka g.setFontAlign
-exports.render = function(text, x, y) {
+const JUSTIFY_LEFT = 0;
+const JUSTIFY_RIGHT = 1;
+const JUSTIFY_CENTER = 2;
+
+exports.JUSTIFY_LEFT = JUSTIFY_LEFT;
+exports.JUSTIFY_RIGHT = JUSTIFY_RIGHT;
+exports.JUSTIFY_CENTER = JUSTIFY_CENTER;
+
+exports.render = function(text, x, y, justify) {
+  x += GLOBAL_MARGIN_LEFT;
+  y += GLOBAL_MARGIN_TOP;
+
   text = text.toUpperCase();
   //print(`rendering ${text}`);
 
+  x = setposition(text, x, justify);
   for (let i = 0; i < text.length; i++) {
     char = text[i];
     g.setFontCustom(BG_FONT, ASCII_SPACE_CODE, WIDTHS, 8|(SCALE<<8))
@@ -27,7 +44,24 @@ exports.render = function(text, x, y) {
      .setFontCustom(FG_FONT, ASCII_SPACE_CODE, WIDTHS, 8|(SCALE<<8))
      .setColor(1,1,1)
      .drawString(char, x, y);
-     // for a nice 1 pixel border between letters
+     // for 1-pixel kerning
      x += (g.stringWidth(char) - SCALE);
   }
 };
+
+function setposition(text, x, justify) {
+  if (justify == JUSTIFY_LEFT) {
+    return x;
+  }
+  else if (justify == JUSTIFY_RIGHT) {
+    return x - getWidth(text);
+  }
+  else if (justify == JUSTIFY_CENTER) {
+    return x - (getWidth(text)/2);
+  }
+}
+
+function getWidth(text) {
+  return g.setFontCustom(BG_FONT, ASCII_SPACE_CODE, WIDTHS, 8|(SCALE<<8))
+          .stringWidth(text) - (SCALE * text.length);
+}
