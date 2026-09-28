@@ -126,14 +126,14 @@ exports.render = function(ctx) {
   // HUD elements
 
   // direction
-  bitfont_m.render(avatar.facing, 60, 34);
+  bitfont_m.render(avatar.facing, 80, 2, bitfont_m.JUSTIFY_CENTER);
 
   // if there is treasure to display, put the message higher
   if (explore.gold_value > 0 || explore.treasure_id > 0) {
-    bitfont_m.render(explore.message, 20, 70);
+    bitfont_m.render(explore.message, 80, 70, bitfont_m.JUSTIFY_CENTER);
   }
   else {
-    bitfont_m.render(explore.message, 20, 100);
+    bitfont_m.render(explore.message, 80, 100, bitfont_m.JUSTIFY_CENTER);
   }
 
   //if (OPTIONS.minimap) {

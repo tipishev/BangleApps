@@ -1,7 +1,7 @@
 { "id": "heroine",
   "name": "Heroine Dusk",
   "shortName":"Heroine Dusk",
-  "version":"0.15",
+  "version":"0.16",
   "description": "A port of an adventure by Clint Bellanger.",
   "icon": "app.png",
   "tags": "game",

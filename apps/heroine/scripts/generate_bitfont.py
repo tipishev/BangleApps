@@ -1,186 +1,74 @@
 #!/usr/bin/env python
+"""
+Generate ../bitfont.js from the original font strip, see boxy_bold.py.
 
-from string import Template
+The Espruino custom fonts cover ASCII 32..126. The space is an empty
+glyph 4 pixels wide, so that with the 1 pixel kerning it advances 3 like
+the original. Lowercase letters have no glyphs (zero width), the text is
+converted to uppercase like in the original.
+"""
+
 from datetime import datetime
-from PIL import Image
+from pathlib import Path
+from string import Template
 
-FILE_TO_CHAR = {
-    0: ' ',
-    1: '!',
-    2: '"',
-    3: '#',
-    4: '$',
-    5: '%',
-    6: '&',
-    7: "'",
-    8: '(',
-    9: ')',
+from boxy_bold import EMPTY, GLYPHS, HEIGHT, OUTLINE, SPACE, KERNING, \
+    load_glyphs
 
-    10: '*',
-    11: '+',
-    12: ',',
-    13: '-',
-    14: '.',
-    15: '/',
+HERE = Path(__file__).resolve().parent
+TEMPLATE = HERE / 'bitfont.js.template'
+OUTPUT = HERE.parent / 'bitfont.js'
 
-    16: '0',
-    17: '1',
-    18: '2',
-    19: '3',
-    20: '4',
-    21: '5',
-    22: '6',
-    23: '7',
-    24: '8',
-    25: '9',
-
-    26: ':',
-    27: ';',
-    28: '<',
-    29: '=',
-    30: '>',
-    31: '?',
-    32: '@',
-
-    33: 'A',
-    34: 'B',
-    35: 'C',
-    36: 'D',
-    37: 'E',
-    38: 'F',
-    39: 'G',
-    40: 'H',
-    41: 'I',
-    42: 'J',
-    43: 'K',
-    44: 'L',
-    45: 'M',
-    46: 'N',
-    47: 'O',
-    48: 'P',
-    49: 'Q',
-    50: 'R',
-    51: 'S',
-    52: 'T',
-    53: 'U',
-    54: 'V',
-    55: 'W',
-    56: 'X',
-    57: 'Y',
-    58: 'Z',
-
-    59: '[',
-    60: '\\',
-    61: ']',
-    62: '^',
-    63: '_',
-    64: '`',
-
-    # skipped lowercase block
-
-    #  91: '{',
-    #  92: '|',
-    #  93: '}',
-    #  94: '~'
-}
+FIRST_CHAR = 32
+LAST_CHAR = 126
 
 
-def to_color(red, green, blue, alpha):
-    if alpha == 0:
-        return 'transparent'
-    elif red == 0:
-        return 'black'
-    elif red == 255:
-        return 'white'
+def column_byte(column, wanted):
+    """One byte per column, top pixel in the most significant bit."""
+    assert len(column) == HEIGHT == 8
+    return int(''.join('1' if pixel == wanted else '0' for pixel in column), 2)
 
 
-def to_columns(filename):
-    image = Image.open(filename)
-    width, height = image.size
-    pixels = image.load()
-
-    columns = []
-    for x in range(width):
-        column = []
-        for y in range(height):
-            pixel = pixels[x, y]
-            color = to_color(*pixel)
-            column.append(color)
-        columns.append(column)
-    return columns
+def check_pixel_classes(glyphs):
+    """Glyphs may only contain outline, fill and empty pixels."""
+    for char, columns in glyphs.items():
+        for column in columns:
+            assert set(column) <= {EMPTY, OUTLINE, 'o'}, (char, column)
 
 
-def to_bg_bit(color):
-    return {'black': 1, 'white': 0, 'transparent': 0}[color]
-
-
-def to_fg_bit(color):
-    return {'black': 0, 'white': 1, 'transparent': 0}[color]
-
-
-def to_hexes(columns, to_bit_function):
-    return ([hex(int(''.join([str(to_bit_function(color))
-                              for color in column]), 2))
-            for column in columns])
-
-
-def to_character_dict(columns, character):
+def font_tables():
+    glyphs = load_glyphs()
+    check_pixel_classes(glyphs)
+    glyphs[' '] = [EMPTY * HEIGHT] * (SPACE - KERNING)
+    outline, fill, widths = [], [], []
+    for code in range(FIRST_CHAR, LAST_CHAR + 1):
+        char = chr(code)
+        columns = glyphs.get(char, [])
+        widths.append(len(columns))
+        if columns:
+            outline.append(', '.join(hex(column_byte(c, OUTLINE))
+                                     for c in columns) + f', // {char}')
+            fill.append(', '.join(hex(column_byte(c, 'o'))
+                                  for c in columns) + f', // {char}')
+    missing = {char for char, _ in GLYPHS} - {chr(c) for c in
+                                              range(FIRST_CHAR, LAST_CHAR + 1)}
+    assert not missing, missing
     return {
-            'character': character,
-            'width': len(columns),
-            'bg': to_hexes(columns, to_bg_bit),
-            'fg': to_hexes(columns, to_fg_bit),
-            }
-
-
-def get_character_dicts():
-    result = []
-    for number, character in FILE_TO_CHAR.items():
-        filename = f'glyphs/{number}.png'
-        columns = to_columns(filename)
-        character_dict = to_character_dict(columns, character)
-        result.append(character_dict)
-    return result
-
-
-def generate_template_values():
-    character_dicts = get_character_dicts()
-    bg_block = ""
-    fg_block = ""
-    widths_block = ""
-    for character_dict in character_dicts:
-
-        character = character_dict['character']
-
-        # singular
-        width = character_dict['width']
-        widths_block += f'{width},'
-
-        bg_hexes = ', '.join(character_dict['bg'])
-        fg_hexes = ', '.join(character_dict['fg'])
-
-        bg_block += f'{bg_hexes}, // {character}\n'
-        fg_block += f'{fg_hexes}, // {character}\n'
-
-    return {
-            'widths_block': widths_block,
-            'bg_block': bg_block,
-            'fg_block': fg_block,
-            }
-
-
-def generate_bitfont_js():
-    with open('bitfont.js.template', 'r') as f:
-        template = Template(f'// autogenerated with generate_bitfont.py'
-                            f' at {datetime.now()}'
-                            f'\n\n{f.read()}')
-    template_values = generate_template_values()
-    return template.safe_substitute(template_values)
+        'outline_block': '\n'.join(outline),
+        'fill_block': '\n'.join(fill),
+        'widths_block': ','.join(map(str, widths)),
+        'first_char': FIRST_CHAR,
+        'height': HEIGHT,
+    }
 
 
 def main():
-    with open('bitfont.js', 'w') as f:
-        f.write(generate_bitfont_js())
+    template = Template(TEMPLATE.read_text())
+    header = (f'// autogenerated with scripts/generate_bitfont.py'
+              f' at {datetime.now():%Y-%m-%d %H:%M}, do not edit\n\n')
+    OUTPUT.write_text(header + template.substitute(font_tables()))
+    print(f'wrote {OUTPUT}')
 
 
-main()
+if __name__ == '__main__':
+    main()

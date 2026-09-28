@@ -30,3 +30,7 @@ Game site: http://heroinedusk.com
 
 * Heroine Dusk is created by Clint Bellanger http://clintbellanger.net
 * Ported to Bangle.js 2 by Timofey Tipishev https://github.com/tipishev
+
+## License
+
+* The code of the original Heroine Dusk is GPL v3 (or later) and its art is CC-BY-SA 3.0 (or later), both by Clint Bellanger: https://github.com/clintbellanger/heroine-dusk

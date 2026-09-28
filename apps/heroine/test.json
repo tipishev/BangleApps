@@ -485,6 +485,118 @@
           "text": "every enemy image draws"
         }
       ]
+    },
+    {
+      "description": "Font pixel parity with the original",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "global.fontcrc=function(t,x,y,j,c){var OX=8,OY=32,B=g.toColor(\"#00F\"),K=g.toColor(\"#000\"),W=g.toColor(\"#FFF\"),R=g.toColor(\"#F00\");g.setColor(B).fillRect(OX,OY,OX+159,OY+119);var f=require(\"heroine_bitfont\");f.set_color(c);f.render(t,x,y,j);var s=\"\";for(var yy=y;yy<y+8;yy++)for(var xx=0;xx<160;xx++){var p=g.getPixel(OX+xx,OY+yy);s+=p==B?\".\":p==K?\"#\":p==W?\"o\":p==R?\"r\":\"?\";}return E.CRC32(s);}",
+          "text": "define fontcrc(), see scripts/font_reference.py"
+        },
+        {
+          "t": "assert",
+          "js": "fontcrc(\"!\\\"#$%&'()*+,-./\",2,2,0,0)",
+          "is": "equal",
+          "to": "549737886",
+          "text": "\"!\\\"#$%&'()*+,-./\""
+        },
+        {
+          "t": "assert",
+          "js": "fontcrc(\"0123456789:;<=>?@\",2,12,0,0)",
+          "is": "equal",
+          "to": "784644739",
+          "text": "\"0123456789:;<=>?@\""
+        },
+        {
+          "t": "assert",
+          "js": "fontcrc(\"ABCDEFGHIJKLM\",2,22,0,0)",
+          "is": "equal",
+          "to": "2380124298",
+          "text": "\"ABCDEFGHIJKLM\""
+        },
+        {
+          "t": "assert",
+          "js": "fontcrc(\"NOPQRSTUVWXYZ\",2,32,0,0)",
+          "is": "equal",
+          "to": "1339923442",
+          "text": "\"NOPQRSTUVWXYZ\""
+        },
+        {
+          "t": "assert",
+          "js": "fontcrc(\"[\\\\]^_`{|}~\",2,42,0,0)",
+          "is": "equal",
+          "to": "4218809469",
+          "text": "\"[\\\\]^_`{|}~\""
+        },
+        {
+          "t": "assert",
+          "js": "fontcrc(\"west\",60,34,0,0)",
+          "is": "equal",
+          "to": "2532185294",
+          "text": "\"west\""
+        },
+        {
+          "t": "assert",
+          "js": "fontcrc(\"0 Gold\",158,110,1,0)",
+          "is": "equal",
+          "to": "3432912705",
+          "text": "\"0 Gold\""
+        },
+        {
+          "t": "assert",
+          "js": "fontcrc(\"INFO\",80,2,2,0)",
+          "is": "equal",
+          "to": "4032207004",
+          "text": "\"INFO\""
+        },
+        {
+          "t": "assert",
+          "js": "fontcrc(\"Gar'ashi Monastery\",80,60,2,0)",
+          "is": "equal",
+          "to": "4045119380",
+          "text": "\"Gar'ashi Monastery\""
+        },
+        {
+          "t": "assert",
+          "js": "fontcrc(\"Victory!\",80,60,2,0)",
+          "is": "equal",
+          "to": "547635168",
+          "text": "\"Victory!\""
+        },
+        {
+          "t": "assert",
+          "js": "fontcrc(\"You rest for awhile.\",2,100,0,0)",
+          "is": "equal",
+          "to": "111591779",
+          "text": "\"You rest for awhile.\""
+        },
+        {
+          "t": "assert",
+          "js": "fontcrc(\"  two  spaces \",158,50,1,0)",
+          "is": "equal",
+          "to": "899601055",
+          "text": "\"  two  spaces \""
+        },
+        {
+          "t": "assert",
+          "js": "fontcrc(\"HP 5/25\",2,100,0,1)",
+          "is": "equal",
+          "to": "2400638639",
+          "text": "\"HP 5/25\""
+        },
+        {
+          "t": "assert",
+          "js": "fontcrc(\"You are defeated...\",158,100,1,1)",
+          "is": "equal",
+          "to": "3467496429",
+          "text": "\"You are defeated...\""
+        }
+      ]
     }
   ]
 }

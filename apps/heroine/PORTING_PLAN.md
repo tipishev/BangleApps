@@ -202,6 +202,26 @@ Tasks:
 Acceptance: the comparison passes for every string; screenshot of explore
 HUD side by side with the browser original at 1×.
 
+Status: **done**. Notes from doing it:
+- Measured in Chrome with the original's own `bitfont_render` on a
+  160×120 canvas at scale 1: centred odd widths start at `x - floor(w/2)`
+  (the half pixel rounds up); no partially transparent pixels.
+- `scripts/boxy_bold.py` holds the original glyph table and reads the
+  original `boxy_bold.png` (copied unchanged into `scripts/`);
+  `generate_bitfont.py` writes `bitfont.js` straight into the app; the
+  hand-cut `scripts/glyphs/` and the stale `scripts/bitfont.js` are gone.
+- `scripts/font_reference.py` renders 14 cases (every glyph, left/right/
+  centre, odd and even widths, spaces, red) with the original algorithm,
+  checks them against CRC32s measured from the original in Chrome, and
+  writes the "Font pixel parity" test into `test.json`. The watch test
+  compares the CRC32 of each 160×8 text line: all 14 match. A deliberate
+  1 px rounding change makes it fail.
+- The side-by-side screenshot wasn't produced: the browser tool refuses
+  to return canvas image data. The pixel test compares against the same
+  original renderer, so it stands in for it.
+- The explore HUD now uses the original's positions: facing at (80, 2),
+  messages at (80, 70) / (80, 100), centred.
+
 ### M2 — Item data + save/load (v0.17)
 Files: new `items.js` (weapons, armors, spells tables from original
 `info.js`), `avatar.js`.
@@ -309,4 +329,4 @@ under `release/images/`. Still to convert: `backgrounds/title.png`,
 | Milestone | Idle free vars (explore) | Peak state | Peak free vars |
 |---|---|---|---|
 | M0 | 6809 free / 12000 after load (Serf Quarters), emulator 2v29 | explore, Cedar Village | 6602 |
-| M1 | | | |
+| M1 | — | explore, Monastery after 3 moves | 6604 |

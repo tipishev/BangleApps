@@ -1,67 +1,90 @@
+/**
+ Bitmap font renderer, pixel for pixel like the original bitfont.js
+ Font art by Clint Bellanger, CC-BY-SA 3.0
 
-// explained by the position of game canvas offset
-// TODO deduplicate with tileset.js constants
-// maybe via a global settings module
-const GLOBAL_MARGIN_LEFT = 8;
-const GLOBAL_MARGIN_TOP = 32;
+ Each glyph is drawn as two Espruino custom fonts: the outline in black
+ and then the fill in white (or red), one glyph at a time, so that the
+ next glyph overwrites the column they share, like in the original.
+ Coordinates are in the original 160x120 game space.
+ */
 
-// TODO look into atob/btoa compression speedup
-const BG_FONT = E.toString([
-$bg_block
+// module imports
+const config_m = require("heroine_config");
+
+// one byte per column, top pixel in the most significant bit
+const OUTLINE_FONT = E.toString([
+$outline_block
 ]);
 
-const FG_FONT = E.toString([
-$fg_block
+const FILL_FONT = E.toString([
+$fill_block
 ]);
 
 const WIDTHS = E.toString([$widths_block]);
 
-const SCALE = 1;
-const ASCII_SPACE_CODE = 32;
-
+const FIRST_CHAR = $first_char;
+const HEIGHT = $height | (1 << 8);  // scale 1
 
 const JUSTIFY_LEFT = 0;
 const JUSTIFY_RIGHT = 1;
 const JUSTIFY_CENTER = 2;
 
+const FONT_WHITE = 0;
+const FONT_RED = 1;
+
+const FILL_COLORS = ["#FFF", "#F00"];
+
+let color = FONT_WHITE;
+
+/**
+ * Width of an uppercase string, same as the original bitfont_calcwidth():
+ * every glyph overlaps the next by a pixel, except for the last one
+ */
+function calc_width(text) {
+  return g.setFontCustom(OUTLINE_FONT, FIRST_CHAR, WIDTHS, HEIGHT)
+          .stringWidth(text) - text.length + 1;
+}
+
+// exports
+
 exports.JUSTIFY_LEFT = JUSTIFY_LEFT;
 exports.JUSTIFY_RIGHT = JUSTIFY_RIGHT;
 exports.JUSTIFY_CENTER = JUSTIFY_CENTER;
 
-exports.render = function(text, x, y, justify) {
-  x += GLOBAL_MARGIN_LEFT;
-  y += GLOBAL_MARGIN_TOP;
+exports.FONT_WHITE = FONT_WHITE;
+exports.FONT_RED = FONT_RED;
 
-  text = text.toUpperCase();
-  //print(`rendering ${text}`);
-
-  x = setposition(text, x, justify);
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    g.setFontCustom(BG_FONT, ASCII_SPACE_CODE, WIDTHS, 8|(SCALE<<8))
-     .setColor(0,0,0)
-     .drawString(char, x, y)
-     .setFontCustom(FG_FONT, ASCII_SPACE_CODE, WIDTHS, 8|(SCALE<<8))
-     .setColor(1,1,1)
-     .drawString(char, x, y);
-     // for 1-pixel kerning
-     x += (g.stringWidth(char) - SCALE);
-  }
+exports.set_color = function(font_color) {
+  color = font_color;
 };
 
-function setposition(text, x, justify) {
-  if (justify == JUSTIFY_LEFT) {
-    return x;
-  }
-  else if (justify == JUSTIFY_RIGHT) {
-    return x - getWidth(text);
+exports.calc_width = function(text) {
+  return calc_width(text.toUpperCase());
+};
+
+exports.render = function(text, x, y, justify) {
+  text = text.toUpperCase();
+
+  if (justify == JUSTIFY_RIGHT) {
+    x -= calc_width(text);
   }
   else if (justify == JUSTIFY_CENTER) {
-    return x - (getWidth(text)/2);
+    // the original's canvas rounds the half pixel of odd widths up
+    x -= calc_width(text) >> 1;
   }
-}
+  x += config_m.SCREEN_OFFSET_X;
+  y += config_m.SCREEN_OFFSET_Y;
 
-function getWidth(text) {
-  return g.setFontCustom(BG_FONT, ASCII_SPACE_CODE, WIDTHS, 8|(SCALE<<8))
-          .stringWidth(text) - (SCALE * text.length);
-}
+  const fill_color = FILL_COLORS[color];
+  g.setFontAlign(-1, -1);
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    g.setFontCustom(OUTLINE_FONT, FIRST_CHAR, WIDTHS, HEIGHT)
+     .setColor("#000")
+     .drawString(char, x, y)
+     .setFontCustom(FILL_FONT, FIRST_CHAR, WIDTHS, HEIGHT)
+     .setColor(fill_color)
+     .drawString(char, x, y);
+    x += g.stringWidth(char) - 1;
+  }
+};

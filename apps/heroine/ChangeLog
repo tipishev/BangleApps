@@ -2,3 +2,4 @@
 0.13: Added bitfont rendering
 0.14: Disabled widgets drawing
 0.15: Shared game state, swipe/tap/button input via setUI, fixed crashes, minimap rebuilt per map
+0.16: Text renders pixel for pixel like the original (alignment, kerning, missing glyphs, red text when badly hurt)
