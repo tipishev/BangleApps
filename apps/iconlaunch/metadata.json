@@ -2,17 +2,19 @@
 	"id": "iconlaunch",
 	"name": "Icon Launcher",
 	"shortName" : "Icon launcher",
-	"version": "0.15",
+	"version": "0.23",
 	"icon": "app.png",
+	"author": "TheGLander",
 	"description": "A launcher inspired by smartphones, with an icon-only scrollable menu.",
 	"tags": "tool,system,launcher",
 	"type": "launch",
 	"supports": ["BANGLEJS2"],
 	"storage": [
 		{ "name": "iconlaunch.app.js", "url": "app.js" },
-		{ "name": "iconlaunch.settings.js", "url": "settings.js" }
+		{ "name": "iconlaunch.settings.js", "url": "settings.js" },
+		{ "name": "iconlaunch.na.img", "url": "na.img" }
 	],
-	"data": [{"name":"iconlaunch.json"},{"name":"iconlaunch.cache.json"}],
+	"data": [{"name":"iconlaunch.json"},{"name":"launch.cache.json"}],
 	"screenshots": [{ "url": "screenshot1.png" }, { "url": "screenshot2.png" }],
 	"readme": "README.md"
 }

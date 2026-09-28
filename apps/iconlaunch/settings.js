@@ -5,7 +5,7 @@
     showClocks: true,
     fullscreen: false,
     direct: false,
-    oneClickExit: false,
+    oneClickExit: true,
     swipeExit: false,
     timeOut:"Off"
   }, s.readJSON("iconlaunch.json", true) || {});
@@ -16,13 +16,12 @@
   }
   const timeOutChoices = [/*LANG*/"Off", "10s", "15s", "20s", "30s"];
   const appMenu = {
-    "": { "title": /*LANG*/"Launcher" },
-    /*LANG*/"< Back": back,
+    "": { "title": /*LANG*/"Launcher", back: back },
     /*LANG*/"Show Clocks": {
       value: settings.showClocks == true,
-      onchange: (m) => { 
+      onchange: (m) => {
         save("showClocks", m);
-        s.erase("iconlaunch.cache.json"); //delete the cache app list
+        s.erase("launch.cache.json"); //delete the cache app list
      }
     },
     /*LANG*/"Fullscreen": {
@@ -51,4 +50,4 @@
     },
   };
   E.showMenu(appMenu);
-});
+})

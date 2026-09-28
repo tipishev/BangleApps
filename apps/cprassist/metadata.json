@@ -2,6 +2,7 @@
   "id": "cprassist",
   "name": "CPR Assist",
   "version": "0.02",
+  "author": "capybara1",
   "description": "Provides assistance while performing a CPR",
   "icon": "cprassist-icon.png",
   "tags": "tool,firstaid",
@@ -13,5 +14,6 @@
     {"name":"cprassist.app.js","url":"cprassist.js"},
     {"name":"cprassist.img","url":"cprassist-icon.js","evaluate":true},
     {"name":"cprassist.settings.js","url":"settings.js"}
-  ]
+  ],
+  "data":[{"name":"cprassist.settings.json"}]
 }

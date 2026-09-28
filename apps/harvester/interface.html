@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="../../css/spectre.min.css">
+  </head>
+  <body>
+    <h2>Logs</h2>
+    <ul id="logs"></ul>
+
+    <h2>Categories</h2>
+    <table id="fruitful" class="my-2">
+      <caption style="caption-side: top;">Fruitful Categories</caption>
+      <thead>
+        <tr>
+          <th>Color</th>
+          <th>Title</th>
+          <th title="Adapt Through Week">📈</th>
+          <th>Target</th>
+          <th title="Customize Daily Targets"><img src="./weekend.png" alt=""></th>
+          <th></th>
+        </tr>
+        <tr><th colspan="6" style="font-weight: normal;">Weekly Cumulative</th></tr>
+        <tr><th colspan="6" style="font-weight: normal;">
+          <menu id="weekdayHeader"></menu>
+        </th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <template id="fruitfulRow">
+      <tbody data-id="?">
+        <tr>
+          <td><select name="color" onchange="registerChange()" style="padding: 3px 0;"></select></td>
+          <td><input name="title" type="text" minlength="1" maxlength="36"
+                     oninput="registerChange()"></td>
+          <td style="text-align: center;">
+            <input name="adapt_to_week" type="checkbox" onchange="registerChange()">
+          </td>
+          <td><input list="targets" name="target_min" type="number" min="1" max="720"
+                     onchange="registerChange()"></td>
+          <td style="text-align: center;"><input name="customizations" type="checkbox"></td>
+          <td><button onclick="deleteCategory(event)" title="Delete">X</button></td>
+        </tr>
+        <tr>
+          <td colspan="6" style="line-height: 1;"><meter style="width: 100%;"></meter></td>
+        </tr>
+        <tr style="display: none;">
+          <td colspan="6">
+            <menu>
+              <li><input type="number" list="targets" min="0" max="720"
+                         onchange="registerChange()"></li>
+              <li><input type="number" list="targets" min="0" max="720"
+                         onchange="registerChange()"></li>
+              <li><input type="number" list="targets" min="0" max="720"
+                         onchange="registerChange()"></li>
+              <li><input type="number" list="targets" min="0" max="720"
+                         onchange="registerChange()"></li>
+              <li><input type="number" list="targets" min="0" max="720"
+                         onchange="registerChange()"></li>
+              <li><input type="number" list="targets" min="0" max="720"
+                         onchange="registerChange()"></li>
+              <li><input type="number" list="targets" min="0" max="720"
+                         onchange="registerChange()"></li>
+            </menu>
+          </td>
+        </tr>
+      </tbody>
+    </template>
+    <button id="addFruitful">Add New Fruitful</button>
+
+    <table id="decentering" class="my-2" style="width: 100%; padding-right: 12px;">
+      <caption style="caption-side: top;">Divergent Categories</caption>
+      <thead>
+        <tr><th>Color</th><th>Title</th><th></th></tr>
+        <tr><th colspan="3">Weekly Cumulative</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <template id="decenteringRow">
+      <tbody data-id="?">
+        <tr>
+          <td><select name="color" onchange="registerChange()" style="padding: 3px;"></select></td>
+          <td><input name="title" type="text" minlength="1" maxlength="40"
+                     oninput="registerChange()"></td>
+          <td><button onclick="deleteCategory(event)" title="Delete">X</button></td>
+        </tr>
+        <tr>
+          <td colspan="3"><meter style="width: 100%;"></meter></td>
+        </tr>
+      </tbody>
+    </template>
+    <button id="addDecentering">Add New Divergent</button>
+
+    <div class="my-2">
+      <button disabled class="btn btn-default" id="btnSave">Save</button>
+      <button disabled class="btn btn-default" id="btnCancel">Cancel</button>
+    </div>
+    <datalist id="targets">
+      <option value="0">0 (none)</option>
+      <option>5</option>
+      <option>10</option>
+      <option>15</option>
+      <option>20</option>
+      <option>25</option>
+      <option>30</option>
+      <option>45</option>
+      <option value="60">1:00</option>
+      <option value="75">1:15</option>
+      <option value="90">1:30</option>
+      <option value="105">1:45</option>
+      <option value="120">2:00</option>
+      <option value="150">2:30</option>
+      <option value="180">3:00</option>
+      <option value="210">3:30</option>
+      <option value="240">4:00</option>
+      <option value="270">4:30</option>
+      <option value="300">5:00</option>
+      <option value="360">6:00</option>
+      <option value="420">7:00</option>
+      <option value="480">8:00</option>
+      <option value="540">9:00</option>
+    </datalist>
+
+    <script src="../../core/lib/interface.js"></script>
+    <script src="./loader-settings.js"></script>
+    <style>
+      input:invalid {
+        border: 2px solid red;
+      }
+      input[type="number"]::-webkit-outer-spin-button,
+      input[type="number"]::-webkit-inner-spin-button {
+          appearance: none;
+          margin: 0;
+      }
+      input[type="number"]/* , tr menu > li */ {
+        width: 3rem;
+      }
+      tbody > tr:first-of-type > td {
+        padding-top: 0.4rem;
+      }
+      tr menu {
+        width: 100%;
+        display: flex;
+        list-style: none;
+        justify-content: space-between;
+        padding-inline-start: 0;
+        margin: 0;
+      }
+    </style>
+  </body>
+</html>

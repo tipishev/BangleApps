@@ -8,3 +8,19 @@
 0.10beta: Add interface.html to view saved log data, add "View log" function for debugging log, send data for gadgetbridge, change caching for global getStats
 0.11: Prevent module not found error
 0.12: Improve README, option to add functions triggered by status changes or time periods, remove old log (<0.10) conversion
+0.13: Prevent to stay in consecutive sleep if not worn, correct trigger calling, add trigger object itself as argument to the fn function
+0.14: Add "Delete all logfiles before" to interface.html, display all logfiles in the interface
+0.15: Issue newline before GB commands (solves issue with console.log and ignored commands)
+0.16: Only write logs if we have a non-empty log to write
+0.17: Minor code improvements
+0.18: Add back as a function to prevent translation making it a menu entry
+0.19: Write sleep state into health event's .activity field
+0.20: Increase default sleep thresholds, tweak settings to allow higher ones to be chosen
+0.21: Use HRM data if polling is enabled, and add appropriate thresholds in settings. Change settings to feel more intuitive, rather than copied settings in different pages.
+0.22: Fix bug with HRM threshold not updating due to movement thresholds being incorrectly compared against the HRM thresholds.
+0.23: Fix important bug with HRM data being undefined when compared - broken apps should work properly now
+0.24: Change day title to be easier to read, capitalization, and improved documentation/tuning guide in README.
+0.25: Put HRM mode behind the setting `Prefer HRM` which defaults to `false`.
+      Please enable if you want the HRM behavior from v0.21. The new default
+      will be more in line with how version 0.20 worked.
+0.26: Replaced 'Prefer HRM' with 'Sleep Mode' setting, adding an option to require both movement and HRM to detect sleep (prevents false sleep while sitting still).

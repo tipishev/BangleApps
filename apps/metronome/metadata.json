@@ -3,6 +3,7 @@
   "name": "Metronome",
   "version": "0.07",
   "readme": "README.md",
+  "author": "bengwalker",
   "description": "Makes the watch blinking and vibrating with a given rate",
   "icon": "metronome_icon.png",
   "tags": "tool",
@@ -13,5 +14,6 @@
     {"name":"metronome.app.js","url":"metronome.js"},
     {"name":"metronome.img","url":"metronome-icon.js","evaluate":true},
     {"name":"metronome.settings.js","url":"settings.js"}
-  ]
+  ],
+  "data":[{"name":"metronome.settings.json"}]
 }

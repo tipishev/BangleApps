@@ -23,4 +23,18 @@ button to exit is no longer an option.
 facilitate 'fast switching' of apps where available.
 0.20: Bangle 2: Revert use of Bangle.load() to classic load() calls since
 widgets would still be loaded when they weren't supposed to.
-
+0.21: Bangle 2: Call Bangle.drawWidgets() early on so that the widget field
+immediately follows the correct theme.
+0.22: Bangle 2: Change to not automatically marking the first app on a page
+when moving pages. Add caching for faster startups.
+0.23: Bangle 1: Fix issue with missing icons, added touch screen interactions
+0.24: Add buzz-on-interaction setting
+0.25: Minor code improvements
+0.26: Bangle 2: Postpone loading icons that are not needed initially.
+0.27: Bangle 2: Add setting to remember and present the last open page between instances of dtlaunch.
+0.28: Bangle 2: Fix showClocks and showLaunchers settings not taking effect by
+      clearing cache when changing those settings.
+      Bangle 2: Use a separate cache file from the standard launcher.
+      Bangle 2: Don't leave cache file after uninstalling the app.
+0.29: Use launcher_utils library for app cacheing  and fast load
+      Ensure we reset graphics when touching (fix colour of first touch in emulator)

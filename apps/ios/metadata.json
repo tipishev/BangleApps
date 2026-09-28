@@ -1,17 +1,21 @@
 {
   "id": "ios",
   "name": "iOS Integration",
-  "version": "0.13",
-  "description": "Display notifications/music/etc from iOS devices",
+  "version": "0.26",
+  "author": "gfwilliams",
+  "description": "Show and dismiss iOS notifications, and pull music, weather, location, and agenda from iOS devices.\n\nFor more features and deeper integration, use the `BlueWatch iOS Integration` app.",
   "icon": "app.png",
   "tags": "tool,system,ios,apple,messages,notifications",
   "dependencies": {"messages":"module"},
+  "dependencies" : {"mylocation":"app" },
   "supports": ["BANGLEJS","BANGLEJS2"],
   "readme": "README.md",
   "storage": [
     {"name":"ios.app.js","url":"app.js"},
     {"name":"ios.img","url":"app-icon.js","evaluate":true},
-    {"name":"ios.boot.js","url":"boot.js"}
+    {"name":"ios.boot.js","url":"boot.js"},
+    {"name":"ios.settings.js","url":"settings.js"}
   ],
+  "data": [{"name":"ios.settings.json"}],
   "sortorder": -8
 }

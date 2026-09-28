@@ -153,16 +153,16 @@ function drawingCycle(calcDate, thisID, cycle, log) {
     infoData = slMod.getStats(calcDate, 0, log);
     infoData = [
       [
-        [ /*LANG*/"consecutive\nsleeping", infoData.consecSleep],
-        [ /*LANG*/"true\nsleeping", infoData.deepSleep + infoData.lightSleep]
+        [ /*LANG*/"Consec.\nsleep", infoData.consecSleep],
+        [ /*LANG*/"True\nsleep", infoData.deepSleep + infoData.lightSleep]
       ],
       [
-        [ /*LANG*/"deep\nsleep", infoData.deepSleep],
-        [ /*LANG*/"light\nsleep", infoData.lightSleep]
+        [ /*LANG*/"Deep\nsleep", infoData.deepSleep],
+        [ /*LANG*/"Light\nsleep", infoData.lightSleep]
       ],
       [
-        [ /*LANG*/"awake", infoData.awakeTime],
-        [ /*LANG*/"not worn", infoData.notWornTime]
+        [ /*LANG*/"Awake", infoData.awakeTime],
+        [ /*LANG*/"Not worn", infoData.notWornTime]
       ]
     ];
     // draw info
@@ -235,23 +235,24 @@ function draw() {
 
   // set date to calculate data for
   var calcDate = new Date(startDate - prevDays * 864E5);
-
+  var oneDayAgo = new Date(startDate - prevDays * 864E5);
+  oneDayAgo.setDate(oneDayAgo.getDate() - 1);
   // draw title
   g.setFont("12x20").setFontAlign(0, -1)
-    .drawString( /*LANG*/"Night to " + require('locale').dow(calcDate, 1) + "\n" +
+    .drawString(require('locale').dow(oneDayAgo, 1)+" to " + require('locale').dow(calcDate, 1) + "\n" +
       require('locale').date(calcDate, 1), 87, 28);
 
   // reset graphics and define image string
   g.reset();
   var imgStr = "";
   // check which icon to set
-  if (!global.sleeplog || sleeplog.conf.enabled !== true) {
+  if (!global.sleeplog || global.sleeplog.conf.enabled !== true) {
     // set color and disabled service icon
     g.setColor(1, 0, 0);
     imgStr = "FBSBAOAAfwAP+AH3wD4+B8Hw+A+fAH/gA/wAH4AB+AA/wAf+APnwHw+D4Hx8A++AH/AA/gAH";
-  } else if (sleeplog.debug) {
+  } else if (global.sleeplog.debug) {
     // set debugging icon
-    imgStr = typeof sleeplog.debug === "object" ?
+    imgStr = typeof global.sleeplog.debug === "object" ?
       "FBSBAB/4AQDAF+4BfvAX74F+CBf+gX/oFJKBf+gUkoF/6BSSgX/oFJ6Bf+gX/oF/6BAAgf/4" : // file
       "FBSBAP//+f/V///4AAGAABkAAZgAGcABjgAYcAGDgBhwAY4AGcABmH+ZB/mAABgAAYAAH///"; // console
   }
@@ -262,7 +263,7 @@ function draw() {
   // show loading info with progresss bar
   g.reset().drawRect(7, 117, width - 8, 157)
     .setFont("6x8").setFontAlign(0, 0)
-    .drawString( /*LANG*/ "calculating data ...\nplease be patient :)", 87, 133)
+    .drawString( /*LANG*/ "Calculating...\nPlease be patient :)", 87, 133)
     .drawRect(17, 145, 157, 151);
 
   // draw first progress
@@ -297,7 +298,7 @@ var ATID; //          analysis timeout ID
 var drawingID = 0; // drawing ID for ongoing process
 // get screen width and center (zero based)
 var width = g.getWidth() - 1;
-var center = width / 2 - 1;
+//var center = width / 2 - 1;
 
 // set areas and actions array
 var aaa = [

@@ -1,0 +1,18 @@
+{
+  "id": "widbatc",
+  "name": "Yet Another Battery Widget",
+  "shortName":"Battery Level",
+  "icon": "icon.png",
+  "screenshots": [{"url":"screenshot.png"}],
+  "version":"0.02",
+  "author": "Espruino",
+  "type": "widget",
+  "supports": ["BANGLEJS", "BANGLEJS2", "BANGLEJS3"],
+  "readme": "README.md",
+  "description": "Shows the current battery level status in the top right using the Lato Font in digits",
+  "tags": "widget,battery",
+  "provides_widgets" : ["battery"],
+  "storage": [
+    {"name":"widbatc.wid.js","url":"widget.js"}
+   ]
+}

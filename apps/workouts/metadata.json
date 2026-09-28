@@ -1,0 +1,19 @@
+{ 
+  "id": "workouts",
+  "name": "Workouts and Activities",
+  "shortName":"Workouts",
+  "icon": "icon.png",
+  "version":"0.01",
+  "description": "A simple, all-in-one workout and activity app. Start a workout to see heart rate, steps, and time, and see stats when you finish.",
+  "type":"app",    
+  "tags": "health,outdoor",
+  "author":"RKBoss6",
+  "dependencies": {"calories":"app"},
+  "supports": ["BANGLEJS2"],
+  "readme": "README.md",
+  "screenshots": [{"url":"scr.png"}],
+  "storage": [
+    {"name":"workouts.app.js","url":"app.js"},
+    {"name":"workouts.img","url":"app-icon.js","evaluate":true}
+  ]
+}

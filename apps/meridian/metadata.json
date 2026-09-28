@@ -1,0 +1,19 @@
+{
+  "id": "meridian",
+  "name": "Meridian Clock",
+  "shortName": "Meridian",
+  "version": "0.02",
+  "description": "An elegant clock with two ClockInfos",
+  "screenshots": [{ "url": "screenshot.png" }],
+  "icon": "icon.png",
+  "type": "clock",
+  "author": "Spioune",
+  "tags": "clock,clkinfo",
+  "supports": ["BANGLEJS2"],
+  "dependencies" : { "clock_info":"module" },
+  "readme": "README.md",
+  "storage": [
+    { "name": "meridian.app.js", "url": "app.js" },
+    { "name": "meridian.img", "url": "app-icon.js", "evaluate": true }
+  ]
+}

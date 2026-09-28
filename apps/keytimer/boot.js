@@ -1,11 +1,8 @@
-const keytimer_common = require("keytimer-com.js");
-
-//Only start the timeout if the timer is running
-if (keytimer_common.state.running) {
-    setTimeout(() => {
-        //Check now to avoid race condition
-        if (Bangle.keytimer_ACTIVE === undefined) {
-            load('keytimer-ring.js');
-        }
-    }, keytimer_common.getTimeLeft());
-}
+Bangle.on('alarmDismiss', alarm => {
+  if (alarm.appid === 'keytimer') {
+    console.debug('keytimer: alarmDismiss for keytimer alarm');
+    let state = require('Storage').readJSON('keytimer.json');
+    state.timeLeft = 0;
+    require('Storage').writeJSON('keytimer.json', state);
+  }
+});

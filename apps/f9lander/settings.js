@@ -2,12 +2,12 @@
 /**
  * @param {function} back Use back() to return to settings menu
  */
-const boolFormat = v => v ? /*LANG*/"On" : /*LANG*/"Off";
 (function(back) {
   const SETTINGS_FILE = 'f9settings.json'
   // initialize with default settings...
   let settings = {
     'lightning': false,
+    'timeChange':false
   }
   // ...and overwrite them with any saved values
   // This way saved values are preserved if a new version adds more settings
@@ -24,12 +24,15 @@ const boolFormat = v => v ? /*LANG*/"On" : /*LANG*/"Off";
     }
   }
   const menu = {
-    '': { 'title': 'OpenWind' },
+    '': { 'title': 'F9 Lander' },
     '< Back': back,
     'Lightning': {
-      value: settings.lightning,
-      format: boolFormat,
+      value: !!settings.lightning,
       onchange: save('lightning'),
+    },
+    'Time Change': {
+      value: !!settings.timeChange,
+      onchange: save('timeChange'),
     }
   }
   E.showMenu(menu);

@@ -1,0 +1,14 @@
+{ "id": "alarmqm",
+  "name": "Alarm Quiet Mode",
+  "shortName":"AlarmQM",
+  "version":"0.01",
+  "author": "Kedlub",
+  "description": "Service that turns off quiet mode after alarm dismiss",
+  "icon": "app.png",
+  "tags": "quiet,alarm",
+  "supports" : ["BANGLEJS2"],
+  "type": "bootloader",
+  "storage": [
+    {"name":"alarmqm.boot.js","url":"boot.js"}
+  ]
+}

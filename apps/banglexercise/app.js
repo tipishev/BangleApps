@@ -11,7 +11,7 @@ let historySlopeY = [];
 let historySlopeZ = [];
 
 let lastZeroPassCameFromPositive;
-let lastZeroPassTime = 0;
+//let lastZeroPassTime = 0;
 
 let lastExerciseCompletionTime = 0;
 let lastExerciseHalfCompletionTime = 0;
@@ -24,7 +24,7 @@ let exerciseType = {
 // add new exercises here:
 const exerciseTypes = [{
     "id": "pushup",
-    "name": "push ups",
+    "name": /*LANG*/"Push-ups",
     "useYaxis": true,
     "useZaxis": false,
     "threshold": 2500,
@@ -34,7 +34,7 @@ const exerciseTypes = [{
   },
   {
     "id": "curl",
-    "name": "curls",
+    "name": /*LANG*/"Curls",
     "useYaxis": true,
     "useZaxis": false,
     "threshold": 2500,
@@ -44,7 +44,7 @@ const exerciseTypes = [{
   },
   {
     "id": "situp",
-    "name": "sit ups",
+    "name": /*LANG*/"Sit-ups",
     "useYaxis": false,
     "useZaxis": true,
     "threshold": 3500,
@@ -88,7 +88,7 @@ function showMainMenu() {
     menu["--------"] = {
       value: ""
     };
-    menu["Last:"] = {
+    menu[/*LANG*/"Last:"] = {
       value: exerciseCounter + " " + exerciseType.name
     };
   }
@@ -148,7 +148,7 @@ function accelHandler(accel) {
 
   // slope for Z
   if (exerciseType.useZaxis) {
-    l = historyAvgZ.length;
+    let l = historyAvgZ.length;
     if (l > 1) {
       const p1 = historyAvgZ[l - 2];
       const p2 = historyAvgZ[l - 1];
@@ -189,22 +189,22 @@ function isValidExercise(slope, t) {
       if (p1 > 0 && p2 < 0) {
         if (lastZeroPassCameFromPositive == false) {
           lastExerciseHalfCompletionTime = t;
-          console.log(t, exerciseName + " half complete...");
+          console.log(t, exerciseName + /*LANG*/" half complete...");
 
           layout.progress.label = "½";
-          layout.recording.label = "TRAINING";
+          layout.recording.label = /*LANG*/"TRAINING";
           g.clear();
           layout.render();
         }
 
         lastZeroPassCameFromPositive = true;
-        lastZeroPassTime = t;
+        //lastZeroPassTime = t;
       }
       if (p2 > 0 && p1 < 0) {
         if (lastZeroPassCameFromPositive == true) {
           const tDiffLastExercise = t - lastExerciseCompletionTime;
           const tDiffStart = t - tStart;
-          console.log(t, exerciseName + " maybe complete?", Math.round(tDiffLastExercise), Math.round(tDiffStart));
+          console.log(t, exerciseName + /*LANG*/" maybe complete?", Math.round(tDiffLastExercise), Math.round(tDiffStart));
 
           // check minimal time between exercises:
           if ((lastExerciseCompletionTime <= 0 && tDiffStart >= thresholdMinTime) || tDiffLastExercise >= thresholdMinTime) {
@@ -222,7 +222,7 @@ function isValidExercise(slope, t) {
 
                 layout.count.label = exerciseCounter;
                 layout.progress.label = "";
-                layout.recording.label = "Good!";
+                layout.recording.label =/*LANG*/"Good!";
 
                 g.clear();
                 layout.render();
@@ -230,33 +230,33 @@ function isValidExercise(slope, t) {
                 if (settings.buzz)
                   Bangle.buzz(200, 0.5);
               } else {
-                console.log(t, exerciseName + " too quick for duration time threshold!"); // thresholdMinDurationTime
+                console.log(t, exerciseName + /*LANG*/" too quick for duration time threshold!"); // thresholdMinDurationTime
                 lastExerciseCompletionTime = t;
 
-                layout.recording.label = "Go slower!";
+                layout.recording.label = /*LANG*/"Go slower!";
                 g.clear();
                 layout.render();
               }
             } else {
-              console.log(t, exerciseName + " top slow for time threshold!"); // thresholdMaxTime
+              console.log(t, exerciseName + /*LANG*/" top slow for time threshold!"); // thresholdMaxTime
               lastExerciseCompletionTime = t;
 
-              layout.recording.label = "Go faster!";
+              layout.recording.label = /*LANG*/"Go faster!";
               g.clear();
               layout.render();
             }
           } else {
-            console.log(t, exerciseName + " too quick for time threshold!"); // thresholdMinTime
+            console.log(t, exerciseName + /*LANG*/" too quick for time threshold!"); // thresholdMinTime
             lastExerciseCompletionTime = t;
 
-            layout.recording.label = "Go slower!";
+            layout.recording.label = /*LANG*/"Go slower!";
             g.clear();
             layout.render();
           }
         }
 
         lastZeroPassCameFromPositive = false;
-        lastZeroPassTime = t;
+        //lastZeroPassTime = t;
       }
     }
   }
@@ -272,7 +272,7 @@ function reset() {
   historySlopeZ = [];
 
   lastZeroPassCameFromPositive = undefined;
-  lastZeroPassTime = 0;
+  //lastZeroPassTime = 0;
   lastExerciseHalfCompletionTime = 0;
   lastExerciseCompletionTime = 0;
   exerciseCounter = 0;
@@ -337,7 +337,7 @@ function startTraining() {
         type: "txt",
         id: "recording",
         font: "6x8:2",
-        label: "TRAINING",
+        label: /*LANG*/"TRAINING",
         bgCol: "#f00",
         pad: 5,
         fillx: 1
@@ -345,7 +345,7 @@ function startTraining() {
     ]
   }, {
     btns: [{
-      label: "STOP",
+      label: /*LANG*/"STOP",
       cb: () => {
         stopTraining();
       }

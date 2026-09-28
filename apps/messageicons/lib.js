@@ -1,68 +1,20 @@
+// This file is auto-generated. --- DO NOT MODIFY AT ALL ---
+// If you want to add icons, import your icon as a 24x24 png, change icons/icon_names.json and re-run icons/generate.js
 exports.getImage = function(msg) {
   if (msg.img) return atob(msg.img);
   let s = (("string"=== typeof msg) ? msg : (msg.src || "")).toLowerCase();
   if (msg.id=="music") s="music";
-  let match = ",default|0,airbnb|1,alarm|2,alarmclockreceiver|2,amazon shopping|3,bibel|4,bitwarden|5,1password|5,lastpass|5,dashlane|5,bring|6,calendar|7,etar|7,chat|8,chrome|9,corona-warn|10,bmo|11,desjardins|11,rbc mobile|11,nbc|11,rabobank|11,scotiabank|11,td (canada)|11,discord|12,drive|13,element|14,facebook|15,messenger|16,firefox|17,firefox beta|17,firefox nightly|17,f-droid|5,neo store|5,aurora droid|5,github|18,gitlab|19,gmx|20,google|21,google home|22,google play store|23,home assistant|24,instagram|25,kalender|26,keep notes|27,lieferando|28,linkedin|29,maps|30,organic maps|30,osmand|30,mastodon|31,fedilab|31,tooot|31,tusky|31,mattermost|32,n26|33,netflix|34,news|35,cbc news|35,rc info|35,reuters|35,ap news|35,la presse|35,nbc news|35,nextbike|36,nina|37,outlook mail|38,paypal|39,phone|40,plex|41,pocket|42,post & dhl|43,proton mail|44,reddit|45,sync pro|45,sync dev|45,boost|45,infinity|45,slide|45,signal|46,skype|47,slack|48,snapchat|49,starbucks|50,steam|51,teams|52,telegram|53,telegram foss|53,threema|54,tiktok|55,to do|56,opentasks|56,tasks|56,transit|57,twitch|58,twitter|59,uber|60,lyft|60,vlc|61,warnapp|62,whatsapp|63,wordfeud|64,youtube|65,newpipe|65,zoom|66,meet|66,music|67,sms message|0,mail|0,gmail|0,".match(new RegExp(`,${s}\\|(\\d+)`))
+  let match = ",default|0,adp|1,airbnb|2,agenda|3,alarm|4,alarmclockreceiver|4,amazon shopping|5,bereal.|6,bibel|7,bitwarden|8,1password|8,lastpass|8,dashlane|8,bring|9,calendar|10,etar|10,chat|11,chrome|12,clock|4,corona-warn|13,bmo|14,desjardins|14,duolingo|15,rbc mobile|14,nbc|14,rabobank|14,scotiabank|14,td (canada)|14,davx⁵|16,discord|17,drive|18,element|19,element classic|19,element x|19,facebook|20,messenger|21,firefox|22,firefox beta|22,firefox nightly|22,f-droid|8,neo store|8,aurora droid|8,github|23,gitlab|24,gmail|25,gmx|26,google|27,google home|28,google play store|29,gotify|30,health|31,home assistant|32,instagram|33,jira|34,kalender|35,keep notes|36,kleinanzeigen|37,leboncoin|38,lieferando|39,linkedin|40,maps|41,meshtastic|42,organic maps|41,osmand|41,mastodon|43,fedilab|43,tooot|43,tusky|43,mattermost|44,messages|45,n26|46,netflix|47,news|48,cbc news|48,rc info|48,reuters|48,ap news|48,la presse|48,nbc news|48,nextbike|49,nextcloud|50,nina|51,ntfy|52,outlook mail|53,paypal|54,phone|55,plex|56,pocket|57,post & dhl|58,proton mail|59,reddit|60,sync pro|60,sync dev|60,boost|60,infinity|60,slide|60,signal|61,molly|61,roborock|62,skype|63,slack|64,snapchat|65,shortcuts|66,starbucks|67,steam|68,teams|69,telegram|70,telegram foss|70,threema|71,threema libre|71,thunderbird|72,tiktok|73,to do|74,opentasks|74,tasks|74,transit|75,twitch|76,twitter|77,uber|78,lyft|78,vlc|79,wallet|80,warnapp|81,whatsapp|82,wordfeud|83,youtube|84,newpipe|84,zoom|85,meet|85,music|86,sms message|0,mail|0,".match(new RegExp(`,${s}\\|(\\d+)`))
   return require("Storage").read("messageicons.img", (match===null)?0:match[1]*76, 76);
 };
 
 exports.getColor = function(msg,options) {
   options = options||{};
-  var st = options.settings || require('Storage').readJSON("messages.settings.json", 1) || {};
+  var st = options.settings || require('Storage').readJSON("messages.settings.json", 1) || {}; // TODO: should we really be loading settings each time we want an icon color? Shouldn't this messageicons users' job?
   if (options.default===undefined) options.default=g.theme.fg;
   if (st.iconColorMode == 'mono') return options.default;
   const s = (("string"=== typeof msg) ? msg : (msg.src || "")).toLowerCase();
-  return {
-    // generic colors, using B2-safe colors
-    // DO NOT USE BLACK OR WHITE HERE, just leave the declaration out and then the theme's fg color will be used
-    "airbnb": "#ff385c", // https://news.airbnb.com/media-assets/category/brand/
-    "mail": "#ff0",
-    "music": "#f0f",
-    "phone": "#0f0",
-    "sms message": "#0ff",
-    // brands, according to https://www.schemecolor.com/?s (picking one for multicolored logos)
-    // all dithered on B2, but we only use the color for the icons.  (Could maybe pick the closest 3-bit color for B2?)
-    "bibel": "#54342c",
-    "bring": "#455a64",
-    "discord": "#5865f2", // https://discord.com/branding
-    "etar": "#36a18b",
-    "facebook": "#1877f2", // https://www.facebook.com/brand/resources/facebookapp/logo
-    "gmail": "#ea4335",
-    "gmx": "#1c449b",
-    "google": "#4285F4",
-    "google home": "#fbbc05",
-// "home assistant": "#41bdf5", // ha-blue is #41bdf5, but that's the background
-    "instagram": "#ff0069", // https://about.instagram.com/brand/gradient
-    "lieferando": "#ff8000",
-    "linkedin": "#0a66c2", // https://brand.linkedin.com/
-    "messenger": "#0078ff",
-    "mastodon": "#563acc", // https://www.joinmastodon.org/branding
-    "mattermost": "#00f",
-    "n26": "#36a18b",
-    "nextbike": "#00f",
-    "newpipe": "#f00",
-    "nina": "#e57004",
-    "opentasks": "#409f8f",
-    "outlook mail": "#0078d4", // https://developer.microsoft.com/en-us/fluentui#/styles/web/colors/products
-    "paypal": "#003087",
-    "pocket": "#ef4154f", // https://blog.getpocket.com/press/
-    "post & dhl": "#f2c101",
-    "reddit": "#ff4500", // https://www.redditinc.com/brand
-    "signal": "#3a76f0", // https://github.com/signalapp/Signal-Desktop/blob/main/images/signal-logo.svg
-    "skype": "#0078d4", // https://developer.microsoft.com/en-us/fluentui#/styles/web/colors/products
-    "slack": "#e51670",
-    "snapchat": "#ff0",
-    "steam": "#171a21",
-    "teams": "#6264a7", // https://developer.microsoft.com/en-us/fluentui#/styles/web/colors/products
-    "telegram": "#0088cc",
-    "telegram foss": "#0088cc",
-    "to do": "#3999e5",
-    "twitch": "#9146ff", // https://brand.twitch.tv/
-    "twitter": "#1d9bf0", // https://about.twitter.com/en/who-we-are/brand-toolkit
-    "vlc": "#ff8800",
-    "whatsapp": "#4fce5d",
-    "wordfeud": "#e7d3c7",
-    "youtube": "#f00", // https://www.youtube.com/howyoutubeworks/resources/brand-resources/#logos-icons-and-colors
-  }[s]||options.default;
+  let match = ",adp|F00,agenda|26D,airbnb|F35,mail|FF0,music|F0F,phone|0F0,sms message|0FF,bibel|532,bring|456,davx⁵|8C4,duolingo|5C0,discord|56F,etar|3A8,facebook|17F,gmail|E43,gmx|149,google|48F,google home|FB0,health|F37,instagram|F06,jira|05C,kleinanzeigen|6B2,leboncoin|F72,lieferando|F80,linkedin|06C,messages|05C,messenger|07F,mastodon|53C,mattermost|00F,n26|3A8,nextbike|00F,nextcloud|08C,newpipe|F00,nina|E70,opentasks|498,outlook mail|07D,paypal|038,pocket|E45,post & dhl|FC0,reddit|F40,roborock|F00,signal|37F,skype|07D,slack|E17,shortcuts|80F,snapchat|FF0,steam|112,teams|66A,telegram|08C,telegram foss|08C,thunderbird|18E,to do|39E,twitch|94F,twitter|19F,vlc|F80,whatsapp|4C5,wordfeud|EDC,youtube|F00,".match(new RegExp(`,${s}\\|(...)`))
+  return (match===null)?options.default:"#"+match[1]
 };
   

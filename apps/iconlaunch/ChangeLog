@@ -20,3 +20,12 @@
       still be loaded when they weren't supposed to.
 0.15: Ensure that we hide widgets if in fullscreen mode
       (So that widgets are still hidden if launcher is fast-loaded)
+0.16: Use firmware provided E.showScroller method
+0.17: fix fullscreen with oneClickExit
+0.18: Better performance
+0.19: Remove 'jit' keyword as 'for(..of..)' is not supported (fix #2937)
+0.20: Use '28' font if installed (2v26+) and put it inside a rounded rect in the current theme
+      Ensure 'oneClickExit' is the default
+0.21: Display placeholder icons at start and render line by line to the screen to make loading seem faster
+0.22: Use launcher_utils library for app cacheing  and fast load
+0.23: Use Bangle.haptic if available

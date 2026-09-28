@@ -1,7 +1,8 @@
 {
   "id": "2ofthemclk",
   "name": "two of them clock",
-  "version": "0.01",
+  "version": "0.02",
+  "author": "kilrah",
   "description": "You can now wear teh memez on your wrist.",
   "readme": "README.md",
   "icon": "app.png",

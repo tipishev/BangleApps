@@ -1,0 +1,18 @@
+{ "id": "textfacts",
+  "name": "List of Facts",
+  "shortName":"Facts",
+  "version":"0.04",
+  "author": "gfwilliams",
+  "description": "A list of fun facts. Provides a `textsource` module that apps can use to query a random fact, as well as a clockInfo to see facts on your favorite clock.",
+  "icon": "icon.png",
+  "type": "module",
+  "tags": "clkinfo",
+  "provides_modules" : ["textsource"],
+  "supports" : ["BANGLEJS2"],
+  "readme": "README.md",
+  "storage": [
+    {"name":"textsource.txt","url":"facts.txt"},
+    {"name":"textsource","url":"lib.js"},
+    {"name":"textsource.clkinfo.js","url":"clkinfo.js"}
+  ]
+}

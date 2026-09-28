@@ -19,3 +19,29 @@
 0.16: Improve support for date timezone
 0.17: Fix midnight in local timezone (alarms wouldn't always fire as expected in timezone != 0)
 0.18: Update clock_info to avoid a redraw
+0.19: Update clock_info to refresh periodically on active alarms/timers
+0.20: Alarm dismiss and snooze events
+0.21: Fix crash in clock_info
+0.22: Dated event repeat option
+0.23: Allow buzzing forever when an alarm fires
+0.24: Emit alarmReload when alarms change (used by widalarm)
+0.25: Fix wrap around when snoozed through midnight
+0.26: Fix hitting snooze on an alarm after when the snooze would've fired
+0.27: Tapping clkinfo enables/disables the selected alarm
+0.28: Added an icon for disabled events
+0.29: Improve clkinfo startup time by 10ms
+0.30: Fix possible bug in toggling an alarm to on, from clkinfo
+0.31: Ensure we reschedule alarms after setTimeZone has been called (fix #3791)
+0.32: clkinfo ensures an alarm won't trigger immediately (copying `alarm`'s behaviour)
+0.33: Ensure default vibration pattern is longer
+0.34: Ensure ClockInfo updates if it's used to start a timer
+0.35: If you use 2v28 (or above) firmware, you can long-press on the snooze button to gain finer control over snooze lengths.
+0.36: Make 'Unlock At Buzz' (unlocking the watch when the alarm goes off) default to true
+0.37: Ensure we always execute an alarm, even if it was >1 minute in the past. This fixes missed alarms when >1 alarm is scheduled next to each other (fix #2712)
+0.38: Fix timer going off immediately if it was long enough it went to the next day (#4220)
+0.39: Allow a press of the button to stop/snooze the alarm when it's gone off
+0.40: Prevent time-of-day alarms set via setAlarm() that have a time earlier than the current time triggering immediately after #4220 fix; schedule them for tomorrow by default to match original behavior
+0.41: Fix issue with snoozing alarms and timers beyond midnight causing the alarm/timer to go off immediately instead of snoozing
+0.42: Fix timer snooze 5m button adding 6 minutes instead of 5
+0.43: Introduce `snoozeAlarm` and `dismissAlarm` functions for easier alarm handling by custom JS
+

@@ -2,7 +2,8 @@
   // define settings filename
   var filename = "sleeplog.json";
   // define logging prompt display status
-  var thresholdsPrompt = true;
+  var movementThresholdsPrompt = true;
+  var hrmThresholdsPrompt = true;
 
   // define default vaules
   var defaults = {
@@ -11,15 +12,35 @@
     // threshold settings
     maxAwake: 36E5, //  [ms] maximal awake time to count for consecutive sleep
     minConsec: 18E5, // [ms] minimal time to count for consecutive sleep
-    deepTh: 100, //     threshold for deep sleep
-    lightTh: 200, //    threshold for light sleep
+    deepTh: 150, //     threshold for deep sleep
+    lightTh: 300,//    threshold for light sleep
+    hrmLightTh: 74,//    threshold for light sleep with HRM
+    hrmDeepTh:60,//     threshold for deep sleep with HRM
+    sleepMode: 0, // 0=Movement, 1=HRM, 2=Both
+    wearTemp: 19.5, //    temperature threshold to count as worn
     // app settings
     breakToD: 12, //    [h] time of day when to start/end graphs
     appTimeout: 0 //   lock and backlight timeouts for the app
   };
 
   // assign loaded settings to default values
-  var settings = Object.assign(defaults, require("Storage").readJSON(filename, true) || {});
+  var settings = Object.assign({},defaults, require("Storage").readJSON(filename, true));
+
+  // --- MIGRATION LOGIC (Added in v0.26) ---
+  // WHY: In v0.25 and earlier, the HRM setting was a simple boolean called 'preferHRM'.
+  // In v0.26, this was replaced by a 3-state 'sleepMode' (0=Movement, 1=HRM, 2=Both).
+  // WHAT: This block silently migrates existing users to the new format upon opening
+  // the settings, ensuring they don't lose their preference and the app doesn't crash.
+  // REMOVAL: This block can be safely removed in a future major update (e.g., v1.0 or 
+  // after ~1 year), once we can assume all active users have updated past v0.25.
+  // CONSEQUENCE: If removed, users updating directly from <=v0.25 to that future version 
+  // will simply lose their old 'preferHRM' preference and default to sleepMode 0.
+  if ("preferHRM" in settings) {
+    settings.sleepMode = settings.preferHRM ? 1 : 0;
+    delete settings.preferHRM;
+    require("Storage").writeJSON(filename, settings);
+  }
+  // ----------------------------------------
 
   // write change to storage
   function writeSetting() {
@@ -173,8 +194,8 @@
     }
 
     // get thresholds
-    var deepTh = global.sleeplog ? sleeplog.conf.deepTh : defaults.deepTh;
-    var lightTh = global.sleeplog ? sleeplog.conf.lightTh : defaults.lightTh;
+    var deepTh = global.sleeplog ? global.sleeplog.conf.deepTh : defaults.deepTh;
+    var lightTh = global.sleeplog ? global.sleeplog.conf.lightTh : defaults.lightTh;
     // set lowest movement displayed
     var minMove = deepTh - 20;
     // set start point
@@ -239,20 +260,20 @@
     // check if sleeplog is available
     if (global.sleeplog) {
       // get debug status, file and duration
-      var enabled = !!sleeplog.debug;
-      var file = typeof sleeplog.debug === "object";
+      var enabled = !!global.sleeplog.debug;
+      var file = typeof global.sleeplog.debug === "object";
       var duration = 0;
       // setup debugging menu
       var debugMenu = {
         "": {
-          title: /*LANG*/"Debugging"
-        },
-        /*LANG*/"< Back": () => {
-          // check if some value has changed
-          if (enabled !== !!sleeplog.debug || file !== (typeof sleeplog.debug === "object") || duration)
-            require("sleeplog").setDebug(enabled, file ? duration || 12 : undefined);
-          // redraw main menu
-          showMain(7);
+          title: /*LANG*/"Debugging",
+          back: () => {
+            // check if some value has changed
+            if (enabled !== !!global.sleeplog.debug || file !== (typeof global.sleeplog.debug === "object") || duration)
+              require("sleeplog").setDebug(enabled, file ? duration || 12 : undefined);
+            // redraw main menu
+            showMain(7);
+          }
         },
         /*LANG*/"View log": () => selectDebug(),
         /*LANG*/"Enable": {
@@ -264,7 +285,7 @@
           onchange: v => file = v
         },
         /*LANG*/"Duration": {
-          value: file ? (sleeplog.debug.writeUntil - Date.now()) / 36E5 | 0 : 12,
+          value: file ? (global.sleeplog.debug.writeUntil - Date.now()) / 36E5 | 0 : 12,
           min: 1,
           max: 96,
           wrap: true,
@@ -274,7 +295,7 @@
         /*LANG*/"Cancel": () => showMain(7),
       };
       // show menu
-      var menu = E.showMenu(debugMenu);
+      /*var menu =*/ E.showMenu(debugMenu);
     } else {
       // show error prompt
       E.showPrompt("Sleeplog" + /*LANG*/"not enabled!", {
@@ -285,47 +306,76 @@
       }).then(showMain);
     }
   }
-
+  
+  
   // show menu to change thresholds
-  function showThresholds() {
+  function showHRMThresholds() {
     // setup logging menu
-    var menu;
+    //var menu;
     var thresholdsMenu = {
       "": {
-        title: /*LANG*/"Thresholds"
+        title: /*LANG*/"HRM Thresholds",
+        back: () => showMain(2)
       },
-      /*LANG*/"< Back": () => showMain(2),
-      /*LANG*/"Max Awake": {
-        value: settings.maxAwake / 6E4,
-        step: 10,
-        min: 10,
-        max: 120,
+      /*LANG*/"Deep Sleep": {
+        value: settings.hrmDeepTh,
+        step: 1,
+        min: 30,
+        max: 200,
         wrap: true,
         noList: true,
-        format: v => v + /*LANG*/"min",
         onchange: v => {
-          settings.maxAwake = v * 6E4;
+          settings.hrmDeepTh = v;
           writeSetting();
         }
       },
-      /*LANG*/"Min Consecutive": {
-        value: settings.minConsec / 6E4,
-        step: 10,
-        min: 10,
-        max: 120,
+      /*LANG*/"Light Sleep": {
+        value: settings.hrmLightTh,
+        step: 1,
+        min: 30,
+        max: 200,
         wrap: true,
         noList: true,
-        format: v => v + /*LANG*/"min",
         onchange: v => {
-          settings.minConsec = v * 6E4;
+          settings.hrmLightTh = v;
           writeSetting();
         }
       },
+      /*LANG*/"Reset to Default": () => {
+        settings.hrmDeepTh = defaults.hrmDeepTh;
+        settings.hrmLightTh = defaults.hrmLightTh;
+        writeSetting();
+        showHRMThresholds();
+      }
+    };
+    if (hrmThresholdsPrompt) {
+      hrmThresholdsPrompt = false;
+      E.showPrompt("SleepLog only uses HRM if HRM is enabled in Health settings.", {
+        title: /*LANG*/"HRM Thresholds",
+        buttons: {
+          /*LANG*/"Ok": 0
+        }
+      }).then(() => /*menu =*/ E.showMenu(thresholdsMenu));
+    } else {
+      /*menu =*/ E.showMenu(thresholdsMenu);
+    }
+  }
+
+  // show menu to change thresholds
+  function showMovementThresholds() {
+    // setup logging menu
+    //var menu;
+    var thresholdsMenu = {
+      "": {
+        title: /*LANG*/"Movement Thresholds",
+        back: () => showMain(2)
+      },
+      
       /*LANG*/"Deep Sleep": {
         value: settings.deepTh,
         step: 1,
         min: 30,
-        max: 200,
+        max: 500,
         wrap: true,
         noList: true,
         onchange: v => {
@@ -335,9 +385,9 @@
       },
       /*LANG*/"Light Sleep": {
         value: settings.lightTh,
-        step: 10,
+        step: 1,
         min: 100,
-        max: 400,
+        max: 800,
         wrap: true,
         noList: true,
         onchange: v => {
@@ -345,50 +395,88 @@
           writeSetting();
         }
       },
+      
       /*LANG*/"Reset to Default": () => {
         settings.maxAwake = defaults.maxAwake;
         settings.minConsec = defaults.minConsec;
         settings.deepTh = defaults.deepTh;
         settings.lightTh = defaults.lightTh;
         writeSetting();
-        showThresholds();
+        showMovementThresholds();
       }
-    };
-
-    // display info/warning prompt or menu
-    if (thresholdsPrompt) {
-      thresholdsPrompt = false;
+    }
+    if (movementThresholdsPrompt) {
+      movementThresholdsPrompt = false;
       E.showPrompt("Changes take effect from now on, not retrospective", {
-        title: /*LANG*/"Thresholds",
+        title: /*LANG*/"Movement Thresholds",
         buttons: {
           /*LANG*/"Ok": 0
         }
-      }).then(() => menu = E.showMenu(thresholdsMenu));
+      }).then(() => /*menu =*/ E.showMenu(thresholdsMenu));
     } else {
-      menu = E.showMenu(thresholdsMenu);
+      /*menu =*/ E.showMenu(thresholdsMenu);
     }
-  }
-
-  // show main menu
-  function showMain(selected) {
-    // set debug image
-    var debugImg = !global.sleeplog ?
-      "FBSBAOAAfwAP+AH3wD4+B8Hw+A+fAH/gA/wAH4AB+AA/wAf+APnwHw+D4Hx8A++AH/AA/gAH" : // X
-      typeof sleeplog.debug === "object" ?
-      "FBSBAB/4AQDAF+4BfvAX74F+CBf+gX/oFJKBf+gUkoF/6BSSgX/oFJ6Bf+gX/oF/6BAAgf/4" : // file
-      sleeplog.debug ?
-      "FBSBAP//+f/V///4AAGAABkAAZgAGcABjgAYcAGDgBhwAY4AGcABmH+ZB/mAABgAAYAAH///" : // console
-      0; // off
-    debugImg = debugImg ? "\0" + atob(debugImg) : false;
-    // set menu
-    var mainMenu = {
-      "": {
-        title: "Sleep Log",
-        selected: selected
-      },
-      /*LANG*/"< Back": () => back(),
-      /*LANG*/"Thresholds": () => showThresholds(),
-      /*LANG*/"Break ToD": {
+    }
+    
+    function showOtherSettings() {
+    // setup logging menu
+    //var menu;
+      var otherSettingsMenu = {
+        "": {
+          title: /*LANG*/"Other Settings",
+          back: () => showMain(2)
+        },
+        /*LANG*/"Max Awake": {
+          value: settings.maxAwake / 6E4,
+          step: 10,
+          min: 10,
+          max: 120,
+          wrap: true,
+          noList: true,
+          format: v => v + /*LANG*/"min",
+          onchange: v => {
+            settings.maxAwake = v * 6E4;
+            writeSetting();
+          }
+        },
+        /*LANG*/"Min Consecutive": {
+          value: settings.minConsec / 6E4,
+          step: 10,
+          min: 10,
+          max: 120,
+          wrap: true,
+          noList: true,
+          format: v => v + /*LANG*/"min",
+          onchange: v => {
+            settings.minConsec = v * 6E4;
+            writeSetting();
+          }
+        },
+        /*LANG*/"Sleep Mode": {
+          value: settings.sleepMode,
+          min: 0,
+          max: 2,
+          format: v => [/*LANG*/"Movement", /*LANG*/"HRM", /*LANG*/"Both"][v],
+          onchange: v => {
+            settings.sleepMode = v;
+            writeSetting();
+          }
+        },
+        /*LANG*/"HRM Thresholds": () => showHRMThresholds(),
+        /*LANG*/"Wear Temp": {
+          value: settings.wearTemp,
+          step: 0.5,
+          min: 19.5,
+          max: 40,
+          wrap: true,
+          noList: true,
+          format: v => v === 19.5 ? "Disabled" : require("locale").temp(v),
+          onchange: v => {
+            settings.wearTemp = v;
+            writeSetting();
+          }
+        },
+        /*LANG*/"Break ToD": {
         value: settings.breakToD,
         step: 1,
         min: 0,
@@ -414,6 +502,42 @@
           writeSetting();
         }
       },
+        /*LANG*/"Reset to Default": () => {
+          settings.maxAwake = defaults.maxAwake;
+          settings.minConsec = defaults.minConsec;
+          settings.breakToD = defaults.breakToD;
+          settings.appTimeout = defaults.appTimeout;
+
+          writeSetting();
+          showOtherSettings();
+        }
+      };
+      E.showMenu(otherSettingsMenu);
+    }
+
+    
+
+  // show main menu
+  function showMain(selected) {
+    // set debug image
+    var debugImg = !global.sleeplog ?
+      "FBSBAOAAfwAP+AH3wD4+B8Hw+A+fAH/gA/wAH4AB+AA/wAf+APnwHw+D4Hx8A++AH/AA/gAH" : // X
+      typeof global.sleeplog.debug === "object" ?
+      "FBSBAB/4AQDAF+4BfvAX74F+CBf+gX/oFJKBf+gUkoF/6BSSgX/oFJ6Bf+gX/oF/6BAAgf/4" : // file
+      global.sleeplog.debug ?
+      "FBSBAP//+f/V///4AAGAABkAAZgAGcABjgAYcAGDgBhwAY4AGcABmH+ZB/mAABgAAYAAH///" : // console
+      0; // off
+    debugImg = debugImg ? "\0" + atob(debugImg) : false;
+    // set menu
+    var mainMenu = {
+      "": {
+        title: "Sleep Log",
+        back: back,
+        selected: selected
+      },
+      /*LANG*/"Movement Thresholds": () => showMovementThresholds(),
+      /*LANG*/"Other Settings": () => showOtherSettings(),
+      
       /*LANG*/"Enabled": {
         value: settings.enabled,
         onchange: v => {
@@ -426,7 +550,7 @@
         onchange: () => setTimeout(showDebug, 10)
       }
     };
-    var menu = E.showMenu(mainMenu);
+    /*var menu =*/ E.showMenu(mainMenu);
   }
 
   // draw main menu

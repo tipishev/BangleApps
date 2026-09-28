@@ -1,7 +1,8 @@
 {
   "id": "lazyclock",
   "name": "Lazy Clock",
-  "version": "0.03",
+  "version": "0.04",
+  "author": "ollyollyollyltd",
   "description": "Tells the time, roughly",
   "icon": "lazyclock.png",
   "type": "clock",

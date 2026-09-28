@@ -1,0 +1,74 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="../../css/spectre.min.css">
+  </head>
+  <body>
+    <h3>Tennis Scores settings</h3>
+    <p>
+      <label for="apikey">Live Tennis API key</label><br>
+      <input id="apikey" onkeyup="checkInput()" style="width:90%; margin: 3px">
+    </p>
+    <p>
+      <label for="tour">Tour</label><br>
+      <select id="tour" style="margin: 3px">
+        <option value="">All</option>
+        <option value="atp">ATP</option>
+        <option value="wta">WTA</option>
+        <option value="challenger">Challenger</option>
+        <option value="itf">ITF</option>
+        <option value="juniors">Juniors</option>
+      </select>
+    </p>
+    <p><button id="upload" class="btn btn-primary">Save</button></p>
+
+    <h4>Where to get your personal API key?</h4>
+    <p>Go to <a href="https://livetennisapi.com" target="_blank">https://livetennisapi.com</a> and sign up for a free account.<br>
+    After registration you can log in and obtain your personal API key.</p>
+
+    <script src="../../core/lib/interface.js"></script>
+
+    <script>
+
+      function checkInput() {
+        document.getElementById('upload').disabled =
+          document.getElementById("apikey").value === "";
+      }
+      checkInput();
+
+      var settings = {};
+      function onInit() {
+        console.log("Loading settings from BangleJs...");
+        try {
+          Util.readStorageJSON("tennisscores.json", data => {
+            if (data) {
+              settings = data;
+              console.log("Got settings", settings);
+              if (settings.apikey) document.getElementById("apikey").value = settings.apikey;
+              document.getElementById("tour").value = settings.tour || "";
+              checkInput();
+            }
+          });
+        } catch (ex) {
+          console.log("(Warning) Could not load settings from BangleJs.");
+          console.log(ex);
+        }
+      }
+
+      document.getElementById("upload").addEventListener("click", function() {
+        try {
+          settings.apikey = document.getElementById("apikey").value.trim();
+          settings.tour = document.getElementById("tour").value;
+          Util.showModal("Saving...");
+          Util.writeStorage("tennisscores.json", JSON.stringify(settings), () => {
+            Util.hideModal();
+          });
+          console.log("Sent settings!");
+        } catch (ex) {
+          console.log("(Warning) Could not write settings to BangleJs.");
+          console.log(ex);
+        }
+      });
+
+    </script>
+  </body>
+</html>

@@ -3,6 +3,8 @@ Bangle.js Layout Library
 
 > Take a look at README.md for hints on developing with this library.
 
+**Please see more complete documentation at https://www.espruino.com/Bangle.js+Layout**
+
 Usage
 -----
 
@@ -30,7 +32,7 @@ g.clear();
 layout.render();
 ```
 
-`layoutObject` has:
+`layoutObject` (first argument) has:
 
 - A `type` field of:
   - `undefined` - blank, can be used for padding
@@ -45,14 +47,21 @@ layout.render();
 - A `scale` field, eg `2` to set scale of an image
 - A `r` field to set rotation of text or images (0: 0°, 1: 90°, 2: 180°, 3: 270°).
 - A `wrap` field to enable line wrapping. Requires some combination of `width`/`height` and `fillx`/`filly` to be set. Not compatible with text rotation.
-- A `col` field, eg `#f00` for red
-- A `bgCol` field for background color (will automatically fill on render)
+- A `col` field, eg `#f00` for red. When `type:"btn"`, this sets the color of the button's text label (defaults to `Graphics.theme.fg2` if not set)
+- A `bgCol` field for background color (will automatically fill on render). When `type:"btn"`, this sets the color of the space outside the button border (defaults to parent layoutObject's `bgCol` if not set)
+- A `btnBorderCol` field for button border color (defaults to `Graphics.theme.fg2` if not set)
+- A `btnFaceCol` field for the background color of the area inside the button border (defaults to `Graphics.theme.bg2` if not set)
 - A `halign` field to set horizontal alignment WITHIN a `v` container. `-1`=left, `1`=right, `0`=center
 - A `valign` field to set vertical alignment WITHIN a `h` container. `-1`=top, `1`=bottom, `0`=center
 - A `pad` integer field to set pixels padding
 - A `fillx` int to choose if the object should fill available space in x. 0=no, 1=yes, 2=2x more space
 - A `filly` int to choose if the object should fill available space in y. 0=no, 1=yes, 2=2x more space
-- `width` and `height` fields to optionally specify minimum size options is an object containing:
+- `width` and `height` fields to optionally specify minimum size
+
+
+ `options` (second argument) is an object containing:
+
+
 - `lazy` - a boolean specifying whether to enable automatic lazy rendering
 - `btns` - array of objects containing:
   - `label` - the text on the button
@@ -75,6 +84,57 @@ Other functions:
 - `layout.debug(obj)` - draw outlines for objects on screen
 - `layout.clear(obj)` - clear the given object (you can also just specify `bgCol` to clear before each render)
 - `layout.forgetLazyState()` - if lazy rendering is enabled, makes the next call to `render()` perform a full re-render
+- `layout.setUI()` - Re-add any UI input handlers
+
+
+Alignment
+----------
+
+You can align elements within their `h` or `v` containers with `halign` and `valign`, however within an element, text is always rendered centered.
+
+As a result, if you want to align text, you shouldn't use `fillx:1` in the text element as the element will then fill to all available space and won't align.
+
+```JS
+var layout = new Layout( {
+    type:"v", c: [{
+        type:"txt",
+        font:"20%",
+        fillx:0, // must be 0 for halign to work
+        filly:1,
+        halign:-1, // LEFT align
+        label:"Left"
+      }, {
+        type:"txt",
+        font:"20%",
+        fillx:0,
+        filly:1,
+        halign:0, // CENTER align
+        label:"Center"
+      }, {
+        type:"txt",
+        font:"20%",
+        fillx:0,
+        filly:1,
+        halign:1, // CERIGHTNTER align
+        label:"Right"},
+    ]
+});
+```
+
+Using with `E.showMenu`/`E.showPrompt`/etc
+--------------------------------------
+
+When calling `E.showMenu` or anything that internally calls `Bangle.setUI` to set
+handlers for user input, any input handlers set by `layout` will get removed.
+
+To re-add them (and re-render the screen) you must call the following afterwards:
+
+```
+layout.setUI(); // re-add input handlers
+layout.forgetLazyState(); // if using lazy rendering, ensure we re-render everything
+layout.render(); // render screen
+```
+
 
 Links
 -----

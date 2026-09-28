@@ -1,0 +1,15 @@
+{ "id": "mazeclock",
+  "name": "Maze Clock",
+  "version": "0.01",
+  "author": "Pavel Machek",
+  "description": "Clock showing time in easy to read but not entirely obvious",
+  "icon": "app.png",
+  "readme": "README.md",
+  "supports" : ["BANGLEJS2"],
+  "type": "clock",
+  "tags": "clock",
+  "storage": [
+      {"name":"mazeclock.app.js","url":"mazeclock.app.js"},
+      {"name":"mazeclock.img","url":"app-icon.js","evaluate":true}
+  ]
+}

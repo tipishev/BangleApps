@@ -1,0 +1,19 @@
+{
+  "id":"gbmediaremote",
+  "name":"GB Media Remote",
+  "shortName":"GB Media Remote",
+  "version": "0.01",
+  "author": "cyberarm",
+  "description": "Control media playback on your Gadgetbridge connected device",
+  "icon":"icon.png",
+  "screenshots": [{"url":"screenshot_two.png"},{"url":"screenshot_one.png"}],
+  "type": "app",
+  "tags": "tools,bluetooth,gadgetbridge,music",
+  "supports": ["BANGLEJS2"],
+  "readme": "README.md",
+  "allow_emulator": true,
+  "storage": [
+    {"name":"gbmediaremote.app.js", "url": "app.js"},
+    {"name":"gbmediaremote.img", "url": "icon.js", "evaluate": true}
+  ]
+}

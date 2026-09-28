@@ -2,10 +2,11 @@
   "name": "My app's human readable name",
   "shortName":"Short Name",
   "version":"0.01",
+  "author": "your_github_username",
   "description": "A detailed description of my great app",
   "icon": "app.png",
   "tags": "",
-  "supports" : ["BANGLEJS2"],  
+  "supports" : ["BANGLEJS2"],
   "readme": "README.md",
   "storage": [
     {"name":"7chname.app.js","url":"app.js"},

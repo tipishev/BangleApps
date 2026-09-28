@@ -16,3 +16,36 @@
 0.15: Fix charts (fix #1366)
 0.16: Code tidyup, add back button in top left of health app graphs
 0.17: Add automatic translation of bar chart labels
+0.18: Show step goal in daily step chart
+0.19: Can show notification when daily step goal is reached
+0.20: Fix the settings page, it would not update settings correctly.
+0.21: Update boot.min.js.
+0.22: Fix timeout for heartrate sensor on 3 minute setting (#2435)
+0.23: Fix HRM logic
+0.24: Correct daily health summary for movement (some logic errors resulted in garbage data being written)
+0.25: lib.read* methods now return correctly scaled movement
+      movement graph in app is now an average, not sum
+      fix 11pm slot for daily HRM
+0.26: Implement API for activity fetching
+0.27: Fix typo in daily summary graph code causing graph not to load
+      Fix daily summaries for 31st of the month
+0.28: Calculate distance from steps if myprofile is installed and stride length is set
+0.29: Minor code improvements
+0.30: Minor code improvements
+0.31: Add support for new health format (storing more data)
+      Added graphs for Temperature and Battery
+0.32: If getting HRM every 3/10 minutes, don't turn it on if the Bangle is charging or hasn't moved and is face down/up
+0.33: Ensure readAllRecordsSince always includes the current day
+      Speed improvements (put temporary functions in RAM where possible)
+0.34: Fix readFullDatabase (was skipping first month of data)
+0.35: Update boot/lib.min.js
+0.36: Fix Distance graphs that used '1*' to remove the suffix
+0.37: Reduce movement limit for HRM off from 400 to 100
+      Fix daily summary for movement (was not scaling down correctly)
+0.38: Calculate daily summaries for temperature, battery, charging and altitude
+0.39: Update minified JS, so changes from 0.38 take effect
+0.40: Added setting to delay turning off HRM after a good reading to improve accuracy
+0.41: Fix #4214 (Bangle.js boot broken by bad minification)
+0.42: Add quick menu option for the 'Calories' app, if installed.
+0.43: Use theme colors for bar graphs, show units, and use newer fonts in graphs.
+0.44: Add setting to allow health data to be stored in UTC time for frequent timezone travellers (#4301)

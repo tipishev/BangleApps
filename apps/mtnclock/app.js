@@ -1,9 +1,16 @@
 var data = require("Storage").readJSON("mtnclock.json", 1) || {};
 
+let weather;
+try {
+  weather = require('weather');
+} catch (_err) {
+  weather = undefined;
+}
+
 //seeded RNG to generate stars, snow, etc
 function sfc32(a, b, c, d) {
     return function() {
-      a >>>= 0; b >>>= 0; c >>>= 0; d >>>= 0; 
+      a >>>= 0; b >>>= 0; c >>>= 0; d >>>= 0;
       var t = (a + b) | 0;
       a = b ^ b >>> 9;
       b = c + (c << 3) | 0;
@@ -194,11 +201,19 @@ g.clear();
 
   //clock text
   (color.clock == undefined) ? g.setColor(0xFFFF) : g.setColor(color.clock);
-  g.setFont("Vector", py(20)).setFontAlign(-1, -1).drawString((require("locale").time(new Date(), 1).replace(" ", "")), px(2), py(67));
-  g.setFont("Vector", py(10)).drawString(require('locale').dow(new Date(), 1)+" "+new Date().getDate()+" "+require('locale').month(new Date(), 1)+((data.temp == undefined) ? "" : " | "+require('locale').temp(Math.round(data.temp-273.15)).replace(".0", "")), px(2), py(87));
-}
+  let textx = px(2), textalign=-1, datesize = py(10);
+  if (process.env.BOARD=="BANGLEJS3") {
+    textx = 120;
+    textalign = 0;
+    datesize = py(7);
+  }
+  g.setFont("Vector", py(20)).setFontAlign(textalign, -1).drawString((require("locale").time(new Date(), 1).replace(" ", "")), textx, py(67));
+  g.setFont("Vector", datesize).drawString(require('locale').dow(new Date(), 1)+" "+new Date().getDate()+" "+require('locale').month(new Date(), 1)+((data.temp == undefined) ? "" : " | "+require('locale').temp(Math.round(data.temp-273.15)).replace(".0", "")), textx, py(87));
 
-var i = 0;
+  if (data.showWidgets) {
+    Bangle.drawWidgets();
+  }
+}
 
 function setWeather() {
   var a = {};
@@ -266,7 +281,7 @@ function setWeather() {
       //night-drizzle
       if ((data.code >= 300 && data.code < 600) || (data.code >= 200 && data.code <= 202) || (data.code >= 230 && data.code <= 232)) a.rain1 = 0xC618;
       //night-rain
-      if ((data.code >= 500 && data.code < 600) || (data.code >= 200 && data.code <= 202)) rain2 = 1;
+      if ((data.code >= 500 && data.code < 600) || (data.code >= 200 && data.code <= 202)) a.rain2 = 1;
     }
   }
   else if ((data.code >= 700) && (data.code < 800)) {
@@ -323,11 +338,40 @@ function setWeather() {
   draw(a);
 }
 
+function readWeather() {
+  var weatherJson = require("Storage").readJSON('weather.json', 1);
+  // save updated weather data if available and it has been an hour since last updated
+  if (weatherJson && weatherJson.weather && weatherJson.weather.time && (data.time === undefined || (data.time + 3600000) < weatherJson.weather.time)) {
+    data.time = weatherJson.weather.time;
+    data.temp = weatherJson.weather.temp;
+    data.code = weatherJson.weather.code;
+    require("Storage").writeJSON('mtnclock.json', data);
+  }
+}
+
+function updateWeather() {
+  const current = weather.get();
+  if (current) {
+    data.temp = current.temp;
+    data.code = current.code;
+    data.time = Date.now();
+    require("Storage").writeJSON('mtnclock.json', data);
+    setWeather();
+  }
+}
+
+if (weather) {
+  weather.on("update", updateWeather);
+}
+
 const _GB = global.GB;
 global.GB = (event) => {
-  if (event.t==="weather") {
-    data = event;
-    require("Storage").write('mtnclock.json', event);
+  if (!weather && event.t==="weather" && event.v !== 2) {
+    // Fallback in case weather app is not installed
+    data.temp = event.temp;
+    data.code = event.code;
+    data.time = Date.now();
+    require("Storage").writeJSON('mtnclock.json', data);
     setWeather();
   }
   if (_GB) setTimeout(_GB, 0, event);
@@ -340,11 +384,18 @@ function queueDraw() {
   if (drawTimeout) clearTimeout(drawTimeout);
   drawTimeout = setTimeout(function() {
     drawTimeout = undefined;
+    readWeather();
     setWeather();
     queueDraw();
   }, 60000 - (Date.now() % 60000));
 }
 
 queueDraw();
+readWeather();
 setWeather();
 Bangle.setUI("clock");
+
+if (data.showWidgets) {
+  Bangle.loadWidgets();
+  Bangle.drawWidgets();
+}

@@ -1,0 +1,5 @@
+0.01: Back to the future clock first version.
+0.02: Added more icons to the status field. Made it posible to custemize the step goal thrue the Health Tracking app.
+0.03: Added charging screen.
+0.04: Optimised performance: cached modules, event-driven status updates, removed debug logging.
+0.05: Made the layout dynamic so the clock scales to any screen size.

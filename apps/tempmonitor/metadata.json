@@ -1,12 +1,15 @@
 {
   "id": "tempmonitor",
   "name": "Temperature monitor",
-  "version": "0.01",
-  "description": "Displays the current temperature and stores in a CSV file",
+  "version": "0.06",
+  "author": "dapgo",
+  "description": "Another thermometer, besides displaying current temperature, stores it in a CSV file",
   "icon": "app.png",
   "tags": "tool",
+  "interface": "interface.html",
   "supports": ["BANGLEJS", "BANGLEJS2"],
-  "screenshots": [{"url":"photo_banglejs1.jpg"}],
+  "readme": "README.md",
+  "screenshots": [{"url":"ss_emul_bjs2.png"}],
   "allow_emulator": true,
   "storage": [
     {"name":"tempmonitor.app.js","url":"tempmonitor.app.js"},

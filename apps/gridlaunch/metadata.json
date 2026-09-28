@@ -1,0 +1,20 @@
+{
+  "id": "gridlaunch",
+  "name": "Grid Launcher",
+  "shortName": "Grid Launch",
+  "version": "0.02",
+  "author": "RKBoss6",
+  "description": "A simple grid launcher in a familiar style",
+  "icon": "icon.png",
+  "type": "launch",
+  "tags": "tool,system,launcher",
+  "supports": ["BANGLEJS2"],
+   "screenshots": [
+    {"url":"scr.png"}
+  ],
+  "storage": [
+    {"name":"gridlaunch.app.js","url":"app.js"},
+    {"name":"gridlaunch.settings.js","url":"settings.js"}
+  ],
+  "data": [{"name":"launch.cache.json"},{"name":"gridlaunch.settings.json"}]
+}

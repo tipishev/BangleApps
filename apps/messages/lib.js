@@ -1,4 +1,3 @@
-exports.music = {};
 /**
  * Emit "message" event with appropriate type from Bangle
  * @param {object} msg
@@ -18,9 +17,7 @@ function emit(msg) {
 */
 exports.pushMessage = function(event) {
   // now modify/delete as appropriate
-  if (event.t==="remove") {
-    if (event.id==="music") exports.music = {};
-  } else { // add/modify
+  if (event.t!=="remove") { // add/modify
     if (event.t==="add") {
       if (event.new===undefined) event.new = true; // Assume it should be new
     } else if (event.t==="modify") {
@@ -29,10 +26,8 @@ exports.pushMessage = function(event) {
     }
 
     // combine musicinfo and musicstate events
-    if (event.id==="music") {
-      if (event.state==="play") event.new = true; // new track, or playback (re)started
-      event = Object.assign(exports.music, event);
-    }
+    if (event.id==="music" && event.state==="play")
+      event.new = true; // new track, or playback (re)started
   }
   // reset state (just in case)
   delete event.handled;
@@ -107,7 +102,7 @@ exports.dismiss = function(msg) {
 };
 
 /**
- * Emit a "type=openGUI" event, to open GUI app
+ * Open the Messages GUI app
  *
  * @param {object} [msg={}] Message the app should show
  */
@@ -153,7 +148,12 @@ exports.clearAll = function() {
 }
 
 /**
- * Get saved messages
+ * Get saved messages. If Bangle.MESSAGES was set by messagegui (messages
+ * that aren't yet written) apply them to the messages we read so we get
+ * up to date info.
+ *
+ * If were in the messages app and it's defined `MESSAGES` then we just use that
+ * as it contains all the messages that are already loaded.
  *
  * Optionally pass in a message to apply to the list, this is for event handlers:
  * By passing the message from the event, you can make sure the list is up-to-date,
@@ -168,8 +168,13 @@ exports.clearAll = function() {
  * @returns {array} All messages
  */
 exports.getMessages = function(withMessage) {
-  let messages = require("Storage").readJSON("messages.json", true);
+  let messages;
+  if (global.MESSAGES!==undefined)
+    messages = global.MESSAGES.slice(); // we're in the messages app, just use the messages list that it's keeping (clone the array)
+  else
+    messages = require("Storage").readJSON("messages.json", true);
   messages = Array.isArray(messages) ? messages : []; // make sure we always return an array
+  (Bangle.MESSAGES || []).forEach(m => require("messages").apply(m, messages)); // apply any usaved messages
   if (withMessage && withMessage.id) exports.apply(withMessage, messages);
   return messages;
 };
@@ -204,19 +209,22 @@ exports.buzz = function(msgSrc) {
   if ((require("Storage").readJSON("setting.json", 1) || {}).quiet) return Promise.resolve(); // never buzz during Quiet Mode
   const msgSettings = require("Storage").readJSON("messages.settings.json", true) || {};
   let pattern;
+  let repeat;
   if (msgSrc && msgSrc.toLowerCase()==="phone") {
     // special vibration pattern for incoming calls
     pattern = msgSettings.vibrateCalls;
+    repeat = msgSettings.repeatCalls;
   } else {
     pattern = msgSettings.vibrate;
+    repeat = msgSettings.repeat;
   }
-  if (pattern===undefined) { pattern = ":"; } // pattern may be "", so we can't use || ":" here
+  if (pattern===undefined) { pattern = "="; } // pattern may be "", so we can't use || "=" here
   if (!pattern) return Promise.resolve();
 
-  let repeat = msgSettings.repeat;
   if (repeat===undefined) repeat = 4; // repeat may be zero
-  if (repeat) {
-    exports.buzzTimeout = setTimeout(() => require("buzz").pattern(pattern), repeat*1000);
+  if (repeat)
+  {
+    exports.buzzInterval = setInterval(() => require("buzz").pattern(pattern), repeat*1000);
     let vibrateTimeout = msgSettings.vibrateTimeout;
     if (vibrateTimeout===undefined) vibrateTimeout = 60;
     if (vibrateTimeout && !exports.stopTimeout) exports.stopTimeout = setTimeout(exports.stopBuzz, vibrateTimeout*1000);
@@ -227,8 +235,8 @@ exports.buzz = function(msgSrc) {
  * Stop buzzing
  */
 exports.stopBuzz = function() {
-  if (exports.buzzTimeout) clearTimeout(exports.buzzTimeout);
-  delete exports.buzzTimeout;
+  if (exports.buzzInterval) clearInterval(exports.buzzInterval);
+  delete exports.buzzInterval;
   if (exports.stopTimeout) clearTimeout(exports.stopTimeout);
   delete exports.stopTimeout;
 };

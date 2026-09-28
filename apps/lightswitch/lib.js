@@ -6,17 +6,21 @@ exports = {
     // check for double tap and direction
     if (data.double) {
       // setup shortcut to this widget or load from storage
-      var w = global.WIDGETS ? WIDGETS.lightswitch : Object.assign({
+      var w = global.WIDGETS && WIDGETS.lightswitch || Object.assign({
         unlockSide: "",
         tapSide: "right",
         tapOn: "always",
+        isOn: true
       }, require("Storage").readJSON("lightswitch.json", true) || {});
 
       // cache lock status
       var locked = Bangle.isLocked();
 
       // check to unlock
-      if (locked && data.dir === w.unlockSide) Bangle.setLocked();
+      if (locked && data.dir === w.unlockSide) {
+        Bangle.setLocked();
+        if (w.isOn) Bangle.setLCDPower(true);
+      }
 
       // check to flash
       if (data.dir === w.tapSide && (w.tapOn === "always" || locked === (w.tapOn === "locked"))) require("lightswitch.js").flash();
@@ -31,20 +35,21 @@ exports = {
   // function to flash backlight
   flash: function(tOut) {
     // setup shortcut to this widget or load from storage
-    var w = global.WIDGETS ? WIDGETS.lightswitch : Object.assign({
+    var w = global.WIDGETS && WIDGETS.lightswitch || Object.assign({
       tOut: 3000,
       minFlash: 0.2,
       value: 1,
       isOn: true
     }, require("Storage").readJSON("lightswitch.json", true) || {});
 
-    // chack if locked, backlight off or actual value lower then minimal flash value
+    // check if locked, backlight off or actual value lower then minimal flash value
     if (Bangle.isLocked() || !w.isOn || w.value < w.minFlash) {
 
       // set inner bulb and brightness
       var setBrightness = function(w, value) {
         if (w.drawInnerBulb) w.drawInnerBulb(value);
         Bangle.setLCDBrightness(value);
+        Bangle.setLCDPower(true);
       };
 
       // override timeout if defined

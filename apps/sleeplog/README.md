@@ -1,17 +1,19 @@
 # Sleep Log
 
 This app logs and displays the following states:
-- sleepling status: _unknown, not worn, awake, light sleep, deep sleep_
+- sleeping status: _unknown, not worn, awake, light sleep, deep sleep_
 - consecutive sleep status: _unknown, not consecutive, consecutive_
 
-It is using the built in movement calculation to decide your sleeping state. While charging it is assumed that you are not wearing the watch and if the status changes to _deep sleep_ the internal heartrate sensor is used to detect if you are wearing the watch.
+It is using the built in movement calculation or HRM to decide your sleeping state. While charging it is assumed that you are not wearing the watch and if the status changes to _deep sleep_ the internal heartrate sensor is used to detect if you are wearing the watch.
+
+If HRM polling is enabled in the `Health` app, sleep tracking can use the HRM sensor to detect sleep status instead. Set `Prefer HRM` in settings to enable. Falls back to using movement calculations if HRM is not available.
 
 #### Explanations
-* __Detection of Sleep__  
+* __Detection of Sleep__
   The movement value of bangle's build in health event that is triggered every 10 minutes is checked against the thresholds for light and deep sleep. If the measured movement is lower or equal to the __Deep Sleep__-threshold a deep sleep phase is detected for the last 10 minutes. If the threshold is exceeded but not the __Light Sleep__-threshold than the last timeperiod is detected as light sleep phase. On exceeding even this threshold it is assumed that you were awake.
-* __True Sleep__  
+* __True Sleep__
   The true sleep value is a simple addition of all registered sleeping periods.
-* __Consecutive Sleep__  
+* __Consecutive Sleep__
   In addition the consecutive sleep value tries to predict the complete time you were asleep, even the very light sleeping periods when an awake period is detected based on the registered movements. All periods after a sleeping period will be summarized until the first following non sleeping period that is longer then the maximal awake duration (__Max Awake__). If this sum is lower than the minimal consecutive sleep duration (__Min Consecutive__) it is not considered, otherwise it will be added to the consecutive sleep value.
 
 Logfiles are not removed on un-/reinstall to prevent data loss.
@@ -19,7 +21,7 @@ Logfiles are not removed on un-/reinstall to prevent data loss.
 | Filename (* _example_)       | Content         | Removeable in     |
 |------------------------------|-----------------|-------------------|
 | `sleeplog.log (StorageFile)` | recent logfile  | App Web Interface |
-| `sleeplog_1234.log`*         | old logfiles    | App Web Interface |
+| `sleeplog_1234.log`*         | past logfiles   | App Web Interface |
 | `sleeplog_123456.csv`*       | debugging files | Web IDE           |
 
 
@@ -30,7 +32,7 @@ Logfiles are not removed on un-/reinstall to prevent data loss.
 #### Controls:
   - __swipe left & right__
     to change the displayed day
-  - __touch the "title"__ (e.g. `Night to Fri 20/05/2022`)
+  - __touch the "title"__ (e.g. `Thu to Fri 20/05/2022`)
     to enter day selection prompt
   - __touch the info area__
     to change the displayed information
@@ -54,22 +56,53 @@ Logfiles are not removed on un-/reinstall to prevent data loss.
 ---
 ### Settings Usage
 ---
+#### Tuning guide
+To make sure the app accurately provides sleep information, it's a good idea to change the default thresholds to find one that works for you. A step-by-step process would be:
+##### Simple version
+- Set the thresholds (movement or hrm, depending on what you use) to be high.
+- Every day, look at the sleep it tracked and see if it's accurate or not.
+- If it doesn't detect much, reduce the thresholds.
+- If it detects more than it should, increase slightly until you find an accurate setting.
 
-  - __Thresholds__ submenu
+##### More involved version, quicker to figure out accurate thresholds
+- Enable debugging and check "write file"; make sure to give it a long enough duration (the default is 12h, but you'll want to cover both times when you're awake and when you're asleep).
+- Fetch the debug log with the [web ide](https://www.espruino.com/ide/), by clicking the "Access device storage" button (best done on a computer - disconnect the watch from GadgetBridge, and use a browser with WebBluetooth capability).
+- Import the CSV into a spreadsheet; in order to see dates, set the formatting for the timestamp column to Date, and it will display the UTC date and time of the entry.
+- (optionally, for easier determination of thresholds) Chart the bpm and movement columns with the timestamp as the X axis, and determine the values most suited for you.
+- Set the thresholds for movement and HRM based on the data.
+- The next day, look at the sleep it tracked and see if it's accurate or not.
+- Adjust thresholds accordingly, maybe by repeating the steps above to capture and chart more debug data.
+
+#### Settings
+
+  - __Movement Thresholds__ submenu
     Changes take effect from now on, not retrospective!
-    - __Max Awake__ | maximal awake duration
-      _10min_ / _20min_ / ... / __60min__ / ... / _120min_
-    - __Min Consecutive__ | minimal consecutive sleep duration
-      _10min_ / _20min_ / ... / __30min__ / ... / _120min_
     - __Deep Sleep__ | deep sleep threshold
       _30_ / _31_ / ... / __100__ / ... / _200_
     - __Light Sleep__ | light sleep threshold
       _100_ / _110_ / ... / __200__ / ... / _400_
-    - __Reset to Default__ | reset to bold values above
-  - __BreakToD__ | time of day to break view
-    _0:00_ / _1:00_ / ... / __12:00__ / ... / _23:00_
-  - __App Timeout__ | app specific lock timeout
-    __0s__ / _10s_ / ... / _120s_
+     - __Reset to Default__ | reset to bold values above
+  - __Other Settings__ submenu  
+      - __BreakToD__ | time of day to break view
+        _0:00_ / _1:00_ / ... / __12:00__ / ... / _23:00_
+      - __App Timeout__ | app specific lock timeout
+        __0s__ / _10s_ / ... / _120s_
+      - __Sleep Mode__ | Defines which sensors are used to determine your sleeping state.
+        - **Movement:** Uses only the accelerometer (default).
+        - **HRM:** Uses the heart rate monitor if available (falls back to movement if no pulse is found).
+        - **Both:** Requires *both* the movement and HRM thresholds to indicate sleep. Helps prevent false positives when sitting quietly at a desk.
+      - __HRM Thresholds__ submenu
+        Changes take effect from now on, not retrospective! HRM works only if polling is enabled in `Health` settings
+        - __Deep Sleep__ | deep sleep threshold
+          _40_ / _41_ / ... / __60__ / ... / _80_
+        - __Light Sleep__ | light sleep threshold
+          _50_ / _51_ / ... / __74__ / ... / _90_
+         - __Reset to Default__ | reset to bold values above
+      - __Wear Temperature__ | Set the minimum measured temperature of the wearable to consider it being worn. Can be disabled to use the HRM instead to detect if it's being worn.
+      - __Max Awake__ | maximal awake duration
+      _10min_ / _20min_ / ... / __60min__ / ... / _120min_
+    - __Min Consecutive__ | minimal consecutive sleep duration
+      _10min_ / _20min_ / ... / __30min__ / ... / _120min_
   - __Enabled__ | completely en-/disables the background service
     __on__ / _off_
   - __Debugging__ submenu
@@ -100,13 +133,20 @@ Logfiles are not removed on un-/reinstall to prevent data loss.
 
 Available through the App Loader when your watch is connected.
 
-- __view data__
-  Display the data to each timestamp in a table.
-- __save csv-file__
-  Download a csv-file with the data to each timestamp.
-  The time format is chooseable beneath the file list.
-- __delete file__
-  Deletes the logfile from the watch. __Please backup your data first!__
+- A list of all found logfiles with following options for each file:
+  - __view data__
+    Display the data to each timestamp in a table.
+  - __save csv-file__
+    Download a csv-file with the data to each timestamp.
+    The time format is chooseable beneath the file list.
+  - __delete file__
+    Deletes the logfile from the watch. __Please backup your data first!__
+- __csv time format__
+    __JavaScript (milliseconds since 1970)__ /
+    _UNIX (seconds since 1970)_ /
+    _Office (days since 1900)_
+- __delete all logfiles before__
+  Deletes all logfile before the given date from the watch. __Please backup your data first!__
 
 ---
 ### Timestamps and Files
@@ -184,11 +224,12 @@ if (typeof (global.sleeplog || {}).trigger === "object") {
     from: 0,           // 0 as default, in ms, first time fn will be called
     to: 24*60*60*1000, // 24h as default, in ms, last time fn will be called
       // reference time to from & to is rounded to full minutes
-    fn: function(data) { print(data); } // function to be executed
+    fn: function(data, thisTriggerEntry) { print(data); } // function to be executed
   };
 }
 ```
-The passed data object has the following properties:
+
+The passed __data__ object has the following properties:
 - timestamp: of the status change as date object,
     (should be around 10min. before "now", the actual call of the function)
 - status: value of the new status (0-4),
@@ -199,12 +240,18 @@ The passed data object has the following properties:
 - prevConsecutive: if changed the value of the previous status (0-2) else undefined
 
 
+If you want to use other variables or functions from the trigger object inside the trigger fn function, you will find them inside the __thisTriggerEntry__ object, as the this keyword is not working in this scenario. The function itself (the fn property) is not passed inside the thisTriggerEntry object.
+
+
 ---
 ### Worth Mentioning
 ---
 #### To do list
+- Optimize interface.html:
+  - Open logfile through require("Storage") instead of require("sleeplog").
+  - Give feedback how much files have been deleted on "delete all logfiles before".
 - Check translations.
-- Add more functionallities to interface.html.
+- Add more functionalities to interface.html.
 - Enable receiving data on the Gadgetbridge side + testing.
   __Help appreciated!__
 
@@ -215,7 +262,8 @@ Please leave requests and bug reports by raising an issue at [github.com/storm64
 Storm64 ([mail](mailto:banglejs@storm64.de), [github](https://github.com/storm64))
 
 #### Contributors
-myxor ([github](https://github.com/myxor))
+- myxor ([github](https://github.com/myxor))
+- RKBoss6
 
 #### Attributions
 The app icon is downloaded from [https://icons8.com](https://icons8.com).

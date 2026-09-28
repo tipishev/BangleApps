@@ -1,8 +1,16 @@
 (function (back) {
   var settings = Object.assign({
     hrm: 0,
-    stepGoal: 10000
+    hrmTimeout: 0,
+    wearCheckTemp: 0, // 0 = Movement/Z-Axis, > 0 = Temperature check
+    stepGoal: 10000,
+    stepGoalNotification: false,
+    useUTC : false
   }, require("Storage").readJSON("health.json", true) || {});
+
+  function setSettings() {
+    require("Storage").writeJSON("health.json", settings);
+  }
 
   E.showMenu({
     "": { title: /*LANG*/"Health Tracking" },
@@ -21,7 +29,31 @@
       ][v],
       onchange: v => {
         settings.hrm = v;
-        setSettings(settings);
+        setSettings();
+      }
+    },
+
+    /*LANG*/"HRM Stop Delay": {
+      value: settings.hrmTimeout,
+      min: 0,
+      max: 60,
+      step: 1,
+      format: v => v === 0 ? /*LANG*/"None" : v + "s",
+      onchange: v => {
+        settings.hrmTimeout = v;
+        setSettings();
+      }
+    },
+
+    /*LANG*/"Wear Check": {
+      value: settings.wearCheckTemp || 0,
+      min: 0,
+      max: 40,
+      step: 0.5,
+      format: v => v === 0 ? /*LANG*/"Movement" : v.toFixed(1) + "°C",
+      onchange: v => {
+        settings.wearCheckTemp = v;
+        setSettings();
       }
     },
 
@@ -32,12 +64,24 @@
       step: 250,
       onchange: v => {
         settings.stepGoal = v;
-        setSettings(settings);
+        setSettings();
       }
-    }
-  });
+    },
 
-  function setSettings(settings) {
-    require("Storage").writeJSON("health.json", settings);
-  }
+    /*LANG*/"Step Goal Notification": {
+      value: !!settings.stepGoalNotification,
+      onchange: v => {
+        settings.stepGoalNotification = v;
+        setSettings();
+      }
+    },
+
+     /*LANG*/"UTC time": {
+      value: !!settings.useUTC,
+      onchange: v => {
+        settings.useUTC = v;
+        setSettings();
+      }
+    },
+  });
 })

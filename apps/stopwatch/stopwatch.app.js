@@ -1,13 +1,31 @@
+{
+const CONFIGFILE = "stopwatch.json";
+
+const now = Date.now();
+const config = Object.assign({
+    state: {
+        total: now,
+        start: now,
+        current: now,
+        running: false,
+        laps: [],
+    },
+    lapSupport: false,
+}, require("Storage").readJSON(CONFIGFILE,1) || {});
+
+if(config.state.laps == null) config.state.laps = [];
+
 let w = g.getWidth();
 let h = g.getHeight();
-let tTotal = Date.now();
-let tStart = tTotal;
-let tCurrent = tTotal;
-let running = false;
+let tTotal = config.state.total;
+let tStart = config.state.start;
+let tCurrent = config.state.current;
+let running = config.state.running;
 let timeY = 2*h/5;
 let displayInterval;
 let redrawButtons = true;
 const iconScale = g.getWidth() / 178; // scale up/down based on Bangle 2 size
+const origTheme = g.theme;
 
 // 24 pixel images, scale to watch
 // 1 bit optimal, image string, no E.toArrayBuffer()
@@ -15,42 +33,55 @@ const pause_img = atob("GBiBAf////////////////wYP/wYP/wYP/wYP/wYP/wYP/wYP/wYP/wY
 const play_img = atob("GBjBAP//AAAAAAAAAAAIAAAOAAAPgAAP4AAP+AAP/AAP/wAP/8AP//AP//gP//gP//AP/8AP/wAP/AAP+AAP4AAPgAAOAAAIAAAAAAAAAAA=");
 const reset_img = atob("GBiBAf////////////AAD+AAB+f/5+f/5+f/5+cA5+cA5+cA5+cA5+cA5+cA5+cA5+cA5+f/5+f/5+f/5+AAB/AAD////////////w==");
 
-function log_debug(o) {
-  //console.log(o);
-}
+const saveState = function() {
+    config.state.total = tTotal;
+    config.state.start = tStart;
+    config.state.current = tCurrent;
+    config.state.running = running;
+    require("Storage").writeJSON(CONFIGFILE, config);
+};
 
-function timeToText(t) {
+//const log_debug = function(o) {
+//  console.log(o);
+//};
+
+const timeToText = function(t) {
   let hrs = Math.floor(t/3600000);
   let mins = Math.floor(t/60000)%60;
   let secs = Math.floor(t/1000)%60;
   let tnth = Math.floor(t/100)%10;
   let text;
 
-  if (hrs === 0) 
+  if (hrs === 0)
     text = ("0"+mins).substr(-2) + ":" + ("0"+secs).substr(-2) + "." + tnth;
   else
     text = ("0"+hrs) + ":" + ("0"+mins).substr(-2) + ":" + ("0"+secs).substr(-2);
 
   //log_debug(text);
   return text;
-}
+};
 
-function drawButtons() {
-  log_debug("drawButtons()");
-  if (!running && tCurrent == tTotal) {
+const drawButtons = function() {
+  // log_debug("drawButtons()");
+  if (!running && tCurrent === tTotal) {
     bigPlayPauseBtn.draw();
-  } else if (!running && tCurrent != tTotal) {
+  } else if (!running && tCurrent !== tTotal) {
     resetBtn.draw();
     smallPlayPauseBtn.draw();
   } else {
-    bigPlayPauseBtn.draw();
+    if (config.lapSupport) {
+      resetBtn.draw();
+      smallPlayPauseBtn.draw();
+    } else {
+      bigPlayPauseBtn.draw();
+    }
   }
-  
-  redrawButtons = false;
-}
 
-function drawTime() {
-  log_debug("drawTime()");
+  redrawButtons = false;
+};
+
+const drawTime = function() {
+  // log_debug("drawTime()");
   let Tt = tCurrent-tTotal;
   let Ttxt = timeToText(Tt);
 
@@ -58,35 +89,45 @@ function drawTime() {
   g.setFont("Vector",38);  // check
   g.setFontAlign(0,0);
   g.clearRect(0, timeY - 21, w, timeY + 21);
-  g.setColor(g.theme.fg); 
+  g.setColor(g.theme.fg);
   g.drawString(Ttxt, w/2, timeY);
-}
 
-function draw() {
-  let last = tCurrent;
+  if (config.lapSupport) {
+    g.clearRect(0, timeY + 21, w, 3*h/4);
+    const laps = config.state.laps;
+    let window = laps.length - 2; // space for last two laps
+    if (window < 0) window = 0;
+    for(let i = window; i < laps.length; i++){
+      g.setFont("Vector", 20).drawString(timeToText(laps[i]), w/2, timeY + 26 + 20 * (i - window));
+    }
+  }
+};
+
+const draw = function() {
+  //let last = tCurrent;
   if (running) tCurrent = Date.now();
   g.setColor(g.theme.fg);
   if (redrawButtons) drawButtons();
   drawTime();
-}
+};
 
-function startTimer() {
-  log_debug("startTimer()");
+const startTimer = function() {
+  // log_debug("startTimer()");
   draw();
   displayInterval = setInterval(draw, 100);
-}
+};
 
-function stopTimer() {
-  log_debug("stopTimer()");
+const stopTimer = function() {
+  // log_debug("stopTimer()");
   if (displayInterval) {
     clearInterval(displayInterval);
     displayInterval = undefined;
   }
-}
+};
 
 // BTN stop start
-function stopStart() {
-  log_debug("stopStart()");
+const stopStart = function() {
+  // log_debug("stopStart()");
 
   if (running)
     stopTimer();
@@ -95,7 +136,7 @@ function stopStart() {
   Bangle.buzz();
 
   if (running)
-    tStart = Date.now() + tStart- tCurrent;  
+    tStart = Date.now() + tStart- tCurrent;
   tTotal = Date.now() + tTotal - tCurrent;
   tCurrent = Date.now();
 
@@ -106,34 +147,44 @@ function stopStart() {
   } else {
     draw();
   }
-}
+  saveState();
+};
 
-function setButtonImages() {
+const setButtonImages = function() {
   if (running) {
     bigPlayPauseBtn.setImage(pause_img);
     smallPlayPauseBtn.setImage(pause_img);
-    resetBtn.setImage(reset_img);
   } else {
     bigPlayPauseBtn.setImage(play_img);
     smallPlayPauseBtn.setImage(play_img);
-    resetBtn.setImage(reset_img);
   }
-}
+  resetBtn.setImage(reset_img);
+};
 
 // lap or reset
-function lapReset() {
-  log_debug("lapReset()");
-  if (!running && tStart != tCurrent) {
-    redrawButtons = true;
+const lapReset = function() {
+  // log_debug("lapReset()");
+  if (!running) {
+    if (tStart !== tCurrent) {
+      redrawButtons = true;
+      Bangle.buzz();
+      tStart = tCurrent = tTotal = Date.now();
+      config.state.laps = [];
+      g.clearRect(0,24,w,h);
+      draw();
+    }
+    // else nothing to reset
+  } else {
+    // running, new lap
     Bangle.buzz();
-    tStart = tCurrent = tTotal = Date.now();
-    g.clearRect(0,24,w,h);
-    draw();
+    const lap = tCurrent - tTotal;
+    config.state.laps.push(lap);
   }
-}
+  saveState();
+};
 
 // simple on screen button class
-function BUTTON(name,x,y,w,h,c,f,i) {
+const BUTTON = function(name,x,y,w,h,c,f,i) {
   this.name = name;
   this.x = x;
   this.y = y;
@@ -142,18 +193,18 @@ function BUTTON(name,x,y,w,h,c,f,i) {
   this.color = c;
   this.callback = f;
   this.img = i;
-}
+};
 
 BUTTON.prototype.setImage = function(i) {
   this.img = i;
-}
+};
 
 // if pressed the callback
 BUTTON.prototype.check = function(x,y) {
   //console.log(this.name + ":check() x=" + x + " y=" + y +"\n");
-  
+
   if (x>= this.x && x<= (this.x + this.w) && y>= this.y && y<= (this.y + this.h)) {
-    log_debug(this.name + ":callback\n");
+    // log_debug(this.name + ":callback\n");
     this.callback();
     return true;
   }
@@ -164,59 +215,68 @@ BUTTON.prototype.draw = function() {
   g.setColor(this.color);
   g.fillRect(this.x, this.y, this.x + this.w, this.y + this.h);
   g.setColor("#000"); // the icons and boxes are drawn black
-  if (this.img != undefined) {
+  if (this.img !== undefined) {
     let iw = iconScale * 24;  // the images were loaded as 24 pixels, we will scale
     let ix = this.x + ((this.w - iw) /2);
     let iy = this.y + ((this.h - iw) /2);
-    log_debug("g.drawImage(" + ix + "," + iy + "{scale: " + iconScale + "})");
-    g.drawImage(this.img, ix, iy, {scale: iconScale}); 
+    // log_debug("g.drawImage(" + ix + "," + iy + "{scale: " + iconScale + "})");
+    g.drawImage(this.img, ix, iy, {scale: iconScale});
   }
   g.drawRect(this.x, this.y, this.x + this.w, this.y + this.h);
 };
 
 
-var bigPlayPauseBtn = new BUTTON("big",0, 3*h/4 ,w, h/4, "#0ff", stopStart, play_img);
-var smallPlayPauseBtn = new BUTTON("small",w/2, 3*h/4 ,w/2, h/4, "#0ff", stopStart, play_img);
-var resetBtn = new BUTTON("rst",0, 3*h/4, w/2, h/4, "#ff0", lapReset, pause_img);
+const bigPlayPauseBtn = new BUTTON("big",0, 3*h/4 ,w, h/4, "#0ff", stopStart, play_img);
+const smallPlayPauseBtn = new BUTTON("small",w/2, 3*h/4 ,w/2, h/4, "#0ff", stopStart, play_img);
+const resetBtn = new BUTTON("rst",0, 3*h/4, w/2, h/4, "#ff0", lapReset, pause_img);
 
-bigPlayPauseBtn.setImage(play_img);
-smallPlayPauseBtn.setImage(play_img);
-resetBtn.setImage(pause_img);
+Bangle.setUI({mode:"custom", btn:() => Bangle.load(), touch: (button,xy) => {
+    let x = xy.x;
+    let y = xy.y;
 
+    // adjust for outside the dimension of the screen
+    // http://forum.espruino.com/conversations/371867/#comment16406025
+    if (y > h) y = h;
+    if (y < 0) y = 0;
+    if (x > w) x = w;
+    if (x < 0) x = 0;
 
-Bangle.on('touch', function(button, xy) {
-  var x = xy.x;
-  var y = xy.y;
+    if (!running) {
+      if (tCurrent === tTotal) {
+        // paused and reset
+        if (bigPlayPauseBtn.check(x, y)) return;
+      } else {
+        // paused and hit play
+        if (smallPlayPauseBtn.check(x, y)) return;
 
-  // adjust for outside the dimension of the screen
-  // http://forum.espruino.com/conversations/371867/#comment16406025
-  if (y > h) y = h;
-  if (y < 0) y = 0;
-  if (x > w) x = w;
-  if (x < 0) x = 0;
+        // paused and press reset
+        if (resetBtn.check(x, y)) return;
+      }
+    } else {
+      if (config.lapSupport) {
+        if (smallPlayPauseBtn.check(x, y)) return;
 
-  // not running, and reset
-  if (!running && tCurrent == tTotal && bigPlayPauseBtn.check(x, y)) return;
-
-  // paused and hit play
-  if (!running && tCurrent != tTotal && smallPlayPauseBtn.check(x, y)) return;
-
-  // paused and press reset
-  if (!running && tCurrent != tTotal && resetBtn.check(x, y)) return;
-
-  // must be running
-  if (running && bigPlayPauseBtn.check(x, y)) return;
-});
+        if (resetBtn.check(x, y)) return;
+      } else {
+        if (bigPlayPauseBtn.check(x, y)) return;
+      }
+    }
+  }, remove: () => {
+  if (displayInterval) {
+    clearInterval(displayInterval);
+    displayInterval = undefined;
+  }
+  Bangle.removeListener('lcdPower',onLCDPower);
+  g.setTheme(origTheme);
+}});
 
 // Stop updates when LCD is off, restart when on
-Bangle.on('lcdPower',on=>{
+const onLCDPower = (on) => {
   if (on) {
     draw(); // draw immediately, queue redraw
-  } else { // stop draw timer
-    if (drawTimeout) clearTimeout(drawTimeout);
-    drawTimeout = undefined;
   }
-});
+};
+Bangle.on('lcdPower',onLCDPower);
 
 // Clear the screen once, at startup
 g.setTheme({bg:"#000",fg:"#fff",dark:true}).clear();
@@ -226,5 +286,10 @@ g.fillRect(0,0,w,h);
 
 Bangle.loadWidgets();
 Bangle.drawWidgets();
-draw();
-setWatch(() => load(), BTN, { repeat: false, edge: "falling" });
+setButtonImages();
+if (running) {
+    startTimer();
+} else {
+    draw();
+}
+}

@@ -11,7 +11,6 @@ Graphics.prototype.setFontRobotoRegular21 = function(scale) {
 };
 
 {
-let clock_info = require("clock_info");
 let locale = require("locale");
 let storage = require("Storage");
 
@@ -20,25 +19,13 @@ let settings = Object.assign(
   storage.readJSON("circlesclock.default.json", true) || {},
   storage.readJSON(SETTINGS_FILE, true) || {}
 );
- //TODO deprecate this (and perhaps use in the clkinfo module)
-// Load step goal from health app and pedometer widget as fallback
-if (settings.stepGoal == undefined) {
-  let d = storage.readJSON("health.json", true) || {};
-  settings.stepGoal = d != undefined && d.settings != undefined ? d.settings.stepGoal : undefined;
-
-  if (settings.stepGoal == undefined) {
-    d = storage.readJSON("wpedom.json", true) || {};
-    settings.stepGoal = d != undefined && d.settings != undefined ? d.settings.goal : 10000;
-  }
-}
 
 let drawTimeout;
 const showWidgets = settings.showWidgets || false;
 const circleCount = settings.circleCount || 3;
 const showBigWeather = settings.showBigWeather || false;
 
-let hrtValue; //TODO deprecate this
-let now = Math.round(new Date().getTime() / 1000);
+//let now = Math.round(new Date().getTime() / 1000);
 
 // layout values:
 let colorFg = g.theme.dark ? '#fff' : '#000';
@@ -99,7 +86,7 @@ let draw = function() {
     g.setFontAlign(-1, -1);
     g.drawString(locale.time(new Date(), 1), 2, h1 + 6);
   }
-  now = Math.round(new Date().getTime() / 1000);
+  //now = Math.round(new Date().getTime() / 1000);
 
   // date & dow
   g.setFontRobotoRegular21();
@@ -128,8 +115,13 @@ let draw = function() {
   queueDraw();
 }
 
-let getCircleColor = function(index) {
-  let color = settings["circle" + index + "color"];
+let getCircleColor = function(item, data, clkmenu) {
+  let colorKey = clkmenu.name;
+  if(!clkmenu.dynamic) colorKey += "/"+item.name;
+  colorKey += "_color";
+  let color = settings[colorKey];
+  //use default color only if no other color is set
+  if(data.color && !color) return data.color;
   if (color && color != "") return color;
   return g.theme.fg;
 }
@@ -138,7 +130,7 @@ let getGradientColor = function(color, percent) {
   if (isNaN(percent)) percent = 0;
   if (percent > 1) percent = 1;
   let colorList = [
-    '#00FF00', '#80FF00', '#FFFF00', '#FF8000', '#FF0000'
+    '#00ff00', '#80ff00', '#ffff00', '#ff8000', '#ff0000'
   ];
   if (color == "fg") {
     color = colorFg;
@@ -146,10 +138,25 @@ let getGradientColor = function(color, percent) {
   if (color == "green-red") {
     let colorIndex = Math.round(colorList.length * percent);
     return colorList[Math.min(colorIndex, colorList.length) - 1] || "#00ff00";
+    //return g.blendColor('#00ff00', '#ff0000', percent); //mostly dithering
   }
   if (color == "red-green") {
     let colorIndex = colorList.length - Math.round(colorList.length * percent);
     return colorList[Math.min(colorIndex, colorList.length)] || "#ff0000";
+    //return g.blendColor('#ff0000', '#00ff00', percent);
+  }
+  colorList = [
+    '#0000ff', '#8800ff', '#ff00ff', '#ff0088', '#ff0000'
+  ];
+  if (color == "blue-red") {
+    let colorIndex = Math.round(colorList.length * percent);
+    return colorList[Math.min(colorIndex, colorList.length) - 1] || "#0000ff";
+    //return g.blendColor('#0000ff', '#ff0000', percent);
+  }
+  if (color == "red-blue") {
+    let colorIndex = colorList.length - Math.round(colorList.length * percent);
+    return colorList[Math.min(colorIndex, colorList.length)] || "#ff0000";
+    //return g.blendColor('#ff0000', '#0000ff', percent);
   }
   return color;
 }
@@ -163,6 +170,7 @@ let getCircleIconColor = function(index, color, percent) {
   }
 }
 
+/*
 let drawEmpty = function(img, w, color) {
   drawGauge(w, h3, 0, color);
   drawInnerCircleAndTriangle(w);
@@ -171,11 +179,12 @@ let drawEmpty = function(img, w, color) {
     g.setColor(getGradientColor(color, 0))
       .drawImage(img, w - iconOffset, h3 + radiusOuter - iconOffset, {scale: 16/24});
 }
+*/
 
-let drawCircle = function(index, item, data) {
+let drawCircle = function(index, item, data, clkmenu) {
   var w = circlePosX[index-1];
   drawCircleBackground(w);
-  const color = getCircleColor(index);
+  const color = getCircleColor(item, data, clkmenu);
   //drawEmpty(info? info.img : null, w, color);
   var img = data.img;
   var percent = 1; //fill up if no range
@@ -338,7 +347,8 @@ Bangle.setUI({
 
 let clockInfoDraw = (itm, info, options) => {
   //print("Draw",itm.name,options);
-  drawCircle(options.circlePosition, itm, info);
+  let clkmenu = clockInfoItems[options.menuA];
+  drawCircle(options.circlePosition, itm, info, clkmenu);
   if (options.focus) g.reset().drawRect(options.x, options.y, options.x+options.w-2, options.y+options.h-1)
 };
 let clockInfoItems = require("clock_info").load();
@@ -347,6 +357,7 @@ for(var i=0;i<circleCount; i++) {
   let w = circlePosX[i];
   let y = h3-radiusBorder;
   clockInfoMenu[i] = require("clock_info").addInteractive(clockInfoItems, {
+    app:"circlesclock",
     x:w-radiusBorder, y:y, w:radiusBorder*2, h:g.getHeight()-(y+1),
     draw : clockInfoDraw, circlePosition : i+1
   });

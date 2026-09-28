@@ -1,6 +1,6 @@
 // Settings menu for Time calendar clock
 (function(exit) {
-  ABR_DAY = require("locale") && require("locale").abday ? require("locale").abday : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const ABR_DAY = require("locale") && require("locale").abday ? require("locale").abday : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   var FILE = "timecal.settings.json";
 
@@ -17,9 +17,10 @@
     suClr:1, //0:fg, 1:red=#E00, 2:green=#0E0, 3:blue=#00E
     //phColor:"#E00", //public holiday
 
-    calBrdr:false 
+    calBrdr:false,
+    showWeather:false
   };
-  validSttngs = require("Storage").readJSON(FILE, 1) || {};
+  let validSttngs = require("Storage").readJSON(FILE, 1) || {};
   for (const k in validSttngs) if (!DEFAULTS.hasOwnProperty(k)) delete this.validSttngs[k]; //remove invalid settings
   for (const k in DEFAULTS) if(!validSttngs.hasOwnProperty(k)) validSttngs[k] = DEFAULTS[k]; //assign missing defaults fixed
 
@@ -64,6 +65,11 @@
         format: v => v ? /*LANG*/"show" : /*LANG*/"none",
         onchange: v => chngdSttngs.calBrdr = v
       },
+      "Weather": {
+        value: chngdSttngs.showWeather,
+        format: v => v ? /*LANG*/"show" : /*LANG*/"none",
+        onchange: v => chngdSttngs.showWeather = v
+      },
       /*LANG*/"Today settings": () => showTodayMenu(),
       /*LANG*/"< Cancel": () => cancelExitSettings()
     });
@@ -104,4 +110,4 @@
   };
 
   showMainMenu();
-});
+})

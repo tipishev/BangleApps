@@ -1,2 +1,11 @@
 0.01: New App!
 0.02: Use Bangle.showClock for changing to clock (Backport from launch)
+0.03: Remove app from 'tool' when it has at least one other known tag
+      Add tag 'health' for apps like Heart Rate Monitor
+0.04: Fix remove handler
+0.05: Make the "App source not found" warning less buggy
+0.06: Fixed a crash if an app has no tags (app.tags is undefined)
+0.07: Clear cached app list when updating showClocks setting
+0.08: Add haptic feedback option when selecting app or category in menu, increase vector size limit in settings
+0.09: Add option to set up to 3 shortcut apps that you can access straight from the tag menu for quicker access
+0.10: Fast load apps similar to launcher_utils library

@@ -14,7 +14,7 @@ function onHRM(h) {
     // the first time we're called remove
     // the countdown
     counter = undefined;
-    g.clearRect(0,24,g.getWidth(),g.getHeight());
+    g.reset().clearRect(0,24,g.getWidth(),g.getHeight());
   }
   hrmInfo = h;
   /* On 2v09 and earlier firmwares the only solution for realtime
@@ -35,7 +35,7 @@ Bangle.on('HRM', onHRM);
 
 function updateHrm(){
   var px = g.getWidth()/2;
-  g.setFontAlign(0,-1);
+  g.reset().setFontAlign(0,-1);
   g.clearRect(0,24,g.getWidth(),80);
   g.setFont("6x8").drawString(/*LANG*/"Confidence "+(hrmInfo.confidence || "--")+"%", px, 70);
 
@@ -57,12 +57,12 @@ function updateScale(){
 
 var rawMax = 0;
 var scale = 2000;
-var MID = (g.getHeight()+80)/2;
+//var MID = (g.getHeight()+80)/2;
 /* On newer (2v10) firmwares we can subscribe to get
 HRM events as they happen */
 Bangle.on('HRM-raw', function(v) {
-  h=v;
   hrmOffset++;
+  g.reset();
   if (hrmOffset>g.getWidth()) {
     let thousands = Math.round(rawMax / 1000) * 1000;
     if (thousands > scale) scale = thousands;
@@ -76,7 +76,7 @@ Bangle.on('HRM-raw', function(v) {
   if (rawMax < v.raw) {
     rawMax = v.raw;
   }
-  y = E.clip(btm-(8+v.filt/3000),btm-24,btm);
+  let y = E.clip(btm-(8+v.filt/3000),btm-24,btm);
   g.setColor(1,0,0).fillRect(hrmOffset,btm, hrmOffset, y);
   y = E.clip(btm - (v.raw/scale*84),84,btm);
   g.setColor(g.theme.fg).drawLine(lastHrmPt[0],lastHrmPt[1],hrmOffset, y);
@@ -92,11 +92,11 @@ Bangle.on('HRM-raw', function(v) {
 var counter = 5;
 function countDown() {
   if (counter) {
-    g.drawString(counter--,g.getWidth()/2,g.getHeight()/2, true);
+    g.reset().drawString(counter--,g.getWidth()/2,g.getHeight()/2, true);
     setTimeout(countDown, 1000);
   }
 }
-g.clear();
+g.clear(1);
 Bangle.loadWidgets();
 Bangle.drawWidgets();
 g.setColor(g.theme.fg);
@@ -105,14 +105,14 @@ g.drawString(/*LANG*/"Please wait...",g.getWidth()/2,g.getHeight()/2 - 16);
 countDown();
 
 
-var wasHigh = 0, wasLow = 0;
-var lastHigh = getTime();
-var hrmList = [];
+//var wasHigh = 0, wasLow = 0;
+//var lastHigh = getTime();
+//var hrmList = [];
 var hrmInfo;
 
 function readHRM() {
   if (!hrmInfo) return;
-
+  g.reset();
   if (hrmOffset==0) {
     g.clearRect(0,100,g.getWidth(),g.getHeight());
     lastHrmPt = [-100,0];
@@ -120,7 +120,7 @@ function readHRM() {
   for (var i=0;i<2;i++) {
     var a = hrmInfo.raw[hrmOffset];
     hrmOffset++;
-    y = E.clip(170 - (a*2),100,230);
+    let y = E.clip(170 - (a*2),100,230);
     g.setColor(g.theme.fg).drawLine(lastHrmPt[0],lastHrmPt[1],hrmOffset, y);
     lastHrmPt = [hrmOffset, y];
   }

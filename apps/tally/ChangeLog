@@ -1,0 +1,3 @@
+0.01: New app!
+0.02: Handle duplicate menu entries in the app
+0.03: Go straight to settings when no tally types are configured yet, instead of an empty list

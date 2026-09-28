@@ -10,7 +10,13 @@ const storage = require("Storage");
             longBreak: 900000,                  //15 minute long break
             numShortBreaks: 3,                  //3 short breaks for every long break
             pausedTimerExpireTime: 21600000,    //If the timer was left paused for >6 hours, reset it on next launch
-            widget: false                       //If a widget is added in the future, whether the user wants it
+            showClock: false,                   //Show clock after start/resume
+            widget: false,                      //If a widget is added in the future, whether the user wants it
+            notifyShortPattern: "=",            // pattern for short break notification
+            notifyLongPattern: "=",             // pattern for long break notification
+            notifyWorkPattern: "==",            // pattern for work session notification
+            notifyReps: 2,                      // number of pattern repetitions
+            notifyRepsDelay: 50,                // delay between repetitions (in ms)
         };
     }
 
@@ -74,6 +80,46 @@ const storage = require("Storage");
                 return '' + (value / 60000) + 'm'
             }
         },
+        'Notify work': require("buzz_menu").pattern(settings.notifyWorkPattern, value =>{
+settings.notifyWorkPattern = value;
+save();
+require("buzz").pattern(value);
+
+        }),
+        'Notify short': require("buzz_menu").pattern(settings.notifyShortPattern, value =>{
+settings.notifyShortPattern = value;
+save();
+require("buzz").pattern(value);
+
+        }),
+        'Notify long': require("buzz_menu").pattern(settings.notifyLongPattern, value =>{
+settings.notifyLongPattern = value;
+save();
+        }),
+        'Notify reps': {
+            value: settings.notifyReps,
+            step: 1,
+            min: 1,
+            max: 50,
+            onchange: function (value) {
+                settings.notifyReps = value;
+                save();
+                require("pomoplus-com.js").doNotify(settings.notifyLongPattern, settings.notifyReps,settings.notifyRepsDelay);  
+      
+            }
+        },
+        'Reps. delay': {
+            value: settings.notifyRepsDelay || 50,
+            step: 50,
+            min: 0,
+            max: 5000,
+            wrap: true,
+            onchange: function (value) {
+                settings.notifyRepsDelay = value;
+                save();
+                require("pomoplus-com.js").doNotify(settings.notifyLongPattern, settings.notifyReps,settings.notifyRepsDelay);  
+            }
+        },
         'Timer expiration': {
             value: settings.pausedTimerExpireTime,
             step: 900000,   //15 minutes
@@ -88,6 +134,13 @@ const storage = require("Storage");
                 if (value == 0) return "Off"
                 else return `${Math.floor(value / 3600000)}h ${(value % 3600000) / 60000}m`
             }
+        },
+        'Show clock': {
+            value: settings.showClock,
+            onchange: function(value) {
+                settings.showClock = value;
+                save();
+            },
         },
     };
     E.showMenu(menu)

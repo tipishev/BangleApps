@@ -16,3 +16,31 @@
       Support for zooming in on map
       Satellite count moved to widget bar to leave more room for the map
 0.15: Make track drawing an option (default off)
+0.16: Draw waypoints, too
+0.17: With new Recorder app allow track to be drawn in the background
+      Switch tile layer URL for faster/more reliable map tiles
+0.18: Prefer map with highest resolution
+0.19: Remember latitude, longitude & scale
+0.20: Make Satellite counter widget 24px wide (was 48)
+      Move 'Center GPS' to the top of the menu
+      If 'Recorder' app installed, add a 'Record' menu item
+0.21: Draw a current position marker (Bangle.js 2 only)
+      Enable/Disable previous position marker in new setting "Draw cont. position"
+0.22: Replace position marker with direction arrow
+0.23: Bugfix: Enable Compass if needed
+0.24: Allow zooming by clicking the screen
+0.25: Enable scaled image filtering on 2v19+ firmware
+0.26: Ensure that when redrawing, we always cancel any in-progress track draw
+0.27: Display message if no map is installed
+0.28: Fix rounding errors
+0.29: Keep exit at bottom of menu
+      Speed up latLonToXY for track rendering
+0.30: Minor code improvements
+0.31: Reset draw colours before rendering (to allow black and white maps)
+0.32: Move to non-deprecated track drawing using the recorder library
+      Add option to hide widgets
+0.33: Map zoom by tapping is now only when tapping at each corner (helps with accidental zooming)
+      When GPS location is offscreen, draw a blue circle showing the direction to scroll
+      Added 'Autoscroll' option to automatically scroll the map when GPS location moves off it
+0.34: Uploader can upload the maps along a GPX route, with the route drawn on them
+      Uploader checks there is enough free space on the Bangle before uploading

@@ -1,0 +1,2 @@
+0.01: New App!
+0.02: Readable error screen: short human messages (No connection, Request timed out, Check API key, ...) instead of raw error text, plus a tap-to-retry hint

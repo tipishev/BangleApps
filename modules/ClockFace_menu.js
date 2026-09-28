@@ -10,13 +10,12 @@ exports.addItems = function(menu, callback, items) {
     let value = items[key];
     const label = {
       showDate:/*LANG*/"Show date",
-      loadWidgets:/*LANG*/"Load widgets",
+      hideWidgets:/*LANG*/"Widgets",
       powerSave:/*LANG*/"Power saving",
     }[key];
     switch(key) {
       // boolean options which default to true
       case "showDate":
-      case "loadWidgets":
         if (value===undefined) value = true;
         // fall through
       case "powerSave":
@@ -25,6 +24,18 @@ exports.addItems = function(menu, callback, items) {
           value: !!value,
           onchange: v => callback(key, v),
         };
+        break;
+
+      case "hideWidgets": {
+        let options = [/*LANG*/"Show",/*LANG*/"Hide"];
+        if (process.env.HWVERSION===2) options.push(/*LANG*/"Swipe");
+        menu[label] = {
+          value: value|0,
+          min: 0, max: options.length-1,
+          format: v => options[v|0],
+          onchange: v => callback(key, v),
+        };
+      }
     }
   });
 };
@@ -38,6 +49,12 @@ exports.addItems = function(menu, callback, items) {
  */
 exports.addSettingsFile = function(menu, settingsFile, items) {
   let s = require("Storage").readJSON(settingsFile, true) || {};
+
+  // migrate "don't load widgets" to "hide widgets"
+  if (!("hideWidgets" in s) && ("loadWidgets" in s) && !s.loadWidgets) {
+    s.hideWidgets = 1;
+  }
+  delete s.loadWidgets;
 
   function save(key, value) {
     s[key] = value;

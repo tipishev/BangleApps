@@ -2,7 +2,8 @@
     "id":"mosaic",
     "name":"Mosaic Clock",
     "shortName": "Mosaic Clock",
-    "version": "0.01",
+    "version": "0.04",
+    "author": "sir-indy",
     "description": "A fabulously colourful clock",
     "readme": "README.md",
     "icon":"mosaic.png",
@@ -15,5 +16,8 @@
       {"name":"mosaic.app.js","url":"mosaic.app.js"},
       {"name":"mosaic.settings.js","url":"mosaic.settings.js"},
       {"name":"mosaic.img","url":"mosaic.icon.js","evaluate":true}
+    ],
+    "data": [
+      {"name":"mosaic.settings.json"}
     ]
   }

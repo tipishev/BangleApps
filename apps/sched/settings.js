@@ -30,6 +30,14 @@
       }
     },
 
+    /*LANG*/"Button Stops Alarm": {
+      value: settings.btnToStop,
+      onchange: v => {
+        settings.btnToStop = v;
+        require("sched").setSettings(settings);
+      }
+    },
+
     /*LANG*/"Default Snooze": {
       value: settings.defaultSnoozeMillis / 60000,
       min: 5,
@@ -43,12 +51,13 @@
     },
 
     /*LANG*/"Buzz Count": {
-      value: settings.buzzCount,
-      min: 5,
+      value: settings.buzzCount == null ? 4 : settings.buzzCount,
+      min: 4,
       max: 15,
       step: 1,
+      format: v => v === 4 ? "Forever" : v,
       onchange: v => {
-        settings.buzzCount = v;
+        settings.buzzCount = v === 4 ? null : v;
         require("sched").setSettings(settings);
       }
     },
@@ -75,4 +84,4 @@
       require("sched").setSettings(settings);
     })
   });
-});
+})

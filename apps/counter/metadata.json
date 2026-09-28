@@ -1,7 +1,8 @@
 {
   "id": "counter",
   "name": "Counter",
-  "version": "0.04",
+  "version": "0.05",
+  "author": "bengwalker",
   "description": "Simple counter",
   "icon": "counter_icon.png",
   "tags": "tool",

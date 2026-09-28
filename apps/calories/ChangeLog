@@ -1,0 +1,2 @@
+0.01: Initial app based on #4092
+0.02: Adjust formula slightly and fix overestimated active calories by scaling based on max HR (#4286)

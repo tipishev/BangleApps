@@ -1,0 +1,3 @@
+0.01: Official release
+0.02: Fix misbehavior if multiple alarms become active at once
+0.03: Fix issues with snoozing timers past midnight (#4241)
