@@ -258,6 +258,28 @@ Assets: `treasure/treasure.png` sprite sheet (gold pile icons 0–9, item icons
 Acceptance: open the Monk Quarters chest (Wood Stick), rest on the Serf
 Quarters hay bale, restart → chest stays open.
 
+Status: **done**. Notes from doing it:
+- `mapscript.exec(ctx, map_id)` runs from `mazemap.set` (restoring chests,
+  bones, doors; required lazily because mapscript requires mazemap) and
+  after each step in explore, which saves when it returns true.
+  Scripted enemies (maps 9, 10) are stubs until M5; `boss_alter_map` M6.
+- Start-up follows the original `avatar_init()` exactly: a dead heroine
+  respawns without loading the map she died on (loading it could run
+  its chest script). `respawn` sets the position before the map, fixing
+  an original bug where the old coordinates could open a chest on the
+  respawn map.
+- Images: `scripts/convert_image.py` + `generate_images.py` (Pillow +
+  Espruino's own `webtools/heatshrink.js`). Reconverting `nightsky` and
+  `skeleton` gives exactly the existing images. The existing art was
+  tuned per image (e.g. the imp's orange is red, tempest's purple red),
+  so `COLORS` is the majority mapping and a module can override colours;
+  treasure overrides the sapphire's mid blue to blue. Browns map to red
+  (like the brick tiles), so the stick and spellbook are red.
+- Gold piles reach below the 120 px game area; drawn with a clip
+  rectangle like the original's canvas edge.
+- `run_emulator_tests.js` now runs each test in its own process:
+  `runapptests.js` gives all of an app's tests 60 s together.
+
 ### M4 — Info screen (v0.19)
 Files: new `info.js`, new `action.js` (spell selection, watch version),
 `power.js` (map spells only here).
@@ -346,3 +368,4 @@ under `release/images/`. Still to convert: `backgrounds/title.png`,
 | M0 | 6809 free / 12000 after load (Serf Quarters), emulator 2v29 | explore, Cedar Village | 6602 |
 | M1 | — | explore, Monastery after 3 moves | 6604 |
 | M2 | 6582 free / 12000 after loading a save on the Monastery | — | — |
+| M3 | — | explore, Cedar Village after the gold chest | 6019 (−563 vs M2: mapscript, treasure and its images stay in RAM once loaded; lazy-load treasure images if M5 needs the room) |

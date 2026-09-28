@@ -89,12 +89,15 @@ exports.init = function() {
 };
 
 /**
- * Like the original avatar_init(): a saved heroine that died
- * continues from her last sleep point
- * Call after the map is set up
+ * Like the original avatar_init(): continue on the saved map, or if the
+ * heroine died, straight from her last sleep point (the map she died on
+ * isn't loaded, so its scripts don't run)
  */
-exports.after_load = function(ctx) {
-  if (ctx.avatar.hp <= 0) {
+exports.start = function(ctx) {
+  if (ctx.avatar.hp > 0) {
+    mazemap_m.set(ctx, ctx.avatar.map_id);
+  }
+  else {
     exports.respawn(ctx);
   }
 };
@@ -129,9 +132,11 @@ exports.sleep = function(ctx) {
 exports.respawn = function(ctx) {
   var avatar = ctx.avatar;
   // previously died. restart at last sleep point
-  mazemap_m.set(ctx, avatar.sleeploc[0]);
+  // (position first: the new map's scripts run for where she stands;
+  // the original set the map first, which could open a chest there)
   avatar.x = avatar.sleeploc[1];
   avatar.y = avatar.sleeploc[2];
+  mazemap_m.set(ctx, avatar.sleeploc[0]);
 
   avatar.hp = avatar.max_hp;
   avatar.mp = avatar.max_mp;

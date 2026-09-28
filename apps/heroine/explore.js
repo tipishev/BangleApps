@@ -6,9 +6,11 @@
 
 const avatar_m = require("heroine_avatar");
 const bitfont_m = require("heroine_bitfont");
+const mapscript_m = require("heroine_mapscript");
 const mazemap_m = require("heroine_mazemap");
 const minimap_m = require("heroine_minimap");
 const tileset_m = require("heroine_tileset");
+const treasure_m = require("heroine_treasure");
 
 // exports
 
@@ -49,20 +51,20 @@ exports.logic = function (ctx) {
     }
   }
 
+  // check special script
+  if (ctx.avatar.moved) {
+    if (mapscript_m.exec(ctx, ctx.mazemap.current_id)) {
+      avatar_m.save(ctx);
+      return;
+    }
+  }
+
   /*
   // check shop
   if (avatar.moved) {
     if (mazemap_check_shop()) {
       gamestate = STATE_DIALOG;
       redraw = true;
-      avatar_save();
-      return;
-    }
-  }
-
-  // check special script;
-  if (avatar.moved) {
-    if (mapscript_exec(mazemap.current_id)) {
       avatar_save();
       return;
     }
@@ -136,29 +138,22 @@ exports.render = function(ctx) {
     bitfont_m.render(explore.message, 80, 100, bitfont_m.JUSTIFY_CENTER);
   }
 
-  //if (OPTIONS.minimap) {
+  //info_render_button();  // FIXME port info (M4)
+
+  //if (OPTIONS.minimap) {  // FIXME port options (M8)
     minimap_m.render(ctx);
   //}
-
-  /*
-
-  info_render_button();
-
-  if (OPTIONS.minimap) {
-    minimap_render();
-  }
 
   // if a map event has rewarded gold to the player
   // display it on the ground here
   if (explore.gold_value > 0) {
-    treasure_render_gold(explore.gold_value);
+    treasure_m.render_gold(explore.gold_value);
     explore.gold_value = 0;
   }
 
   // display treasure on the ground
   if (explore.treasure_id > 0) {
-    treasure_render_item(explore.treasure_id);
+    treasure_m.render_item(explore.treasure_id);
     explore.treasure_id = 0;
   }
-  */
 };

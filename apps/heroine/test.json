@@ -262,7 +262,7 @@
         },
         {
           "t": "cmd",
-          "js": "require(\"heroine_mazemap\").set(ctx,1);ctx.avatar.x=4;ctx.avatar.y=9;ctx.avatar.facing=\"south\"",
+          "js": "ctx.avatar.x=4;ctx.avatar.y=9;require(\"heroine_mazemap\").set(ctx,1);ctx.avatar.facing=\"south\"",
           "text": "stand next to an exit on map 1"
         },
         {
@@ -299,7 +299,7 @@
         },
         {
           "t": "cmd",
-          "js": "require(\"heroine_mazemap\").set(ctx,4);ctx.avatar.x=10;ctx.avatar.y=14;ctx.avatar.facing=\"south\"",
+          "js": "ctx.avatar.x=10;ctx.avatar.y=14;require(\"heroine_mazemap\").set(ctx,4);ctx.avatar.facing=\"south\"",
           "text": "stand next to an exit on map 4"
         },
         {
@@ -367,7 +367,7 @@
         },
         {
           "t": "cmd",
-          "js": "require(\"heroine_mazemap\").set(ctx,4);ctx.avatar.x=6;ctx.avatar.y=2;ctx.avatar.facing=\"north\"",
+          "js": "ctx.avatar.x=6;ctx.avatar.y=2;require(\"heroine_mazemap\").set(ctx,4);ctx.avatar.facing=\"north\"",
           "text": "stand next to an exit on map 4"
         },
         {
@@ -601,6 +601,11 @@
       "description": "Loading a save of a dead heroine, from an older version",
       "steps": [
         {
+          "t": "cmd",
+          "js": "0",
+          "text": "she died standing on the Monastery Trail emerald chest (2,2): loading must not open it"
+        },
+        {
           "t": "jsonfile",
           "name": "heroine.save.json",
           "json": {
@@ -652,6 +657,13 @@
           "t": "assert",
           "js": "Array.isArray(ctx.avatar.campaign)",
           "is": "true"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.campaign.length",
+          "is": "equal",
+          "to": "0",
+          "text": "the chest on the map she died on stays closed"
         }
       ]
     },
@@ -703,6 +715,420 @@
           "js": "require(\"heroine_items\").weapons[7].atk_max",
           "is": "equal",
           "to": "18"
+        }
+      ]
+    },
+    {
+      "description": "Rest on the hay bale, open the Monk Quarters chest, restart",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.explore.message",
+          "is": "equal",
+          "to": "\"\"",
+          "text": "starting on the hay bale doesn't rest"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.hp=3;ctx.avatar.mp=1",
+          "text": "hurt"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "step off the hay bale"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            1
+          ],
+          "text": "and back on it"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.explore.message",
+          "is": "equal",
+          "to": "\"You rest for awhile.\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.hp == 25 && ctx.avatar.mp == 4",
+          "is": "true"
+        },
+        {
+          "t": "assert",
+          "js": "JSON.stringify(ctx.avatar.sleeploc)",
+          "is": "equal",
+          "to": "\"[0,1,1]\""
+        },
+        {
+          "t": "assert",
+          "js": "require(\"Storage\").readJSON(\"heroine.save.json\",true).hp",
+          "is": "equal",
+          "to": "25",
+          "text": "resting saves"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "into the Monastery, facing west"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "west door into Monk Quarters"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id",
+          "is": "equal",
+          "to": "2"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ],
+          "text": "face north"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.tiles[1][1]",
+          "is": "equal",
+          "to": "8",
+          "text": "the chest is there"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "onto the chest"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.explore.message",
+          "is": "equal",
+          "to": "\"Found Wood Stick!\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.weapon",
+          "is": "equal",
+          "to": "1"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.explore.treasure_id",
+          "is": "equal",
+          "to": "0",
+          "text": "shown once, then cleared by the render"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"Storage\").readJSON(\"heroine.save.json\",true).campaign.indexOf(\"stick\") > -1",
+          "is": "true",
+          "text": "opening a chest saves"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            1
+          ],
+          "text": "step back"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.tiles[1][1]",
+          "is": "equal",
+          "to": "5",
+          "text": "the opened chest is gone"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "onto the empty spot"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.explore.message",
+          "is": "equal",
+          "to": "\"\"",
+          "text": "nothing to find twice"
+        },
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id",
+          "is": "equal",
+          "to": "2"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.tiles[1][1]",
+          "is": "equal",
+          "to": "5",
+          "text": "still gone after a restart"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.atlas.maps[2].tiles[1][1]",
+          "is": "equal",
+          "to": "8",
+          "text": "the atlas keeps its chest"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.weapon",
+          "is": "equal",
+          "to": "1"
+        }
+      ]
+    },
+    {
+      "description": "Gold chest in Cedar Village",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.x=6;ctx.avatar.y=10;require(\"heroine_mazemap\").set(ctx,5);ctx.avatar.facing=\"east\"",
+          "text": "next to the chest"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "onto the chest"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.explore.message",
+          "is": "equal",
+          "to": "\"Found 10 Gold\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.gold",
+          "is": "equal",
+          "to": "10"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.explore.gold_value",
+          "is": "equal",
+          "to": "0",
+          "text": "gold pile shown once"
+        }
+      ]
+    },
+    {
+      "description": "Burned bones and unlocked doors are restored on load",
+      "steps": [
+        {
+          "t": "jsonfile",
+          "name": "heroine.save.json",
+          "json": {
+            "x": 1,
+            "y": 7,
+            "facing": "east",
+            "map_id": 8,
+            "campaign": [
+              "bone1",
+              "door1",
+              "atk1"
+            ]
+          }
+        },
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id",
+          "is": "equal",
+          "to": "8"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.tiles[7][4]",
+          "is": "equal",
+          "to": "5",
+          "text": "bone pile at 4,7 burned"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.tiles[2][4]",
+          "is": "equal",
+          "to": "16",
+          "text": "bone pile at 4,2 still there"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.tiles[12][4]",
+          "is": "equal",
+          "to": "3",
+          "text": "door at 4,12 unlocked"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.tiles[2][3]",
+          "is": "equal",
+          "to": "5",
+          "text": "opened ruby chest hidden on load"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.tiles[12][3]",
+          "is": "equal",
+          "to": "8",
+          "text": "unopened chest still there"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.tiles[12][3]",
+          "is": "equal",
+          "to": "8",
+          "text": "unopened chest still there"
+        },
+        {
+          "t": "cmd",
+          "js": "require(\"heroine_mapscript\").bone_pile_save(ctx,4,2);require(\"heroine_mapscript\").locked_door_save(ctx,4,99)"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.campaign.indexOf(\"bone2\") > -1 && ctx.avatar.campaign.length == 4",
+          "is": "true",
+          "text": "only known spots are remembered"
+        }
+      ]
+    },
+    {
+      "description": "Respawning doesn't open a chest on the respawn map",
+      "steps": [
+        {
+          "t": "jsonfile",
+          "name": "heroine.save.json",
+          "json": {
+            "x": 1,
+            "y": 1,
+            "facing": "north",
+            "map_id": 0,
+            "hp": 0,
+            "sleeploc": [
+              2,
+              1,
+              2
+            ]
+          },
+          "text": "died at 1,1 (the Monk Quarters chest spot), sleep point in Monk Quarters"
+        },
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id == 2 && ctx.avatar.x == 1 && ctx.avatar.y == 2",
+          "is": "true"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.campaign.length == 0 && ctx.avatar.weapon == 0",
+          "is": "true",
+          "text": "chest still closed"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.tiles[1][1]",
+          "is": "equal",
+          "to": "8"
         }
       ]
     },

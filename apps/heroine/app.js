@@ -27,8 +27,8 @@ const ctx = {
 ctx.atlas = atlas_m.atlas();
 ctx.avatar = avatar_m.init();
 ctx.explore = explore_m.init();
-mazemap_m.init(ctx);
-avatar_m.after_load(ctx);
+ctx.mazemap = mazemap_m.init();
+avatar_m.start(ctx);
 ctx.minimap = minimap_m.init();
 
 function render() {

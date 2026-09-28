@@ -23,9 +23,9 @@ function render_tile(mazemap, pos_x, pos_y, position) {
 
 // exports
 
-exports.init = function(ctx) {
-  ctx.mazemap = {};
-  exports.set(ctx, ctx.avatar.map_id);
+// an empty map, see set() and avatar.start()
+exports.init = function() {
+  return {};
 };
 
 // load a map from atlas
@@ -38,8 +38,9 @@ exports.set = function(ctx, map_id) {
   mazemap.width = map.width;
   mazemap.height = map.height;
   mazemap.current_id = map_id;
-  // FIXME: port mapscript (M3)
-  //mapscript_exec(map_id);
+  // restore opened chests, burned bones and unlocked doors
+  // (required here, not at the top: mapscript requires this module)
+  require("heroine_mapscript").exec(ctx, map_id);
   // reset encounter chance when moving to a new map
   ctx.explore.encounter_chance = 0;
   // for save game info
