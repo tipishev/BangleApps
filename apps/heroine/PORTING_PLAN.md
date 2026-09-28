@@ -230,6 +230,21 @@ Files: new `items.js` (weapons, armors, spells tables from original
 Acceptance: move, exit via BTN long-press, relaunch → same map, position,
 facing.
 
+Status: **done**. Notes from doing it:
+- `heroine.save.json` is the avatar as JSON, listed under `data` in
+  `metadata.json` so it survives updates and goes on uninstall. Saved on
+  map change and in `E.on("kill")`; a save identical to the last one isn't
+  rewritten. Later milestones call `avatar.save(ctx)` at their events.
+- Loading follows the original's `avatar_init()`: continue if HP > 0,
+  otherwise respawn at the sleep point. Fields missing from an older save
+  get their starting values; an unreadable save starts a new game.
+- `avatar.has_save()` is there for the title's Continue (M8).
+- Checked in the emulator with `load()`, which fires `kill` like
+  switching apps. Not checked on a watch: a BTN1 long-press should go
+  through `load()` too, but a hard reset (holding BTN1 ~10 s) or a flat
+  battery loses the steps since the last save.
+- Still no `setUI` `remove` handler (no fast-load support).
+
 ### M3 — Map scripts and treasure (v0.18)
 Files: new `mapscript.js`, new `treasure.js`, `explore.js`, `mazemap.js`.
 Assets: `treasure/treasure.png` sprite sheet (gold pile icons 0–9, item icons
@@ -330,3 +345,4 @@ under `release/images/`. Still to convert: `backgrounds/title.png`,
 |---|---|---|---|
 | M0 | 6809 free / 12000 after load (Serf Quarters), emulator 2v29 | explore, Cedar Village | 6602 |
 | M1 | — | explore, Monastery after 3 moves | 6604 |
+| M2 | 6582 free / 12000 after loading a save on the Monastery | — | — |

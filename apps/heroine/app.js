@@ -28,6 +28,7 @@ ctx.atlas = atlas_m.atlas();
 ctx.avatar = avatar_m.init();
 ctx.explore = explore_m.init();
 mazemap_m.init(ctx);
+avatar_m.after_load(ctx);
 ctx.minimap = minimap_m.init();
 
 function render() {
@@ -44,6 +45,11 @@ function handle_input(input) {
 }
 
 render();
+
+// the position isn't saved on every step, so save when the app closes
+E.on("kill", function() {
+  avatar_m.save(ctx);
+});
 
 // controls
 

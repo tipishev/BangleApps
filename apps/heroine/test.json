@@ -487,6 +487,226 @@
       ]
     },
     {
+      "description": "Save on map change and when the app closes",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"Storage\").read(\"heroine.save.json\")",
+          "is": "equal",
+          "to": "undefined",
+          "text": "a new game has no save yet"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "into the Monastery"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id",
+          "is": "equal",
+          "to": "1"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"Storage\").readJSON(\"heroine.save.json\",true).map_id == 1 && require(\"Storage\").readJSON(\"heroine.save.json\",true).x == 6 && require(\"Storage\").readJSON(\"heroine.save.json\",true).y == 6",
+          "is": "true",
+          "text": "saved on map change"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "step west"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            -1,
+            0
+          ],
+          "text": "turn south"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.x == 5 && ctx.avatar.facing == \"south\"",
+          "is": "true"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"Storage\").readJSON(\"heroine.save.json\",true).x",
+          "is": "equal",
+          "to": "6",
+          "text": "steps and turns are not saved right away"
+        },
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id",
+          "is": "equal",
+          "to": "1",
+          "text": "closing the app saved the game"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.x == 5 && ctx.avatar.y == 6 && ctx.avatar.facing == \"south\"",
+          "is": "true"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.minimap.map_id",
+          "is": "equal",
+          "to": "1"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.moved",
+          "is": "equal",
+          "to": "false"
+        }
+      ]
+    },
+    {
+      "description": "Loading a save of a dead heroine, from an older version",
+      "steps": [
+        {
+          "t": "jsonfile",
+          "name": "heroine.save.json",
+          "json": {
+            "x": 2,
+            "y": 2,
+            "facing": "east",
+            "map_id": 4,
+            "hp": 0,
+            "max_hp": 30,
+            "gold": 50,
+            "sleeploc": [
+              5,
+              3,
+              1
+            ]
+          },
+          "text": "died on Monastery Trail"
+        },
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id",
+          "is": "equal",
+          "to": "5",
+          "text": "respawned at the sleep point"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.x == 3 && ctx.avatar.y == 1",
+          "is": "true"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.hp == 30 && ctx.avatar.gold == 0",
+          "is": "true",
+          "text": "healed, lost all gold"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.max_mp",
+          "is": "equal",
+          "to": "4",
+          "text": "missing fields get their starting values"
+        },
+        {
+          "t": "assert",
+          "js": "Array.isArray(ctx.avatar.campaign)",
+          "is": "true"
+        }
+      ]
+    },
+    {
+      "description": "A broken save starts a new game",
+      "steps": [
+        {
+          "t": "cmd",
+          "js": "require(\"Storage\").write(\"heroine.save.json\",\"{broken\")",
+          "text": "corrupted save, app not running yet"
+        },
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id == 0 && ctx.avatar.x == 1 && ctx.avatar.y == 1 && ctx.avatar.hp == 25",
+          "is": "true"
+        }
+      ]
+    },
+    {
+      "description": "Item tables",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"heroine_items\").weapons.length == 8 && require(\"heroine_items\").armors.length == 8 && require(\"heroine_items\").spells.length == 7",
+          "is": "true"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"heroine_items\").weapons[ctx.avatar.weapon].name",
+          "is": "equal",
+          "to": "\"Bare Fists\""
+        },
+        {
+          "t": "assert",
+          "js": "require(\"heroine_items\").armors[ctx.avatar.armor].name",
+          "is": "equal",
+          "to": "\"Serf Rags\""
+        },
+        {
+          "t": "assert",
+          "js": "require(\"heroine_items\").weapons[7].atk_max",
+          "is": "equal",
+          "to": "18"
+        }
+      ]
+    },
+    {
       "description": "Font pixel parity with the original",
       "steps": [
         {

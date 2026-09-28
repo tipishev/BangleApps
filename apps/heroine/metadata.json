@@ -1,7 +1,7 @@
 { "id": "heroine",
   "name": "Heroine Dusk",
   "shortName":"Heroine Dusk",
-  "version":"0.16",
+  "version":"0.17",
   "description": "A port of an adventure by Clint Bellanger.",
   "icon": "app.png",
   "tags": "game",
@@ -15,6 +15,7 @@
     {"name":"heroine_avatar","url":"avatar.js"},
     {"name":"heroine_enemy","url":"enemy.js"},
     {"name":"heroine_explore","url":"explore.js"},
+    {"name":"heroine_items","url":"items.js"},
     {"name":"heroine_gamestate","url":"gamestate.js"},
     {"name":"heroine_mazemap","url":"mazemap.js"},
     {"name":"heroine_minimap","url":"minimap.js"},
@@ -23,5 +24,8 @@
     {"name":"heroine_title","url":"title.js"},
     {"name":"heroine.app.js","url":"app.js"},
     {"name":"heroine.img","url":"app-icon.js","evaluate":true}
+  ],
+  "data": [
+    {"name":"heroine.save.json"}
   ]
 }

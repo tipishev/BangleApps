@@ -5,7 +5,13 @@
 
 // module imports
 const mazemap_m = require("heroine_mazemap");
+const storage_m = require("Storage");
 const tileset_m = require("heroine_tileset");
+
+const SAVE_FILE = "heroine.save.json";
+
+// the last saved JSON, to skip writing the same save again
+let last_save = null;
 
 //---- Private Functions ---------------------------------------------
 
@@ -39,7 +45,6 @@ function move(ctx, dx, dy) {
     avatar.y += dy;
     avatar.moved = true;
     ctx.redraw = true;
-    //avatar_save();
   }
   else {
     // TODO heroine_vibrate.js
@@ -54,7 +59,6 @@ function turn_left(ctx) {
   else if (avatar.facing == "south") avatar.facing = "east";
   else if (avatar.facing == "east")  avatar.facing = "north";
   ctx.redraw = true; // turning always causes a redraw
-  //avatar_save();
 }
 
 function turn_right(ctx) {
@@ -64,14 +68,52 @@ function turn_right(ctx) {
   else if (avatar.facing == "south") avatar.facing = "west";
   else if (avatar.facing == "west") avatar.facing = "north";
   ctx.redraw = true; // turning always causes a redraw
-  //avatar_save();
 }
 
 // exports
 
-// TODO handle savefile loading
+/**
+ * Load the saved avatar, or start a new one
+ * Fields missing from an older save get their starting values
+ */
 exports.init = function() {
-  return reset();
+  last_save = storage_m.read(SAVE_FILE);
+  var saved = storage_m.readJSON(SAVE_FILE, true);
+  if (!saved) {
+    last_save = null;
+    return reset();
+  }
+  var avatar = Object.assign(reset(), saved);
+  avatar.moved = false;
+  return avatar;
+};
+
+/**
+ * Like the original avatar_init(): a saved heroine that died
+ * continues from her last sleep point
+ * Call after the map is set up
+ */
+exports.after_load = function(ctx) {
+  if (ctx.avatar.hp <= 0) {
+    exports.respawn(ctx);
+  }
+};
+
+// a saved game exists (for the title menu's Continue)
+exports.has_save = function() {
+  return storage_m.read(SAVE_FILE) !== undefined;
+};
+
+/**
+ * Save on events that matter (map change, rest, chest, combat end,
+ * purchase, spells on the map) and when the app closes,
+ * not on every step like the original, to spare the flash
+ */
+exports.save = function(ctx) {
+  var json = JSON.stringify(ctx.avatar);
+  if (json === last_save) return;
+  storage_m.write(SAVE_FILE, json);
+  last_save = json;
 };
 
 /**

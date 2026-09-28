@@ -44,7 +44,7 @@ exports.logic = function (ctx) {
       // display the name of the new map
       explore.message = ctx.atlas.maps[ctx.mazemap.current_id].name;
       // don't allow a random encounter when switching maps
-      // avatar_save();  // FIXME implement saving (M2)
+      avatar_m.save(ctx);
       return;
     }
   }
