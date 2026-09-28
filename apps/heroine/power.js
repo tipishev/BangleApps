@@ -1,13 +1,114 @@
-/* eslint-disable -- verbatim copy of the browser original, not ported yet (see PORTING_PLAN.md) */
 /**
  * Resolve power use
  */
 
-var ENEMY_POWER_ATTACK = 0;
-var ENEMY_POWER_SCORCH = 1;
-var ENEMY_POWER_HPDRAIN = 2;
-var ENEMY_POWER_MPDRAIN = 3;
+// module imports
+const avatar_m = require("heroine_avatar");
+const config_m = require("heroine_config");
+const enemy_m = require("heroine_enemy");
+const mapscript_m = require("heroine_mapscript");
+const mazemap_m = require("heroine_mazemap");
+const minimap_m = require("heroine_minimap");
 
+// used by the combat powers below, not ported yet
+const ENEMY_POWER_ATTACK = enemy_m.ENEMY_POWER_ATTACK;
+const ENEMY_POWER_SCORCH = enemy_m.ENEMY_POWER_SCORCH;
+const ENEMY_POWER_HPDRAIN = enemy_m.ENEMY_POWER_HPDRAIN;
+const ENEMY_POWER_MPDRAIN = enemy_m.ENEMY_POWER_MPDRAIN;
+
+const TILE_DUNGEON_DOOR = 3;
+const TILE_DUNGEON_CEILING = 5;
+const TILE_SKULL_PILE = 16;
+const TILE_LOCKED_DOOR = 18;
+
+//---- Ported ----------------------------------------------------------
+
+exports.heal = function(ctx) {
+  const avatar = ctx.avatar;
+
+  if (avatar.mp == 0) return;
+  if (avatar.hp == avatar.max_hp) return;
+
+  var heal_amount = Math.floor(avatar.max_hp/2) + Math.floor(Math.random() * avatar.max_hp/2);
+  avatar.hp = avatar.hp + heal_amount;
+  if (avatar.hp > avatar.max_hp) avatar.hp = avatar.max_hp;
+
+  //sounds_play(SFX_HEAL);  // FIXME port feedback (M9)
+  avatar.mp--;
+
+  if (ctx.state == config_m.STATE_COMBAT) {
+    ctx.combat.offense_action = "Heal!";
+    ctx.combat.offense_result = "+" + heal_amount + " HP";
+  }
+  else if (ctx.state == config_m.STATE_INFO) {
+    ctx.info.power_action = "Heal!";
+    ctx.info.power_result = "+" + heal_amount + " HP";
+    avatar_m.save(ctx);
+  }
+};
+
+// turn a tile next to the heroine from one type into another,
+// returns true if there was one
+function change_adjacent_tile(ctx, from_tile, to_tile, remember) {
+  const avatar = ctx.avatar;
+  // same order as the original
+  const neighbours = [[1, 0], [0, 1], [-1, 0], [0, -1]];
+  for (var i = 0; i < neighbours.length; i++) {
+    var x = avatar.x + neighbours[i][0];
+    var y = avatar.y + neighbours[i][1];
+    if (mazemap_m.get_tile(ctx.mazemap, x, y) == from_tile) {
+      mazemap_m.set_tile(ctx.mazemap, x, y, to_tile);
+      remember(ctx, x, y);
+      // the path is walkable now
+      minimap_m.invalidate(ctx);
+      return true;
+    }
+  }
+  return false;
+}
+
+exports.map_burn = function(ctx) {
+  const avatar = ctx.avatar;
+  if (avatar.mp == 0) return;
+
+  // tile 16 (skull pile) burns into tile 5 (dungeon interior)
+  // don't let the player waste mana if there is no nearby tile to burn
+  if (change_adjacent_tile(ctx, TILE_SKULL_PILE, TILE_DUNGEON_CEILING,
+                           mapscript_m.bone_pile_save)) {
+    ctx.info.power_action = "Burn!";
+    ctx.info.power_result = "Cleared Path!";
+    avatar.mp--;
+    //sounds_play(SFX_FIRE);  // FIXME port feedback (M9)
+    avatar_m.save(ctx);
+  }
+  else {
+    ctx.info.power_action = "(No Target)";
+  }
+};
+
+exports.map_unlock = function(ctx) {
+  const avatar = ctx.avatar;
+  if (avatar.mp == 0) return;
+
+  // tile 18 (locked door) unlocks into tile 3 (dungeon door)
+  // don't let the player waste mana if there is no nearby tile to unlock
+  if (change_adjacent_tile(ctx, TILE_LOCKED_DOOR, TILE_DUNGEON_DOOR,
+                           mapscript_m.locked_door_save)) {
+    ctx.info.power_action = "Unlock!";
+    ctx.info.power_result = "Door Opened!";
+    avatar.mp--;
+    avatar_m.save(ctx);
+    //sounds_play(SFX_UNLOCK);  // FIXME port feedback (M9)
+  }
+  else {
+    ctx.info.power_action = "(No Target)";
+    //sounds_play(SFX_BLOCK);  // FIXME port feedback (M9)
+  }
+};
+
+//---- Not ported yet (combat, M5): verbatim from the original ---------
+
+/* eslint-disable */
 function power_hero_attack() {
 
   combat.offense_action = "Attack!";
@@ -119,29 +220,6 @@ function power_enemy_attack() {
   combat.hero_hurt = true;
 }
 
-function power_heal() {
-
-  if (avatar.mp == 0) return;
-  if (avatar.hp == avatar.max_hp) return;
-
-  var heal_amount = Math.floor(avatar.max_hp/2) + Math.floor(Math.random() * avatar.max_hp/2);
-  avatar.hp = avatar.hp + heal_amount;
-  if (avatar.hp > avatar.max_hp) avatar.hp = avatar.max_hp;
-
-  //sounds_play(SFX_HEAL);
-  avatar.mp--;
-
-  if (gamestate == STATE_COMBAT) {
-    combat.offense_action = "Heal!";
-    combat.offense_result = "+" + heal_amount + " HP";
-  }
-  else if (gamestate == STATE_INFO) {
-    info.power_action = "Heal!";
-    info.power_result = "+" + heal_amount + " HP";
-	avatar_save();
-  }
-}
-
 function power_burn() {
   if (avatar.mp == 0) return;
 
@@ -191,40 +269,6 @@ function power_run() {
   }
 }
 
-function power_map_burn() {
-  if (avatar.mp == 0) return;
-  var burn_target = false;
-
-  // tile 16 (skull pile) burns into tile 5 (dungeon interior)
-
-  // don't let the player waste mana if there is no nearby tile to burn
-  burn_target = burn_target || power_map_burntile(avatar.x+1, avatar.y);
-  burn_target = burn_target || power_map_burntile(avatar.x, avatar.y+1);
-  burn_target = burn_target || power_map_burntile(avatar.x-1, avatar.y);
-  burn_target = burn_target || power_map_burntile(avatar.x, avatar.y-1);
-
-  if (burn_target) {
-    info.power_action = "Burn!";
-    info.power_result = "Cleared Path!";
-    avatar.mp--;
-	//sounds_play(SFX_FIRE);
-    avatar_save();
-  }
-  else {
-    info.power_action = "(No Target)";
-  }
-}
-
-function power_map_burntile(x, y) {
-  if (mazemap_get_tile(x,y) == 16) {
-    burn_target = true;
-    mazemap_set_tile(x,y,5);
-    mapscript_bone_pile_save(x,y);
-    return true;
-  }
-  return false;
-}
-
 function power_unlock() {
   if (avatar.mp == 0) return;
   combat.offense_action = "Unlock!";
@@ -244,41 +288,6 @@ function power_unlock() {
   combat.enemy_hurt = true;
   //sounds_play(SFX_UNLOCK);
 
-}
-
-function power_map_unlock() {
-  if (avatar.mp == 0) return;
-  var unlock_target = false;
-
-  // tile 18 (locked door) burns into tile 5 (dungeon interior)
-
-  // don't let the player waste mana if there is no nearby tile to unlock
-  unlock_target = unlock_target || power_map_unlocktile(avatar.x+1, avatar.y);
-  unlock_target = unlock_target || power_map_unlocktile(avatar.x, avatar.y+1);
-  unlock_target = unlock_target || power_map_unlocktile(avatar.x-1, avatar.y);
-  unlock_target = unlock_target || power_map_unlocktile(avatar.x, avatar.y-1);
-
-  if (unlock_target) {
-    info.power_action = "Unlock!";
-    info.power_result = "Door Opened!";
-    avatar.mp--;
-    avatar_save();
-	//sounds_play(SFX_UNLOCK);
-  }
-  else {
-    info.power_action = "(No Target)";
-	//sounds_play(SFX_BLOCK);
-  }
-}
-
-function power_map_unlocktile(x, y) {
-  if (mazemap_get_tile(x,y) == 18) {
-    unlock_target = true;
-    mazemap_set_tile(x,y,3);
-    mapscript_locked_door_save(x,y);
-    return true;
-  }
-  return false;
 }
 
 
@@ -370,9 +379,4 @@ function power_mpdrain() {
   combat.hero_hurt = true;
 }
 
-// exports
-
-exports.ENEMY_POWER_ATTACK = ENEMY_POWER_ATTACK;
-exports.ENEMY_POWER_SCORCH = ENEMY_POWER_SCORCH;
-exports.ENEMY_POWER_HPDRAIN = ENEMY_POWER_HPDRAIN;
-exports.ENEMY_POWER_MPDRAIN = ENEMY_POWER_MPDRAIN;
+/* eslint-enable */

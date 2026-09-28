@@ -7,6 +7,7 @@ const avatar_m = require("heroine_avatar");
 const bitfont_m = require("heroine_bitfont");
 const config_m = require("heroine_config");
 const explore_m = require("heroine_explore");
+const info_m = require("heroine_info");
 
 // exports
 
@@ -19,7 +20,10 @@ exports.logic = function(ctx) {
     case config_m.STATE_EXPLORE:
       explore_m.logic(ctx);
       break;
-    // not ported yet: info (M4), combat (M5), dialog (M7), title (M8)
+    case config_m.STATE_INFO:
+      info_m.logic(ctx);
+      break;
+    // not ported yet: combat (M5), dialog (M7), title (M8)
   }
 };
 
@@ -31,6 +35,9 @@ exports.render = function(ctx) {
     case config_m.STATE_EXPLORE:
       explore_m.render(ctx);
       break;
-    // not ported yet: info (M4), combat (M5), dialog (M7), title (M8)
+    case config_m.STATE_INFO:
+      info_m.render(ctx);
+      break;
+    // not ported yet: combat (M5), dialog (M7), title (M8)
   }
 };

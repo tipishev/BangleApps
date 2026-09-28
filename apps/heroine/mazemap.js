@@ -17,7 +17,7 @@ function bounds_check(mazemap, pos_x, pos_y) {
 // Note: x,y flipped to ease map making
 function render_tile(mazemap, pos_x, pos_y, position) {
   if (bounds_check(mazemap, pos_x, pos_y)) {
-    tileset_m.tile_render(mazemap.tiles[pos_y][pos_x], position);
+    tileset_m.tile_render(mazemap.tiles[pos_y * mazemap.width + pos_x], position);
   }
 }
 
@@ -32,9 +32,9 @@ exports.init = function() {
 exports.set = function(ctx, map_id) {
   var mazemap = ctx.mazemap;
   var map = ctx.atlas.maps[map_id];
-  // copy the rows so that map events (chests, doors, bones)
+  // copy the tiles so that map events (chests, doors, bones)
   // don't alter the atlas
-  mazemap.tiles = map.tiles.map(function(row) { return row.slice(); });
+  mazemap.tiles = new Uint8Array(map.tiles);
   mazemap.width = map.width;
   mazemap.height = map.height;
   mazemap.current_id = map_id;
@@ -50,7 +50,7 @@ exports.set = function(ctx, map_id) {
 // Note: x,y flipped to ease map making
 exports.get_tile = function(mazemap, pos_x, pos_y) {
   if (bounds_check(mazemap, pos_x, pos_y)) {
-    return mazemap.tiles[pos_y][pos_x];
+    return mazemap.tiles[pos_y * mazemap.width + pos_x];
   }
   else return 0;
 };
@@ -58,7 +58,7 @@ exports.get_tile = function(mazemap, pos_x, pos_y) {
 // Note: x,y flipped to ease map making
 exports.set_tile = function(mazemap, pos_x, pos_y, tile_id) {
   if (bounds_check(mazemap, pos_x, pos_y)) {
-    mazemap.tiles[pos_y][pos_x] = tile_id;
+    mazemap.tiles[pos_y * mazemap.width + pos_x] = tile_id;
   }
 };
 

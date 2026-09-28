@@ -6,7 +6,12 @@
 
 // module imports
 const config_m = require("heroine_config");
-const power_m = require("heroine_power");
+
+// enemy powers, see power.js
+const ENEMY_POWER_ATTACK = 0;
+const ENEMY_POWER_SCORCH = 1;
+const ENEMY_POWER_HPDRAIN = 2;
+const ENEMY_POWER_MPDRAIN = 3;
 
 // constants
 const ENEMY_SHADOW_TENDRILS = 0;
@@ -79,28 +84,28 @@ enemy.img[ENEMY_ZOMBIE] = zombie_image;
 // set enemy stats
 
 enemy.stats[ENEMY_SHADOW_TENDRILS] = {name:"Shadow Tendrils", hp:6, atk_min:2, atk_max:5, gold_min:1, gold_max:2, category:ENEMY_CATEGORY_SHADOW};
-enemy.stats[ENEMY_SHADOW_TENDRILS].powers = [power_m.ENEMY_POWER_ATTACK];
+enemy.stats[ENEMY_SHADOW_TENDRILS].powers = [ENEMY_POWER_ATTACK];
 
 enemy.stats[ENEMY_IMP] = {name:"Imp", hp:7, atk_min:2, atk_max:6, gold_min:1, gold_max:3, category:ENEMY_CATEGORY_DEMON};
-enemy.stats[ENEMY_IMP].powers = [power_m.ENEMY_POWER_ATTACK, power_m.ENEMY_POWER_ATTACK, power_m.ENEMY_POWER_SCORCH];
+enemy.stats[ENEMY_IMP].powers = [ENEMY_POWER_ATTACK, ENEMY_POWER_ATTACK, ENEMY_POWER_SCORCH];
 
 enemy.stats[ENEMY_SHADOW_SOUL] = {name:"Shadow Soul", hp:8, atk_min:3, atk_max:8, gold_min:2, gold_max:4, category:ENEMY_CATEGORY_SHADOW};
-enemy.stats[ENEMY_SHADOW_SOUL].powers = [power_m.ENEMY_POWER_ATTACK, power_m.ENEMY_POWER_ATTACK, power_m.ENEMY_POWER_MPDRAIN];
+enemy.stats[ENEMY_SHADOW_SOUL].powers = [ENEMY_POWER_ATTACK, ENEMY_POWER_ATTACK, ENEMY_POWER_MPDRAIN];
 
 enemy.stats[ENEMY_ZOMBIE] = {name:"Zombie", hp:12, atk_min:4, atk_max:10, gold_min:3, gold_max:6, category:ENEMY_CATEGORY_UNDEAD};
-enemy.stats[ENEMY_ZOMBIE].powers = [power_m.ENEMY_POWER_ATTACK, power_m.ENEMY_POWER_ATTACK, power_m.ENEMY_POWER_HPDRAIN];
+enemy.stats[ENEMY_ZOMBIE].powers = [ENEMY_POWER_ATTACK, ENEMY_POWER_ATTACK, ENEMY_POWER_HPDRAIN];
 
 enemy.stats[ENEMY_SKELETON] = {name:"Skeleton", hp:18, atk_min:6, atk_max:12, gold_min:5, gold_max:8, category:ENEMY_CATEGORY_UNDEAD};
-enemy.stats[ENEMY_SKELETON].powers = [power_m.ENEMY_POWER_ATTACK];
+enemy.stats[ENEMY_SKELETON].powers = [ENEMY_POWER_ATTACK];
 
 enemy.stats[ENEMY_DRUID] = {name:"Druid", hp:16, atk_min:7, atk_max:14, gold_min:7, gold_max:12, category:ENEMY_CATEGORY_DEMON};
-enemy.stats[ENEMY_DRUID].powers = [power_m.ENEMY_POWER_ATTACK, power_m.ENEMY_POWER_SCORCH, power_m.ENEMY_POWER_HPDRAIN, power_m.ENEMY_POWER_MPDRAIN];
+enemy.stats[ENEMY_DRUID].powers = [ENEMY_POWER_ATTACK, ENEMY_POWER_SCORCH, ENEMY_POWER_HPDRAIN, ENEMY_POWER_MPDRAIN];
 
 enemy.stats[ENEMY_MIMIC] = {name:"Mimic", hp:30, atk_min:10, atk_max:16, gold_min:16, gold_max:25, category:ENEMY_CATEGORY_AUTOMATON};
-enemy.stats[ENEMY_MIMIC].powers = [power_m.ENEMY_POWER_ATTACK];
+enemy.stats[ENEMY_MIMIC].powers = [ENEMY_POWER_ATTACK];
 
 enemy.stats[ENEMY_DEATH_SPEAKER] = {name:"Death Speaker", hp:84, atk_min:8, atk_max:15, gold_min:225, gold_max:275, category:ENEMY_CATEGORY_DEMON};
-enemy.stats[ENEMY_DEATH_SPEAKER].powers = [power_m.ENEMY_POWER_ATTACK, power_m.ENEMY_POWER_SCORCH];
+enemy.stats[ENEMY_DEATH_SPEAKER].powers = [ENEMY_POWER_ATTACK, ENEMY_POWER_SCORCH];
 
 return enemy;
 }
@@ -116,6 +121,11 @@ exports.ENEMY_SKELETON = ENEMY_SKELETON;
 exports.ENEMY_DRUID = ENEMY_DRUID;
 exports.ENEMY_MIMIC = ENEMY_MIMIC;
 exports.ENEMY_DEATH_SPEAKER = ENEMY_DEATH_SPEAKER;
+
+exports.ENEMY_POWER_ATTACK = ENEMY_POWER_ATTACK;
+exports.ENEMY_POWER_SCORCH = ENEMY_POWER_SCORCH;
+exports.ENEMY_POWER_HPDRAIN = ENEMY_POWER_HPDRAIN;
+exports.ENEMY_POWER_MPDRAIN = ENEMY_POWER_MPDRAIN;
 
 exports.ENEMY_CATEGORY_SHADOW = ENEMY_CATEGORY_SHADOW;
 exports.ENEMY_CATEGORY_DEMON = ENEMY_CATEGORY_DEMON;

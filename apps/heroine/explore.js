@@ -6,6 +6,7 @@
 
 const avatar_m = require("heroine_avatar");
 const bitfont_m = require("heroine_bitfont");
+const info_m = require("heroine_info");
 const mapscript_m = require("heroine_mapscript");
 const mazemap_m = require("heroine_mazemap");
 const minimap_m = require("heroine_minimap");
@@ -37,6 +38,12 @@ exports.logic = function (ctx) {
   var explore = ctx.explore;
 
   explore.message = "";
+
+  // check opening info screen (tap or button)
+  if (ctx.input.tap || ctx.input.btn) {
+    info_m.open(ctx);
+    return;
+  }
 
   avatar_m.explore(ctx);
 
@@ -92,27 +99,6 @@ exports.logic = function (ctx) {
       explore.encounter_chance += explore.encounter_increment;
       explore.encounter_chance = Math.min(explore.encounter_chance, explore.encounter_max);
     }
-  }
-  // check opening info screen (keyboard)
-  if (pressing.action && !input_lock.action) {
-    gamestate = STATE_INFO;
-	input_lock.action = true;
-	redraw = true;
-    action.select_pos = BUTTON_POS_INFO;
-	info_clear_messages();
-    sounds_play(SFX_CLICK);
-    return;
-  }
-
-  // check opening info screen (mouse)
-  if (pressing.mouse && !input_lock.mouse && isWithin(mouse_pos, BUTTON_POS_INFO)) {
-    gamestate = STATE_INFO;
-	input_lock.mouse = true;
-	redraw = true;
-    action.select_pos = BUTTON_POS_INFO;
-	info_clear_messages();
-	sounds_play(SFX_CLICK);
-    return;
   }
   */
 

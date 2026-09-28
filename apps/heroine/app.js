@@ -9,10 +9,12 @@ Bangle.drawWidgets();
 
 // load modules
 
+const action_m = require("heroine_action");
 const atlas_m = require("heroine_atlas");
 const avatar_m = require("heroine_avatar");
 const explore_m = require("heroine_explore");
 const gamestate_m = require("heroine_gamestate");
+const info_m = require("heroine_info");
 const mazemap_m = require("heroine_mazemap");
 const minimap_m = require("heroine_minimap");
 
@@ -27,6 +29,8 @@ const ctx = {
 ctx.atlas = atlas_m.atlas();
 ctx.avatar = avatar_m.init();
 ctx.explore = explore_m.init();
+ctx.info = info_m.init();
+ctx.action = action_m.init();
 ctx.mazemap = mazemap_m.init();
 avatar_m.start(ctx);
 ctx.minimap = minimap_m.init();

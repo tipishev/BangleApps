@@ -254,5 +254,14 @@ exports.atlas = function() {
   atlas.maps[10].shops[1] = {exit_x:11, exit_y:9, shop_id:6, dest_x:12, dest_y:9};
   atlas.maps[10].shops[2] = {exit_x:13, exit_y:7, shop_id:7, dest_x:13, dest_y:8};
 
+  // one byte per tile, row by row (see mazemap.get_tile):
+  // arrays of arrays take about 15 times the RAM
+  atlas.maps.forEach(function(map) {
+    map.tiles = new Uint8Array([].concat.apply([], map.tiles));
+    if (map.tiles.length != map.width * map.height) {
+      throw new Error("map " + map.name + " is not " + map.width + "x" + map.height);
+    }
+  });
+
   return atlas;
 };

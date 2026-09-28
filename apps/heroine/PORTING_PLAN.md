@@ -294,6 +294,28 @@ tier), spell icons from `interface/action_buttons.png`, select frame.
 Acceptance: pick up Heal spellbook, take damage via a debug hook, heal from
 Info; MP decreases and persists.
 
+Status: **done**. Notes from doing it:
+- Watch controls as planned: tap or button opens Info; swipes left/right
+  step through the shown spell buttons (wrapping), a tap casts, the
+  button closes. The first spell is preselected (the original starts on
+  its on-screen Info button, which the watch's button replaces, so that
+  button isn't drawn). Heal/Burn/Unlock never waste MP without effect.
+- `power.js`: Heal, map Burn and map Unlock ported (with minimap
+  rebuild); the combat powers stay verbatim in a marked block for M5.
+  The enemy power constants moved to `enemy.js`, which no longer loads
+  `power.js` at start-up (it would have made a require cycle).
+- Images via `generate_images.py`: `heroine_images.js` (paper doll,
+  armour 0–7 and weapon 0–7, "Bare Fists" is empty) and
+  `interface_images.js` (8 action buttons + selection frame), majority
+  colours. The heroine's skin shading is the same brown as leather and
+  bricks, so it's red; white or yellow were the alternatives.
+- Memory: the atlas kept since M0 cost 2426 blocks (20 % of RAM) as
+  nested arrays; tiles are now a `Uint8Array` per map, indexed
+  `y * width + x` by `mazemap.get_tile/set_tile`. Image modules are cheap
+  (60–90 blocks, the data stays in flash until drawn).
+- Parity note for M8: the original never sets `OPTIONS.minimap`, so its
+  minimap is off while exploring by default and only shown on Info.
+
 ### M5 — Combat (v0.20)
 Files: `combat.js` (rewrite of the verbatim copy), `power.js`, `enemy.js`,
 new `anim.js`, `explore.js`.
@@ -368,4 +390,5 @@ under `release/images/`. Still to convert: `backgrounds/title.png`,
 | M0 | 6809 free / 12000 after load (Serf Quarters), emulator 2v29 | explore, Cedar Village | 6602 |
 | M1 | — | explore, Monastery after 3 moves | 6604 |
 | M2 | 6582 free / 12000 after loading a save on the Monastery | — | — |
-| M3 | — | explore, Cedar Village after the gold chest | 6019 (−563 vs M2: mapscript, treasure and its images stay in RAM once loaded; lazy-load treasure images if M5 needs the room) |
+| M3 | — | explore, Cedar Village after the gold chest | 6019 |
+| M4 | 7456 free / 12000 after load (tiles as bytes: atlas 2426 → 773 blocks) | info, 3 spells | 7429 (7301 back in explore) |

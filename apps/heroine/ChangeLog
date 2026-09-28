@@ -5,3 +5,4 @@
 0.16: Text renders pixel for pixel like the original (alignment, kerning, missing glyphs, red text when badly hurt)
 0.17: Saves the game (on map change and when closing the app) and continues it on the next start
 0.18: Chests with their treasure, resting on hay bales, bone piles and locked doors stay burned/unlocked
+0.19: Info screen (tap or button): equipment, HP/MP, gold, minimap; cast Heal, Burn and Unlock outside combat

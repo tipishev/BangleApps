@@ -89,7 +89,24 @@
               "y": 88
             }
           ],
-          "text": "taps do nothing while exploring yet"
+          "text": "a tap opens the info screen"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "2"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({btn: true})",
+          "text": "and the button closes it"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "0"
         },
         {
           "t": "emit",
@@ -137,7 +154,7 @@
         },
         {
           "t": "assert",
-          "js": "ctx.atlas.maps[0].tiles[1][1]",
+          "js": "ctx.atlas.maps[0].tiles[1*ctx.atlas.maps[0].width+1]",
           "is": "equal",
           "to": "17",
           "text": "atlas is not altered by the map copy"
@@ -426,13 +443,13 @@
         },
         {
           "t": "assert",
-          "js": "ctx.mazemap.tiles[1][1]",
+          "js": "require(\"heroine_mazemap\").get_tile(ctx.mazemap,1,1)",
           "is": "equal",
           "to": "5"
         },
         {
           "t": "assert",
-          "js": "ctx.atlas.maps[0].tiles[1][1]",
+          "js": "ctx.atlas.maps[0].tiles[1*ctx.atlas.maps[0].width+1]",
           "is": "equal",
           "to": "17",
           "text": "set_tile doesn't alter the atlas"
@@ -862,7 +879,7 @@
         },
         {
           "t": "assert",
-          "js": "ctx.mazemap.tiles[1][1]",
+          "js": "require(\"heroine_mazemap\").get_tile(ctx.mazemap,1,1)",
           "is": "equal",
           "to": "8",
           "text": "the chest is there"
@@ -912,7 +929,7 @@
         },
         {
           "t": "assert",
-          "js": "ctx.mazemap.tiles[1][1]",
+          "js": "require(\"heroine_mazemap\").get_tile(ctx.mazemap,1,1)",
           "is": "equal",
           "to": "5",
           "text": "the opened chest is gone"
@@ -945,14 +962,14 @@
         },
         {
           "t": "assert",
-          "js": "ctx.mazemap.tiles[1][1]",
+          "js": "require(\"heroine_mazemap\").get_tile(ctx.mazemap,1,1)",
           "is": "equal",
           "to": "5",
           "text": "still gone after a restart"
         },
         {
           "t": "assert",
-          "js": "ctx.atlas.maps[2].tiles[1][1]",
+          "js": "ctx.atlas.maps[2].tiles[1*ctx.atlas.maps[2].width+1]",
           "is": "equal",
           "to": "8",
           "text": "the atlas keeps its chest"
@@ -1037,42 +1054,42 @@
         },
         {
           "t": "assert",
-          "js": "ctx.mazemap.tiles[7][4]",
+          "js": "require(\"heroine_mazemap\").get_tile(ctx.mazemap,4,7)",
           "is": "equal",
           "to": "5",
           "text": "bone pile at 4,7 burned"
         },
         {
           "t": "assert",
-          "js": "ctx.mazemap.tiles[2][4]",
+          "js": "require(\"heroine_mazemap\").get_tile(ctx.mazemap,4,2)",
           "is": "equal",
           "to": "16",
           "text": "bone pile at 4,2 still there"
         },
         {
           "t": "assert",
-          "js": "ctx.mazemap.tiles[12][4]",
+          "js": "require(\"heroine_mazemap\").get_tile(ctx.mazemap,4,12)",
           "is": "equal",
           "to": "3",
           "text": "door at 4,12 unlocked"
         },
         {
           "t": "assert",
-          "js": "ctx.mazemap.tiles[2][3]",
+          "js": "require(\"heroine_mazemap\").get_tile(ctx.mazemap,3,2)",
           "is": "equal",
           "to": "5",
           "text": "opened ruby chest hidden on load"
         },
         {
           "t": "assert",
-          "js": "ctx.mazemap.tiles[12][3]",
+          "js": "require(\"heroine_mazemap\").get_tile(ctx.mazemap,3,12)",
           "is": "equal",
           "to": "8",
           "text": "unopened chest still there"
         },
         {
           "t": "assert",
-          "js": "ctx.mazemap.tiles[12][3]",
+          "js": "require(\"heroine_mazemap\").get_tile(ctx.mazemap,3,12)",
           "is": "equal",
           "to": "8",
           "text": "unopened chest still there"
@@ -1126,9 +1143,491 @@
         },
         {
           "t": "assert",
-          "js": "ctx.mazemap.tiles[1][1]",
+          "js": "require(\"heroine_mazemap\").get_tile(ctx.mazemap,1,1)",
           "is": "equal",
           "to": "8"
+        }
+      ]
+    },
+    {
+      "description": "Open and close the info screen",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tap while exploring"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "2"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.action.select",
+          "is": "equal",
+          "to": "null",
+          "text": "no spells yet, nothing selected"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ],
+          "text": "swipes don't turn the heroine here"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.facing",
+          "is": "equal",
+          "to": "\"south\""
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tapping without spells does nothing"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "2"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({btn: true})",
+          "text": "press the button"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "0",
+          "text": "the button closes it"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({btn: true})",
+          "text": "press the button"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "2",
+          "text": "the button opens it too"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "swiping up doesn't walk"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.x == 1 && ctx.avatar.y == 1",
+          "is": "true"
+        }
+      ]
+    },
+    {
+      "description": "Heal outside combat",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.spellbook=1;ctx.avatar.hp=5;ctx.avatar.mp=2"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "open info"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.action.select",
+          "is": "equal",
+          "to": "\"heal\""
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ],
+          "text": "only one spell, the selection stays"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.action.select",
+          "is": "equal",
+          "to": "\"heal\""
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "cast Heal"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.hp >= 5+12 && ctx.avatar.hp <= 25",
+          "is": "true",
+          "text": "healed by 12..24"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.mp",
+          "is": "equal",
+          "to": "1"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.info.power_action",
+          "is": "equal",
+          "to": "\"Heal!\""
+        },
+        {
+          "t": "assert",
+          "js": "/^\\+\\d+ HP$/.test(ctx.info.power_result) && parseInt(ctx.info.power_result.slice(1)) >= ctx.avatar.hp - 5",
+          "is": "true",
+          "text": "shows the rolled amount, like the original (HP is capped)"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"Storage\").readJSON(\"heroine.save.json\",true).mp",
+          "is": "equal",
+          "to": "1",
+          "text": "casting saves"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.hp=ctx.avatar.max_hp"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "Heal at full HP"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.mp",
+          "is": "equal",
+          "to": "1",
+          "text": "does nothing"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.hp=3;ctx.avatar.mp=0"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "Heal without MP"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.hp",
+          "is": "equal",
+          "to": "3",
+          "text": "does nothing"
+        }
+      ]
+    },
+    {
+      "description": "Burn a bone pile and unlock a door in the Mausoleum",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.spellbook=3;ctx.avatar.mp=3"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.x=5;ctx.avatar.y=7;require(\"heroine_mazemap\").set(ctx,8);ctx.avatar.facing=\"west\""
+        },
+        {
+          "t": "assert",
+          "js": "require(\"heroine_mazemap\").get_tile(ctx.mazemap,4,7)",
+          "is": "equal",
+          "to": "16",
+          "text": "bone pile west of the heroine"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "open info"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            -1,
+            0
+          ],
+          "text": "left from Heal wraps to Unlock"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.action.select",
+          "is": "equal",
+          "to": "\"unlock\""
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ],
+          "text": "right twice: Heal, Burn"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.action.select",
+          "is": "equal",
+          "to": "\"burn\""
+        },
+        {
+          "t": "cmd",
+          "js": "global.oldLayers=ctx.minimap.layers"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "cast Burn"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"heroine_mazemap\").get_tile(ctx.mazemap,4,7)",
+          "is": "equal",
+          "to": "5",
+          "text": "burned"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.info.power_result",
+          "is": "equal",
+          "to": "\"Cleared Path!\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.mp",
+          "is": "equal",
+          "to": "2"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.campaign.indexOf(\"bone1\") > -1",
+          "is": "true"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.minimap.layers !== oldLayers",
+          "is": "true",
+          "text": "minimap rebuilt"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"Storage\").readJSON(\"heroine.save.json\",true).campaign.indexOf(\"bone1\") > -1",
+          "is": "true",
+          "text": "saved"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "cast Burn again"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.info.power_action",
+          "is": "equal",
+          "to": "\"(No Target)\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.mp",
+          "is": "equal",
+          "to": "2",
+          "text": "no MP wasted"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({btn: true})",
+          "text": "press the button"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.x=5;ctx.avatar.y=12;require(\"heroine_mazemap\").set(ctx,8);ctx.avatar.facing=\"west\""
+        },
+        {
+          "t": "assert",
+          "js": "require(\"heroine_mazemap\").get_tile(ctx.mazemap,4,12)",
+          "is": "equal",
+          "to": "18",
+          "text": "locked door west of the heroine"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "open info"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            -1,
+            0
+          ]
+        },
+        {
+          "t": "assert",
+          "js": "ctx.action.select",
+          "is": "equal",
+          "to": "\"unlock\""
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "cast Unlock"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"heroine_mazemap\").get_tile(ctx.mazemap,4,12)",
+          "is": "equal",
+          "to": "3",
+          "text": "unlocked"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.info.power_result",
+          "is": "equal",
+          "to": "\"Door Opened!\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.campaign.indexOf(\"door1\") > -1 && ctx.avatar.mp == 1",
+          "is": "true"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({btn: true})",
+          "text": "press the button"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "walk through the unlocked door"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.x == 4 && ctx.avatar.y == 12",
+          "is": "true"
         }
       ]
     },

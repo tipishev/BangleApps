@@ -37,6 +37,23 @@ TREASURE_NAMES = [
     'Magic Emerald', 'Magic Ruby', 'Magic Diamond',
 ]
 
+def grid(path, size, columns, rows):
+    """Cut a sprite sheet into rows of columns images of size (w, h),
+    row by row."""
+    width, height = size
+    image = Image.open(path)
+    assert image.size == (width * columns, height * rows), (path, image.size)
+    return [image.crop((x * width, y * height,
+                        (x + 1) * width, (y + 1) * height))
+            for y in range(rows) for x in range(columns)]
+
+
+ARMOR_NAMES = ['No Armor (the heroine)', 'Serf Rags', 'Travel Cloak',
+               'Hide Cuirass', 'Rivet Leather', 'Chain Maille', 'Plate Armor',
+               'Wyvern Scale']
+WEAPON_NAMES = ['Bare Fists', 'Wood Stick', 'Iron Knife', 'Bronze Mace',
+                'Steel Sword', 'War Hammer', 'Battle Axe', 'Great Sword']
+
 MODULES = {
     'treasure_images.js': {
         'doc': 'Treasure icons, 32x32, see treasure.js',
@@ -45,6 +62,22 @@ MODULES = {
         'names': TREASURE_NAMES,
         # the sapphire's mid blue would turn white and look like the diamond
         'overrides': {(89, 125, 206): BLUE},
+    },
+    'heroine_images.js': {
+        'doc': 'Heroine paper doll layers, 80x100: armors 0-7, weapons 8-15'
+               ', see info.js',
+        'images': lambda root: grid(root / 'interface/heroine.png',
+                                    (80, 100), 8, 2),
+        'names': ARMOR_NAMES + WEAPON_NAMES,
+    },
+    'interface_images.js': {
+        'doc': 'Action buttons 16x16 (0-7) and the selection frame 20x20 (8)'
+               ', see action.js',
+        'images': lambda root: sheet(root / 'interface/action_buttons.png',
+                                     (16, 16), 8)
+                               + [Image.open(root / 'interface/select.png')],
+        'names': ['Attack', 'Run', 'Heal', 'Burn', 'Unlock', 'Light',
+                  'Freeze', 'Reflect', 'selection frame'],
     },
 }
 
@@ -59,10 +92,14 @@ def write_module(filename, spec, root):
         '',
         'exports.images = [',
     ]
+    assert len(images) == len(spec['names']), filename
     for index, (image, name) in enumerate(zip(images, spec['names'])):
         lines.append(f'  // {index}: {name}')
-        lines.append(f'  function() {{ return '
-                     f'{to_js(image, spec.get("overrides"))}; }},')
+        if image.convert('RGBA').getbbox() is None:
+            lines.append('  null,  // nothing to draw')
+        else:
+            lines.append(f'  function() {{ return '
+                         f'{to_js(image, spec.get("overrides"))}; }},')
     lines.append('];')
     (APP_DIR / filename).write_text('\n'.join(lines) + '\n')
     print(f'wrote {filename}: {len(images)} images')
