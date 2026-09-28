@@ -1,7 +1,8 @@
-// the original game resolution is 160x120
-// Bangle.js2 resolution is 176x176
-var SCREEN_OFFSET_X = 8; // place in the middle of the screen
-var SCREEN_OFFSET_Y = 32; // allow 24px space for bottom and top widgets
+// module imports
+const config_m = require("heroine_config");
+
+var SCREEN_OFFSET_X = config_m.SCREEN_OFFSET_X;
+var SCREEN_OFFSET_Y = config_m.SCREEN_OFFSET_Y;
 
 var background_images = [];
 var tile_images = [];

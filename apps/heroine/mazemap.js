@@ -7,26 +7,7 @@ While Atlas is a static collection, MazeMap can be altered by events.
 */
 
 // load modules
-var atlas_m = require("heroine_atlas");
 var tileset_m = require("heroine_tileset");
-
-// load a map from atlas
-function set(mazemap, map_id) {
-  var atlas = atlas_m.atlas();
-  mazemap.tiles = atlas.maps[map_id].tiles;
-  mazemap.width = atlas.maps[map_id].width;
-  mazemap.height = atlas.maps[map_id].height;
-  mazemap.current_id = map_id;
-  // FIXME: port mapscript
-  //mapscript_exec(map_id);
-  // // reset encounter chance when moving to a new map
-  // FIXME: port explore
-  //explore.encounter_chance = 0;
-  // FIXME: port avatar
-  // // for save game info
-  // avatar.map_id = map_id;
-  return mazemap;
-}
 
 function bounds_check(mazemap, pos_x, pos_y) {
   return (pos_x >= 0 && pos_y >= 0
@@ -40,18 +21,29 @@ function render_tile(mazemap, pos_x, pos_y, position) {
   }
 }
 
-// Note: x,y flipped to ease map making
-function mazemap_set_tile(pos_x, pos_y, tile_id) {
-  if (mazemap_bounds_check(pos_x, pos_y)) {
-    mazemap.tiles[pos_y][pos_x] = tile_id;
-  }
-}
-
 // exports
 
-exports.init = function() {
-  var mazemap = {};
-  return set(mazemap, 0);
+exports.init = function(ctx) {
+  ctx.mazemap = {};
+  exports.set(ctx, ctx.avatar.map_id);
+};
+
+// load a map from atlas
+exports.set = function(ctx, map_id) {
+  var mazemap = ctx.mazemap;
+  var map = ctx.atlas.maps[map_id];
+  // copy the rows so that map events (chests, doors, bones)
+  // don't alter the atlas
+  mazemap.tiles = map.tiles.map(function(row) { return row.slice(); });
+  mazemap.width = map.width;
+  mazemap.height = map.height;
+  mazemap.current_id = map_id;
+  // FIXME: port mapscript (M3)
+  //mapscript_exec(map_id);
+  // reset encounter chance when moving to a new map
+  ctx.explore.encounter_chance = 0;
+  // for save game info
+  ctx.avatar.map_id = map_id;
 };
 
 // Note: x,y flipped to ease map making
@@ -60,6 +52,13 @@ exports.get_tile = function(mazemap, pos_x, pos_y) {
     return mazemap.tiles[pos_y][pos_x];
   }
   else return 0;
+};
+
+// Note: x,y flipped to ease map making
+exports.set_tile = function(mazemap, pos_x, pos_y, tile_id) {
+  if (bounds_check(mazemap, pos_x, pos_y)) {
+    mazemap.tiles[pos_y][pos_x] = tile_id;
+  }
 };
 
 /**
@@ -161,42 +160,36 @@ exports.render = function(mazemap, x, y, facing) {
 /**
  * Each map in the atlas has a list of exits
  * If the avatar is on an exit tile, move them to the new map
+ * Returns true if the map changed
  */
-exports.check_exit = function(mazemap, avatar) {
-  var result = {};
-  var atlas = atlas_m.atlas();
-  for (var i=0; i<atlas.maps[mazemap.current_id].exits.length; i++) {
-
-    if ((avatar.x == atlas.maps[mazemap.current_id].exits[i].exit_x) &&
-        (avatar.y == atlas.maps[mazemap.current_id].exits[i].exit_y)) {
-
-      avatar.x = atlas.maps[mazemap.current_id].exits[i].dest_x;
-      avatar.y = atlas.maps[mazemap.current_id].exits[i].dest_y;
-      set(mazemap, atlas.maps[mazemap.current_id].exits[i].dest_map);
-      result.mazemap = mazemap;
-      result.avatar = avatar;
-      return result;
+exports.check_exit = function(ctx) {
+  var avatar = ctx.avatar;
+  var exits = ctx.atlas.maps[ctx.mazemap.current_id].exits;
+  for (var i=0; i<exits.length; i++) {
+    if (avatar.x == exits[i].exit_x && avatar.y == exits[i].exit_y) {
+      avatar.x = exits[i].dest_x;
+      avatar.y = exits[i].dest_y;
+      exports.set(ctx, exits[i].dest_map);
+      return true;
     }
   }
-  return false; // yeah, yeah, an unpure shortcut.
+  return false;
 };
 
-exports.check_shop = function (mazemap, avatar) {
-  var atlas = atlas_m.atlas();
-  for (var i=0; i<atlas.maps[mazemap.current_id].shops.length; i++) {
-
-    if ((avatar.x == atlas.maps[mazemap.current_id].shops[i].exit_x) &&
-        (avatar.y == atlas.maps[mazemap.current_id].shops[i].exit_y)) {
-
-      // FIXME update for the shop
-      shop_set(atlas.maps[mazemap.current_id].shops[i].shop_id);
-
+/**
+ * If the avatar is on a shop tile, put them back outside
+ * Returns the shop id, or -1 if there is no shop here
+ */
+exports.check_shop = function(ctx) {
+  var avatar = ctx.avatar;
+  var shops = ctx.atlas.maps[ctx.mazemap.current_id].shops;
+  for (var i=0; i<shops.length; i++) {
+    if (avatar.x == shops[i].exit_x && avatar.y == shops[i].exit_y) {
       // put avatar back outside for save purposes
-      avatar.x = atlas.maps[mazemap.current_id].shops[i].dest_x;
-      avatar.y = atlas.maps[mazemap.current_id].shops[i].dest_y;
-
-      return avatar;
+      avatar.x = shops[i].dest_x;
+      avatar.y = shops[i].dest_y;
+      return shops[i].shop_id;
     }
   }
-  return avatar;
+  return -1;
 };

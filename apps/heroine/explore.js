@@ -4,7 +4,6 @@
 
 // module imports
 
-const atlas_m = require("heroine_atlas");
 const avatar_m = require("heroine_avatar");
 const bitfont_m = require("heroine_bitfont");
 const mazemap_m = require("heroine_mazemap");
@@ -33,46 +32,23 @@ exports.init = function() {
  * and completed states usually return here.
  */
 exports.logic = function (ctx) {
-
-  let avatar = ctx.avatar;
-  let gamestate = ctx.gamestate;
-  let explore = ctx.explore;
-  let input = ctx.input;
-  let mazemap = ctx.mazemap;
-  let minimap = ctx.minimap;
-
-  let atlas = atlas_m.atlas();
-
-  let result = {};
+  var explore = ctx.explore;
 
   explore.message = "";
 
-  const explore_result = avatar_m.explore(avatar, input, mazemap);
-
-  avatar = explore_result.avatar;
-  redraw = explore_result.redraw;
+  avatar_m.explore(ctx);
 
   // check map exit
-  if (avatar.moved) {
-    var check_exit_result = mazemap_m.check_exit(mazemap, avatar);
-    if (check_exit_result !== false) {
-      mazemap = check_exit_result.mazemap;
-      minimap = minimap_m.set_map(minimap, mazemap);
-
-      avatar = check_exit_result.avatar;
-	  // display the name of the new map
-	  explore.message = atlas.maps[mazemap.current_id].name;
-	  // don't allow a random encounter when switching maps
-      // avatar_save();  // FIXME implement saving
-	}
+  if (ctx.avatar.moved) {
+    if (mazemap_m.check_exit(ctx)) {
+      // display the name of the new map
+      explore.message = ctx.atlas.maps[ctx.mazemap.current_id].name;
+      // don't allow a random encounter when switching maps
+      // avatar_save();  // FIXME implement saving (M2)
+      return;
+    }
   }
-      result.avatar = avatar;
-      result.explore = explore;
-      result.gamestate = gamestate;
-      result.mazemap = mazemap;
-      result.minimap = minimap;
-      result.redraw = redraw;
-	  return result;
+
   /*
   // check shop
   if (avatar.moved) {
@@ -144,11 +120,9 @@ exports.logic = function (ctx) {
 exports.render = function(ctx) {
   var avatar = ctx.avatar;
   var explore = ctx.explore;
-  var mazemap = ctx.mazemap;
 
-  var atlas = atlas_m.atlas();
-  tileset_m.background_render(atlas.maps[mazemap.current_id].background);
-  mazemap_m.render(mazemap, avatar.x, avatar.y, avatar.facing);
+  tileset_m.background_render(ctx.atlas.maps[ctx.mazemap.current_id].background);
+  mazemap_m.render(ctx.mazemap, avatar.x, avatar.y, avatar.facing);
   // HUD elements
 
   // direction

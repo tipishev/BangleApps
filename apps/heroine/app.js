@@ -9,72 +9,61 @@ Bangle.drawWidgets();
 
 // load modules
 
-var avatar_m = require("heroine_avatar");
-var gamestate_m = require("heroine_gamestate");
-var explore_m = require("heroine_explore");
-var mazemap_m = require("heroine_mazemap");
-var minimap_m = require("heroine_minimap");
+const atlas_m = require("heroine_atlas");
+const avatar_m = require("heroine_avatar");
+const explore_m = require("heroine_explore");
+const gamestate_m = require("heroine_gamestate");
+const mazemap_m = require("heroine_mazemap");
+const minimap_m = require("heroine_minimap");
 
-// declare objects
+// the whole game state, shared by all modules and mutated in place
 
-let avatar, explore, gamestate, mazemap, minimap;
+const ctx = {
+  state: gamestate_m.init(),
+  input: {},
+  redraw: false,
+};
 
-function export_context() {
-  var ctx = {};
-  ctx.avatar = avatar;
-  ctx.gamestate = gamestate;
-  ctx.explore = explore;
-  ctx.mazemap = mazemap;
-  ctx.minimap = minimap;
-  return ctx;
-}
-
-function import_context(ctx) {
-  avatar = ctx.avatar;
-  gamestate = ctx.gamestate;
-  explore = ctx.explore;
-  mazemap = ctx.mazemap;
-  minimap = ctx.minimap;
-}
+ctx.atlas = atlas_m.atlas();
+ctx.avatar = avatar_m.init();
+ctx.explore = explore_m.init();
+mazemap_m.init(ctx);
+ctx.minimap = minimap_m.init();
 
 function render() {
-  gamestate_m.render(export_context());
-  Bangle.buzz(100);  // half-an-hour later...
+  gamestate_m.render(ctx);
 }
 
-// initialize objects
-
-avatar = avatar_m.init();
-explore = explore_m.init();
-gamestate = gamestate_m.init();
-mazemap = mazemap_m.init();
-minimap = minimap_m.set_map(minimap_m.init(), mazemap);
+function handle_input(input) {
+  ctx.input = input;
+  ctx.redraw = false;
+  gamestate_m.logic(ctx);
+  if (ctx.redraw) {
+    render();
+  }
+}
 
 render();
 
 // controls
-// TODO move to a separate module
-Bangle.on("swipe",
-    function(directionLR, directionUD){
+
+Bangle.setUI({
+  mode: "custom",
+  swipe: function(directionLR, directionUD) {
+    // ignore diagonal swipes
+    if (directionLR !== 0 && directionUD !== 0) return;
     Bangle.buzz(50);
-    var input = {};
-    if (directionLR === 0 && directionUD === -1) {
-      input.up = true;
-    } else if (directionLR === -1 && directionUD === 0) {
-      input.left = true;
-    } else if (directionLR === +1 && directionUD === 0) {
-      input.right = true;
-    } else if (directionLR === 0 && directionUD === 1) {
-      input.down = true;
-    }
-
-    var logic_ctx = export_context();
-    logic_ctx.input = input;
-
-    var logic_result = gamestate_m.logic(logic_ctx);
-    import_context(logic_result);
-
-    if (logic_result.redraw) {
-      render();
-    }
-  });
+    handle_input({
+      up: directionUD === -1,
+      down: directionUD === 1,
+      left: directionLR === -1,
+      right: directionLR === 1,
+    });
+  },
+  touch: function(button, xy) {
+    handle_input({tap: {x: xy.x, y: xy.y}});
+  },
+  btn: function() {
+    handle_input({btn: true});
+  },
+});

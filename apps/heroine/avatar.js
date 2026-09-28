@@ -4,6 +4,7 @@
 
 
 // module imports
+const mazemap_m = require("heroine_mazemap");
 const tileset_m = require("heroine_tileset");
 
 //---- Private Functions ---------------------------------------------
@@ -30,47 +31,39 @@ function reset() {
   return avatar;
 }
 
-function move(avatar, mazemap, dx, dy) {
-  var result = {};
-  var redraw = false;
-  var target_tile = mazemap_m.get_tile(mazemap, avatar.x+dx, avatar.y+dy);
+function move(ctx, dx, dy) {
+  var avatar = ctx.avatar;
+  var target_tile = mazemap_m.get_tile(ctx.mazemap, avatar.x+dx, avatar.y+dy);
   if (tileset_m.is_walkable(target_tile)) {
     avatar.x += dx;
     avatar.y += dy;
-    redraw = true;
     avatar.moved = true;
+    ctx.redraw = true;
     //avatar_save();
   }
   else {
     // TODO heroine_vibrate.js
     //sounds_play(SFX_BLOCKED);
   }
-  result.avatar = avatar;
-  result.redraw = redraw;
-  return result;
 }
 
-function turn_left(avatar) {
-  var result = {};
-  result.redraw = true; // turning always causes a redraw
+function turn_left(ctx) {
+  var avatar = ctx.avatar;
   if      (avatar.facing == "north") avatar.facing = "west";
   else if (avatar.facing == "west")  avatar.facing = "south";
   else if (avatar.facing == "south") avatar.facing = "east";
   else if (avatar.facing == "east")  avatar.facing = "north";
-  result.avatar = avatar;
-  return result;
+  ctx.redraw = true; // turning always causes a redraw
   //avatar_save();
 }
 
-function turn_right(avatar) {
-  var result = {};
-  result.redraw = true; // turning always causes a redraw
+function turn_right(ctx) {
+  var avatar = ctx.avatar;
   if (avatar.facing == "north") avatar.facing = "east";
   else if (avatar.facing == "east") avatar.facing = "south";
   else if (avatar.facing == "south") avatar.facing = "west";
   else if (avatar.facing == "west") avatar.facing = "north";
-  result.avatar = avatar;
-  return result;
+  ctx.redraw = true; // turning always causes a redraw
   //avatar_save();
 }
 
@@ -84,17 +77,17 @@ exports.init = function() {
 /**
  * Sleeping restores HP and MP and sets the respawn point
  */
-exports.sleep = function(avatar, mazemap) {
+exports.sleep = function(ctx) {
+  var avatar = ctx.avatar;
   avatar.hp = avatar.max_hp;
   avatar.mp = avatar.max_mp;
-  avatar.sleeploc = [mazemap.current_id, avatar.x, avatar.y];
-  return avatar;
+  avatar.sleeploc = [ctx.mazemap.current_id, avatar.x, avatar.y];
 };
 
-exports.respawn = function(avatar, mazemap) {
-  result = {};
+exports.respawn = function(ctx) {
+  var avatar = ctx.avatar;
   // previously died. restart at last sleep point
-  mazemap.set(avatar.sleeploc[0]);
+  mazemap_m.set(ctx, avatar.sleeploc[0]);
   avatar.x = avatar.sleeploc[1];
   avatar.y = avatar.sleeploc[2];
 
@@ -103,34 +96,31 @@ exports.respawn = function(avatar, mazemap) {
 
   // cost of death: lose all gold
   avatar.gold = 0;
-
-  result.avatar = avatar;
-  result.mazemap = mazemap;
-
-  return result;
 };
 
-exports.explore = function(avatar, input, mazemap) {
+exports.explore = function(ctx) {
+  var avatar = ctx.avatar;
+  var input = ctx.input;
   avatar.moved = false;
 
   // check movement
   if (input.up) {
-    if (avatar.facing == "north") return move(avatar, mazemap, 0,-1);
-    else if (avatar.facing == "west") return move(avatar, mazemap, -1, 0);
-    else if (avatar.facing == "south") return move(avatar, mazemap, 0, 1);
-    else if (avatar.facing == "east") return move(avatar, mazemap, 1, 0);
+    if (avatar.facing == "north") move(ctx, 0,-1);
+    else if (avatar.facing == "west") move(ctx, -1, 0);
+    else if (avatar.facing == "south") move(ctx, 0, 1);
+    else if (avatar.facing == "east") move(ctx, 1, 0);
   }
   else if (input.down) {
-    if (avatar.facing == "north") return move(avatar, mazemap, 0, 1);
-    else if (avatar.facing == "west") return move(avatar, mazemap, 1, 0);
-    else if (avatar.facing == "south") return move(avatar, mazemap, 0, -1);
-    else if (avatar.facing == "east") return move(avatar, mazemap, -1, 0);
+    if (avatar.facing == "north") move(ctx, 0, 1);
+    else if (avatar.facing == "west") move(ctx, 1, 0);
+    else if (avatar.facing == "south") move(ctx, 0, -1);
+    else if (avatar.facing == "east") move(ctx, -1, 0);
   }
   else if (input.left) {
-    return turn_left(avatar);
+    turn_left(ctx);
   }
   else if (input.right) {
-    return turn_right(avatar);
+    turn_right(ctx);
   }
 };
 

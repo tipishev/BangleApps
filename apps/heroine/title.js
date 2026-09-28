@@ -1,3 +1,4 @@
+/* eslint-disable -- verbatim copy of the browser original, not ported yet (see PORTING_PLAN.md) */
 /**
  * Title screen
  */

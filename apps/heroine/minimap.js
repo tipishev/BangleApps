@@ -3,25 +3,20 @@
  * Shown in the Info screen
  */
 
-const atlas_m = require("heroine_atlas");
-// const heatshrink_m = require("heatshrink");
+const config_m = require("heroine_config");
+const mazemap_m = require("heroine_mazemap");
 const tileset_m = require("heroine_tileset");
-const storage_m = require("Storage");
 
 const ICON_SIZE = 3; // pixels
 
-// explained by the position of game canvas offset
-// TODO deduplicate with tileset.js constants
-// maybe via a global settings module
-const GLOBAL_MARGIN_LEFT = 8;
-const GLOBAL_MARGIN_TOP = 32;
-
-const MARGIN_LEFT = GLOBAL_MARGIN_LEFT + 2;
-const MARGIN_TOP = GLOBAL_MARGIN_TOP + 2;
+const MARGIN_LEFT = config_m.SCREEN_OFFSET_X + 2;
+const MARGIN_TOP = config_m.SCREEN_OFFSET_Y + 2;
 
 /*
 Pre-render a set of 1-bpp layers for fast drawing instead
 of real-time iteration over all map's tiles.
+The layers are rebuilt in RAM on every map change (a few hundred
+bytes each), because map events change tiles at runtime.
 */
 
 function as_layer(graphics) {
@@ -30,7 +25,8 @@ function as_layer(graphics) {
   return image;
 }
 
-function generate_layers(mazemap) {
+function generate_layers(ctx) {
+  const mazemap = ctx.mazemap;
 
   function render_square(graphics, x, y) {
   graphics.fillRect(x * ICON_SIZE,
@@ -49,7 +45,7 @@ function generate_layers(mazemap) {
   // generate walkable tiles and walls layers
   for (let x = 0; x < mazemap.width; x++) {
     for (let y = 0; y < mazemap.height; y++) {
-      target_tile = mazemap_m.get_tile(mazemap, x, y);
+      const target_tile = mazemap_m.get_tile(mazemap, x, y);
       if (tileset_m.is_walkable(target_tile)) {
         render_square(walkable, x, y);
       } else if (target_tile != 0) {
@@ -59,19 +55,11 @@ function generate_layers(mazemap) {
   }
 
   // generate doors layer with shops and exits from atlas
-  const atlas = atlas_m.atlas();
-  for (let i = 0; i < atlas.maps[mazemap.current_id].exits.length; i++) {
-    exit_x = atlas.maps[mazemap.current_id].exits[i].exit_x;
-    exit_y = atlas.maps[mazemap.current_id].exits[i].exit_y;
-    render_square(doors, exit_x, exit_y);
-  }
-  for (let i = 0; i < atlas.maps[mazemap.current_id].shops.length; i++) {
-    exit_x = atlas.maps[mazemap.current_id].shops[i].exit_x;
-    exit_y = atlas.maps[mazemap.current_id].shops[i].exit_y;
-    render_square(doors, exit_x, exit_y);
-  }
+  const map = ctx.atlas.maps[mazemap.current_id];
+  map.exits.concat(map.shops).forEach(function(exit) {
+    render_square(doors, exit.exit_x, exit.exit_y);
+  });
 
-  // TODO compress with heatshrink?
   return {
     walkable: as_layer(walkable),
     walls: as_layer(walls),
@@ -82,47 +70,44 @@ function generate_layers(mazemap) {
 // exports
 
 exports.init = function() {
+  // remove files left by the old on-flash minimap cache
+  const storage = require("Storage");
+  storage.list(/^heroine_minimap_cache_/).forEach(function(filename) {
+    storage.erase(filename);
+  });
   return {
     map_id: null,
-    layers: null,
-    cache: {}
+    layers: null
   };
 };
 
-exports.set_map = function(minimap, mazemap) {
-  const map_id = mazemap.current_id;
-  if (minimap.map_id === map_id) {
-    return minimap;  // noop
-  } else if (minimap.cache.hasOwnProperty(map_id)) {
-    minimap.layers = storage_m.readJSON(minimap.cache[map_id]);
-    minimap.map_id = map_id;
-  } else  {
-    const filename = `heroine_minimap_cache_${map_id}`;
-    const layers = generate_layers(mazemap);
-    storage_m.writeJSON(filename, layers);
-    minimap.layers = layers;
-    minimap.cache[map_id] = filename;
-    minimap.map_id = map_id;
-  }
-  return minimap;
+exports.set_map = function(ctx) {
+  const minimap = ctx.minimap;
+  if (minimap.map_id === ctx.mazemap.current_id) return;  // noop
+  minimap.layers = generate_layers(ctx);
+  minimap.map_id = ctx.mazemap.current_id;
+};
+
+// rebuild the layers after a tile of the current map has changed
+exports.invalidate = function(ctx) {
+  ctx.minimap.map_id = null;
+  exports.set_map(ctx);
 };
 
 exports.render = function(ctx) {
-  const mazemap = ctx.mazemap;
   const avatar = ctx.avatar;
-  const minimap = ctx.minimap;
+  // rebuild the layers if the map has changed since the last render
+  exports.set_map(ctx);
+  const layers = ctx.minimap.layers;
 
   const BLACK = "#000", WHITE = "#FFF", BLUE = "#00F", RED = "#F00";
 
-  let x, y;
-  let target_tile;
-
   g.setColor(BLACK)
-   .drawImage(minimap.layers.walls, MARGIN_LEFT, MARGIN_TOP)
+   .drawImage(layers.walls, MARGIN_LEFT, MARGIN_TOP)
    .setColor(WHITE)
-   .drawImage(minimap.layers.walkable, MARGIN_LEFT, MARGIN_TOP)
+   .drawImage(layers.walkable, MARGIN_LEFT, MARGIN_TOP)
    .setColor(BLUE)
-   .drawImage(minimap.layers.doors, MARGIN_LEFT, MARGIN_TOP)
+   .drawImage(layers.doors, MARGIN_LEFT, MARGIN_TOP)
   ;
   render_cursor(avatar.x, avatar.y, avatar.facing, RED);
 };

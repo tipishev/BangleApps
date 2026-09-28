@@ -169,7 +169,7 @@ exports.render = function(text, x, y, justify) {
 
   x = setposition(text, x, justify);
   for (let i = 0; i < text.length; i++) {
-    char = text[i];
+    const char = text[i];
     g.setFontCustom(BG_FONT, ASCII_SPACE_CODE, WIDTHS, 8|(SCALE<<8))
      .setColor(0,0,0)
      .drawString(char, x, y)

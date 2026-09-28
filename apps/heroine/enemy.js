@@ -5,6 +5,7 @@
  */
 
 // module imports
+const config_m = require("heroine_config");
 const power_m = require("heroine_power");
 
 // constants
@@ -121,8 +122,12 @@ exports.ENEMY_CATEGORY_DEMON = ENEMY_CATEGORY_DEMON;
 exports.ENEMY_CATEGORY_UNDEAD = ENEMY_CATEGORY_UNDEAD;
 exports.ENEMY_CATEGORY_AUTOMATON = ENEMY_CATEGORY_AUTOMATON;
 
-exports.enemy_render = function enemy_render(enemy_id) {
-  g.drawImage(enemy.img[enemy_id]());
-};
+const enemy = enemy_init();
 
-exports.enemy = enemy_init();
+exports.enemy = enemy;
+
+exports.enemy_render = function enemy_render(enemy_id) {
+  g.drawImage(enemy.img[enemy_id](), config_m.SCREEN_OFFSET_X, config_m.SCREEN_OFFSET_Y);
+};
+// used by the boss fight (M6)
+exports.bone_shield_image = bone_shield_image;

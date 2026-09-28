@@ -1,0 +1,490 @@
+{
+  "app": "heroine",
+  "tests": [
+    {
+      "description": "Walk from Serf Quarters to the Monastery",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id",
+          "is": "equal",
+          "to": "0"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.x == 1 && ctx.avatar.y == 1",
+          "is": "true"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "step forward (south)"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.y",
+          "is": "equal",
+          "to": "2"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "blocked by a wall"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.y",
+          "is": "equal",
+          "to": "2"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            1
+          ],
+          "text": "diagonal swipes are ignored"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.facing",
+          "is": "equal",
+          "to": "'south'"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ],
+          "text": "turn right"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.facing",
+          "is": "equal",
+          "to": "'west'"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "taps do nothing while exploring yet"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "walk through the door"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id",
+          "is": "equal",
+          "to": "1"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.x == 6 && ctx.avatar.y == 6",
+          "is": "true"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.map_id",
+          "is": "equal",
+          "to": "1"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.explore.message",
+          "is": "equal",
+          "to": "\"Gar'ashi Monastery\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.minimap.map_id",
+          "is": "equal",
+          "to": "1"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.minimap.layers.walkable.width",
+          "is": "equal",
+          "to": "27"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.atlas.maps[0].tiles[1][1]",
+          "is": "equal",
+          "to": "17",
+          "text": "atlas is not altered by the map copy"
+        }
+      ]
+    },
+    {
+      "description": "No memory leak when switching maps",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id",
+          "is": "equal",
+          "to": "1"
+        },
+        {
+          "t": "saveMemoryUsage"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ],
+          "text": "arrived at 6,6 facing west, turn north"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ],
+          "text": "turn east"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "back through the door to Serf Quarters"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id",
+          "is": "equal",
+          "to": "0"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "and back to the Monastery"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id",
+          "is": "equal",
+          "to": "1"
+        },
+        {
+          "t": "checkMemoryUsage"
+        }
+      ]
+    },
+    {
+      "description": "Monastery to Cedar Village and back",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "require(\"heroine_mazemap\").set(ctx,1);ctx.avatar.x=4;ctx.avatar.y=9;ctx.avatar.facing=\"south\"",
+          "text": "stand next to an exit on map 1"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "Monastery south door"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id",
+          "is": "equal",
+          "to": "4"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.x == 6 && ctx.avatar.y == 2",
+          "is": "true"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.explore.message",
+          "is": "equal",
+          "to": "\"Monastery Trail\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.minimap.map_id",
+          "is": "equal",
+          "to": "4"
+        },
+        {
+          "t": "cmd",
+          "js": "require(\"heroine_mazemap\").set(ctx,4);ctx.avatar.x=10;ctx.avatar.y=14;ctx.avatar.facing=\"south\"",
+          "text": "stand next to an exit on map 4"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "Monastery Trail south exit"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id",
+          "is": "equal",
+          "to": "5"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.x == 3 && ctx.avatar.y == 1",
+          "is": "true"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.explore.message",
+          "is": "equal",
+          "to": "\"Cedar Village\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.minimap.map_id",
+          "is": "equal",
+          "to": "5"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.minimap.layers.doors.width",
+          "is": "equal",
+          "to": "ctx.mazemap.width*3",
+          "text": "minimap covers the whole map, incl. shop doors"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.facing=\"north\""
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "Cedar Village north exit"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id",
+          "is": "equal",
+          "to": "4"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.x == 10 && ctx.avatar.y == 14",
+          "is": "true"
+        },
+        {
+          "t": "cmd",
+          "js": "require(\"heroine_mazemap\").set(ctx,4);ctx.avatar.x=6;ctx.avatar.y=2;ctx.avatar.facing=\"north\"",
+          "text": "stand next to an exit on map 4"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "Monastery Trail north exit"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id",
+          "is": "equal",
+          "to": "1"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.x == 4 && ctx.avatar.y == 9",
+          "is": "true"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.minimap.map_id",
+          "is": "equal",
+          "to": "1"
+        }
+      ]
+    },
+    {
+      "description": "Fixed helpers: set_tile, respawn, enemy_render, old cache clean-up",
+      "steps": [
+        {
+          "t": "jsonfile",
+          "name": "heroine_minimap_cache_1",
+          "json": {
+            "old": "cache"
+          },
+          "text": "file left by the old minimap cache"
+        },
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"Storage\").list(/^heroine_minimap_cache_/).length",
+          "is": "equal",
+          "to": "0",
+          "text": "old cache files are erased at startup"
+        },
+        {
+          "t": "cmd",
+          "js": "require(\"heroine_mazemap\").set_tile(ctx.mazemap,1,1,5)"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.tiles[1][1]",
+          "is": "equal",
+          "to": "5"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.atlas.maps[0].tiles[1][1]",
+          "is": "equal",
+          "to": "17",
+          "text": "set_tile doesn't alter the atlas"
+        },
+        {
+          "t": "cmd",
+          "js": "require(\"heroine_mazemap\").set_tile(ctx.mazemap,99,99,5)",
+          "text": "out of bounds is ignored"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.sleeploc=[5,3,1];ctx.avatar.gold=7;ctx.avatar.hp=1;require(\"heroine_avatar\").respawn(ctx)"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id",
+          "is": "equal",
+          "to": "5"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.x == 3 && ctx.avatar.y == 1",
+          "is": "true"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.gold == 0 && ctx.avatar.hp == ctx.avatar.max_hp",
+          "is": "true"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            -1,
+            0
+          ],
+          "text": "turn, which redraws"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.minimap.map_id",
+          "is": "equal",
+          "to": "5",
+          "text": "minimap follows a respawn without an explicit call"
+        },
+        {
+          "t": "assert",
+          "js": "[0,1,2,3,4,5,6,7].every(function(id){require(\"heroine_enemy\").enemy_render(id);return true;})",
+          "is": "true",
+          "text": "every enemy image draws"
+        }
+      ]
+    }
+  ]
+}
