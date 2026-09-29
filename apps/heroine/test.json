@@ -9,6 +9,11 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
+        },
+        {
           "t": "assert",
           "js": "ctx.mazemap.current_id",
           "is": "equal",
@@ -169,6 +174,11 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
+        },
+        {
           "t": "emit",
           "event": "swipe",
           "paramsArray": [
@@ -276,6 +286,11 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
         },
         {
           "t": "cmd",
@@ -431,6 +446,11 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
+        },
+        {
           "t": "assert",
           "js": "require(\"Storage\").list(/^heroine_minimap_cache_/).length",
           "is": "equal",
@@ -511,6 +531,11 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
+        },
+        {
           "t": "assert",
           "js": "require(\"Storage\").read(\"heroine.save.json\")",
           "is": "equal",
@@ -589,6 +614,11 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
+        },
+        {
           "t": "assert",
           "js": "ctx.mazemap.current_id",
           "is": "equal",
@@ -646,6 +676,11 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
+        },
+        {
           "t": "assert",
           "js": "ctx.mazemap.current_id",
           "is": "equal",
@@ -697,6 +732,11 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
+        },
+        {
           "t": "assert",
           "js": "ctx.mazemap.current_id == 0 && ctx.avatar.x == 1 && ctx.avatar.y == 1 && ctx.avatar.hp == 25",
           "is": "true"
@@ -709,6 +749,11 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
         },
         {
           "t": "assert",
@@ -741,6 +786,11 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
         },
         {
           "t": "assert",
@@ -955,6 +1005,11 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
+        },
+        {
           "t": "assert",
           "js": "ctx.mazemap.current_id",
           "is": "equal",
@@ -988,6 +1043,11 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
         },
         {
           "t": "cmd",
@@ -1045,6 +1105,11 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
         },
         {
           "t": "assert",
@@ -1131,6 +1196,11 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
+        },
+        {
           "t": "assert",
           "js": "ctx.mazemap.current_id == 2 && ctx.avatar.x == 1 && ctx.avatar.y == 2",
           "is": "true"
@@ -1155,6 +1225,11 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
         },
         {
           "t": "emit",
@@ -1260,6 +1335,11 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
         },
         {
           "t": "cmd",
@@ -1395,6 +1475,11 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
         },
         {
           "t": "cmd",
@@ -1628,6 +1713,1429 @@
           "t": "assert",
           "js": "ctx.avatar.x == 4 && ctx.avatar.y == 12",
           "is": "true"
+        }
+      ]
+    },
+    {
+      "description": "A random encounter starts a fight",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
+          "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "into the Monastery (it has enemies)"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_chance=1",
+          "text": "the next step surely meets an enemy"
+        },
+        {
+          "t": "cmd",
+          "js": "RQ=[0.5,0.9]"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "a step"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "1",
+          "text": "combat"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.enemy.type",
+          "is": "equal",
+          "to": "1",
+          "text": "enemy chosen from the map's list: Shadow Tendrils, Imp"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.phase",
+          "is": "equal",
+          "to": "require(\"heroine_combat\").PHASE_INTRO"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.explore.encounter_chance",
+          "is": "equal",
+          "to": "0"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.action.select",
+          "is": "equal",
+          "to": "\"attack\"",
+          "text": "Attack is preselected"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.animating",
+          "is": "true"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "input during the intro is ignored"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.phase",
+          "is": "equal",
+          "to": "require(\"heroine_combat\").PHASE_INTRO"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 5})"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.enemy_offset.x",
+          "is": "equal",
+          "to": "-100",
+          "text": "sliding in from the left"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.phase",
+          "is": "equal",
+          "to": "require(\"heroine_combat\").PHASE_INPUT"
+        },
+        {
+          "t": "assert",
+          "js": "!ctx.animating",
+          "is": "true"
+        }
+      ]
+    },
+    {
+      "description": "Attack and win",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
+          "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
+        },
+        {
+          "t": "cmd",
+          "js": "require(\"heroine_combat\").start(ctx,0,\"\")"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.enemy.hp",
+          "is": "equal",
+          "to": "6",
+          "text": "Shadow Tendrils"
+        },
+        {
+          "t": "cmd",
+          "js": "RQ=[0.5,1,0.5]"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "swipe up attacks: hit, max damage (Bare Fists 1-4), no crit"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.phase",
+          "is": "equal",
+          "to": "require(\"heroine_combat\").PHASE_OFFENSE"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.offense_result",
+          "is": "equal",
+          "to": "\"4 damage\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.enemy.hp",
+          "is": "equal",
+          "to": "2"
+        },
+        {
+          "t": "cmd",
+          "js": "RQ=[1,0];handle_input({tick: 3})",
+          "text": "3 frames into the attack"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.enemy_offset.x == 2 && ctx.combat.enemy_offset.y == -2",
+          "is": "true",
+          "text": "the hit enemy shakes"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 12})",
+          "text": "15 frames in"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.enemy_offset.x == 0 && ctx.combat.enemy_offset.y == 0",
+          "is": "true",
+          "text": "shaking stops"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.phase",
+          "is": "equal",
+          "to": "require(\"heroine_combat\").PHASE_DEFENSE",
+          "text": "the enemy strikes back"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.defense_action",
+          "is": "equal",
+          "to": "\"Attack!\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.defense_result",
+          "is": "equal",
+          "to": "\"2 damage\"",
+          "text": "4 damage (2-5) minus 2 for Serf Rags"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.hp",
+          "is": "equal",
+          "to": "23"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.phase",
+          "is": "equal",
+          "to": "require(\"heroine_combat\").PHASE_INPUT"
+        },
+        {
+          "t": "cmd",
+          "js": "RQ=[0.5,1,0.5]"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.phase",
+          "is": "equal",
+          "to": "require(\"heroine_combat\").PHASE_VICTORY"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.reward_result",
+          "is": "equal",
+          "to": "\"+2 Gold!\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.gold",
+          "is": "equal",
+          "to": "2"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"Storage\").readJSON(\"heroine.save.json\",true).gold",
+          "is": "equal",
+          "to": "2",
+          "text": "victory saves"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.campaign.length",
+          "is": "equal",
+          "to": "0",
+          "text": "no campaign flag for a random enemy"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "continue"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "0"
+        },
+        {
+          "t": "assert",
+          "js": "!ctx.animating",
+          "is": "true"
+        }
+      ]
+    },
+    {
+      "description": "Critical hits and misses",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
+          "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
+        },
+        {
+          "t": "cmd",
+          "js": "require(\"heroine_combat\").start(ctx,4,\"\")"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "RQ=[0.5,0,0.05,0,0.1]",
+          "text": "hit, min damage, crit; the skeleton picks its power, then misses"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "hit, min damage, crit"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.offense_action",
+          "is": "equal",
+          "to": "\"Critical!\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.offense_result",
+          "is": "equal",
+          "to": "\"5 damage\"",
+          "text": "1 + max 4"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.defense_result",
+          "is": "equal",
+          "to": "\"Miss!\"",
+          "text": "the skeleton misses (roll 0.1 < 0.3)"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "RQ=[0.1]"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "miss"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.offense_result",
+          "is": "equal",
+          "to": "\"Miss!\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.enemy.hp",
+          "is": "equal",
+          "to": "13"
+        }
+      ]
+    },
+    {
+      "description": "Running away",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
+          "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
+        },
+        {
+          "t": "cmd",
+          "js": "require(\"heroine_combat\").start(ctx,1,\"\")"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "RQ=[0.9]"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            1
+          ],
+          "text": "swipe down runs: blocked"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.offense_result",
+          "is": "equal",
+          "to": "\"Blocked!\""
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.phase",
+          "is": "equal",
+          "to": "require(\"heroine_combat\").PHASE_DEFENSE",
+          "text": "blocked, the enemy gets a turn"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "RQ=[0.1]"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            1
+          ],
+          "text": "run: escaped"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "0",
+          "text": "back to exploring"
+        },
+        {
+          "t": "assert",
+          "js": "!ctx.animating",
+          "is": "true"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 6})",
+          "text": "a stray tick after leaving combat"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "0"
+        }
+      ]
+    },
+    {
+      "description": "Defeat and respawn",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
+          "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.hp=1;ctx.avatar.gold=40"
+        },
+        {
+          "t": "cmd",
+          "js": "require(\"heroine_combat\").start(ctx,3,\"\")"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "RQ=[0.1,0,0.5,0.5,0.5]"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "miss, then the zombie attacks: 7 damage minus 2"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.phase",
+          "is": "equal",
+          "to": "require(\"heroine_combat\").PHASE_DEFEAT"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.hp",
+          "is": "equal",
+          "to": "-4"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"Storage\").readJSON(\"heroine.save.json\",true).hp <= 0",
+          "is": "true",
+          "text": "saved dead, like the original"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "continue"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "0"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id == 0 && ctx.avatar.x == 1 && ctx.avatar.y == 1",
+          "is": "true",
+          "text": "back at the sleep point"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.hp == 25 && ctx.avatar.gold == 0",
+          "is": "true",
+          "text": "healed, lost all gold"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"Storage\").readJSON(\"heroine.save.json\",true).hp",
+          "is": "equal",
+          "to": "25"
+        }
+      ]
+    },
+    {
+      "description": "Spells in combat",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
+          "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.spellbook=3;ctx.avatar.mp=4"
+        },
+        {
+          "t": "cmd",
+          "js": "require(\"heroine_combat\").start(ctx,6,\"\")"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.enemy.hp",
+          "is": "equal",
+          "to": "30",
+          "text": "Mimic, an automaton"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ],
+          "text": "right: Run, Heal, Burn, Unlock"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.action.select",
+          "is": "equal",
+          "to": "\"unlock\""
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "cast Heal at full HP? no: Unlock"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.offense_action",
+          "is": "equal",
+          "to": "\"Unlock!\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.offense_result",
+          "is": "equal",
+          "to": "\"11 damage\"",
+          "text": "3 (1-4) + 2 x 4"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.mp",
+          "is": "equal",
+          "to": "3"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            -1,
+            0
+          ],
+          "text": "Burn"
+        },
+        {
+          "t": "cmd",
+          "js": "RQ=[0.5]"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "cast Burn on an automaton: 1x crit"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.offense_result",
+          "is": "equal",
+          "to": "\"7 damage\"",
+          "text": "3 + 4"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.hp=10"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            -1,
+            0
+          ],
+          "text": "Heal"
+        },
+        {
+          "t": "cmd",
+          "js": "RQ=[0.5]"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "cast Heal"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.offense_action",
+          "is": "equal",
+          "to": "\"Heal!\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.hp",
+          "is": "equal",
+          "to": "25",
+          "text": "12 + 6, capped"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.mp",
+          "is": "equal",
+          "to": "1"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.mp=0"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "Heal without MP does nothing"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.phase",
+          "is": "equal",
+          "to": "require(\"heroine_combat\").PHASE_INPUT"
+        }
+      ]
+    },
+    {
+      "description": "The mimic on Dead Walkways",
+      "steps": [
+        {
+          "t": "jsonfile",
+          "name": "heroine.save.json",
+          "json": {
+            "x": 4,
+            "y": 9,
+            "facing": "west",
+            "map_id": 9
+          }
+        },
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
+          "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "0",
+          "text": "loading on the mimic's tile doesn't start the fight"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.x=5;ctx.avatar.y=9;ctx.avatar.facing=\"west\""
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "onto the chest"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "1"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.enemy.type",
+          "is": "equal",
+          "to": "6",
+          "text": "Mimic"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.combat.enemy.hp=1"
+        },
+        {
+          "t": "cmd",
+          "js": "RQ=[0.5,0.5,0.5,0.5]"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.phase",
+          "is": "equal",
+          "to": "require(\"heroine_combat\").PHASE_VICTORY"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.reward_result",
+          "is": "equal",
+          "to": "\"+21 Gold!\"",
+          "text": "16-25"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ]
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.x=5;ctx.avatar.y=9"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "the mimic comes back every time, like the original"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "1"
+        }
+      ]
+    },
+    {
+      "description": "A named enemy is remembered",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
+          "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
+        },
+        {
+          "t": "cmd",
+          "js": "require(\"heroine_combat\").start(ctx,7,\"dspeak\")"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.combat.enemy.hp=1"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.phase",
+          "is": "equal",
+          "to": "require(\"heroine_combat\").PHASE_VICTORY"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.campaign.indexOf(\"dspeak\") > -1",
+          "is": "true"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"Storage\").readJSON(\"heroine.save.json\",true).campaign.indexOf(\"dspeak\") > -1",
+          "is": "true"
+        }
+      ]
+    },
+    {
+      "description": "The real animation driver",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0"
+        },
+        {
+          "t": "cmd",
+          "js": "require(\"heroine_combat\").start(ctx,0,\"\")"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({})",
+          "text": "starts the driver"
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "advanceTimers",
+          "ms": 200
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.phase",
+          "is": "equal",
+          "to": "require(\"heroine_combat\").PHASE_INPUT",
+          "text": "the intro ended by itself"
+        },
+        {
+          "t": "assert",
+          "js": "!ctx.animating",
+          "is": "true"
+        },
+        {
+          "t": "assert",
+          "js": "animation_interval === undefined",
+          "is": "true",
+          "text": "the driver's interval is stopped"
+        }
+      ]
+    },
+    {
+      "description": "Defeated after a step: respawn without resting, restart",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
+          "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "into the Monastery"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.hp=1;ctx.avatar.gold=9;ctx.explore.encounter_chance=1"
+        },
+        {
+          "t": "cmd",
+          "js": "RQ=[0.1, 0]"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "a step meets an enemy"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "1"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "RQ=[0.1, 0, 0.5, 0.5, 0.5]"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "miss, the enemy hits"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.phase",
+          "is": "equal",
+          "to": "require(\"heroine_combat\").PHASE_DEFEAT"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ]
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id == 0 && ctx.avatar.x == 1 && ctx.avatar.y == 1",
+          "is": "true"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.explore.message",
+          "is": "equal",
+          "to": "\"\"",
+          "text": "respawning isn't a step: no rest on the hay bale"
+        },
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state == 0 && ctx.mazemap.current_id == 0",
+          "is": "true",
+          "text": "after a restart"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.hp == 25 && ctx.avatar.gold == 0",
+          "is": "true"
+        }
+      ]
+    },
+    {
+      "description": "Victory and a fight in progress survive a restart",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
+          "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
+        },
+        {
+          "t": "cmd",
+          "js": "require(\"heroine_combat\").start(ctx,0,\"\")"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.combat.enemy.hp=1;RQ=[0.5,0.5,0.5]"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.phase",
+          "is": "equal",
+          "to": "require(\"heroine_combat\").PHASE_VICTORY"
+        },
+        {
+          "t": "cmd",
+          "js": "global.won=ctx.avatar.gold"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ]
+        },
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
+          "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state == 0 && ctx.avatar.gold > 0",
+          "is": "true",
+          "text": "the gold is kept"
+        },
+        {
+          "t": "cmd",
+          "js": "require(\"heroine_combat\").start(ctx,1,\"\")"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.hp=11"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.phase",
+          "is": "equal",
+          "to": "require(\"heroine_combat\").PHASE_INPUT",
+          "text": "mid-fight"
+        },
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "0",
+          "text": "closing the app mid-fight: back to exploring"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.hp",
+          "is": "equal",
+          "to": "11"
         }
       ]
     },

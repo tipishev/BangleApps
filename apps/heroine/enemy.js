@@ -136,8 +136,11 @@ const enemy = enemy_init();
 
 exports.enemy = enemy;
 
-exports.enemy_render = function enemy_render(enemy_id) {
-  g.drawImage(enemy.img[enemy_id](), config_m.SCREEN_OFFSET_X, config_m.SCREEN_OFFSET_Y);
+// offset_x/y slide the enemy in and shake it when hit, see combat.js
+exports.enemy_render = function enemy_render(enemy_id, offset_x, offset_y) {
+  g.drawImage(enemy.img[enemy_id](),
+              config_m.SCREEN_OFFSET_X + (offset_x || 0),
+              config_m.SCREEN_OFFSET_Y + (offset_y || 0));
 };
 // used by the boss fight (M6)
 exports.bone_shield_image = bone_shield_image;

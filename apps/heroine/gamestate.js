@@ -23,7 +23,11 @@ exports.logic = function(ctx) {
     case config_m.STATE_INFO:
       info_m.logic(ctx);
       break;
-    // not ported yet: combat (M5), dialog (M7), title (M8)
+    case config_m.STATE_COMBAT:
+      // required on the first fight
+      require("heroine_combat").logic(ctx);
+      break;
+    // not ported yet: dialog (M7), title (M8)
   }
 };
 
@@ -38,6 +42,9 @@ exports.render = function(ctx) {
     case config_m.STATE_INFO:
       info_m.render(ctx);
       break;
-    // not ported yet: combat (M5), dialog (M7), title (M8)
+    case config_m.STATE_COMBAT:
+      require("heroine_combat").render(ctx);
+      break;
+    // not ported yet: dialog (M7), title (M8)
   }
 };

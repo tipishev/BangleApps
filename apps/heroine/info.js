@@ -97,6 +97,9 @@ exports.logic = function(ctx) {
   const avatar = ctx.avatar;
   const input = ctx.input;
 
+  // a stray animation tick
+  if (input.tick) return;
+
   // close the info screen
   if (input.btn) {
     ctx.state = config_m.STATE_EXPLORE;

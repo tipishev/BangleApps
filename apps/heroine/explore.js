@@ -37,6 +37,9 @@ exports.init = function() {
 exports.logic = function (ctx) {
   var explore = ctx.explore;
 
+  // a stray animation tick, e.g. right after leaving combat
+  if (ctx.input.tick) return;
+
   explore.message = "";
 
   // check opening info screen (tap or button)
@@ -67,7 +70,7 @@ exports.logic = function (ctx) {
   }
 
   /*
-  // check shop
+  // check shop  // FIXME port shops (M7)
   if (avatar.moved) {
     if (mazemap_check_shop()) {
       gamestate = STATE_DIALOG;
@@ -76,23 +79,16 @@ exports.logic = function (ctx) {
       return;
     }
   }
+  */
 
   // check random encounter
-  var enemy_options = atlas.maps[mazemap.current_id].enemies.length;
-  if (avatar.moved && enemy_options > 0) {
+  var enemies = ctx.atlas.maps[ctx.mazemap.current_id].enemies;
+  if (ctx.avatar.moved && enemies.length > 0) {
 
     if (Math.random() < explore.encounter_chance) {
-      explore.encounter_chance = 0.0;
-      gamestate = STATE_COMBAT;
-      action.select_pos = BUTTON_POS_ATTACK;
-      combat.timer = COMBAT_INTRO_DELAY;
-	  combat.phase = COMBAT_PHASE_INTRO;
-
       // choose an enemy randomly from the list for this map
-      var enemy_roll = Math.floor(Math.random() * enemy_options);
-      var enemy_id = atlas.maps[mazemap.current_id].enemies[enemy_roll];
-	  combat_set_enemy(enemy_id);
-
+      var enemy_id = enemies[Math.floor(Math.random() * enemies.length)];
+      require("heroine_combat").start(ctx, enemy_id, "");
       return;
     }
     else {
@@ -100,7 +96,6 @@ exports.logic = function (ctx) {
       explore.encounter_chance = Math.min(explore.encounter_chance, explore.encounter_max);
     }
   }
-  */
 
 };
 

@@ -1348,12 +1348,19 @@ exports.background_render = function background_render(background_index) {
   g.drawImage(background_images[background_index](), SCREEN_OFFSET_X, SCREEN_OFFSET_Y);
 };
 
+// shakes the tiles (not the background) when the heroine is hurt
+var render_offset = {x: 0, y: 0};
+
+exports.set_render_offset = function(x, y) {
+  render_offset = {x: x, y: y};
+};
+
 // render a single tile from tileset at tile_number
 exports.tile_render = function(tileset_index, tile_number) {
   if (tileset_index == 0) return; // don't render void
   var tile_offset = TILE_OFFSETS[tile_number];
-  var x_offset = tile_offset[0] + SCREEN_OFFSET_X;
-  var y_offset = tile_offset[1] + SCREEN_OFFSET_Y;
+  var x_offset = tile_offset[0] + render_offset.x + SCREEN_OFFSET_X;
+  var y_offset = tile_offset[1] + render_offset.y + SCREEN_OFFSET_Y;
   g.drawImage(tile_images[tileset_index][tile_number](), x_offset, y_offset);
 };
 

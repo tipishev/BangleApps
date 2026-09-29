@@ -6,22 +6,17 @@
 const avatar_m = require("heroine_avatar");
 const config_m = require("heroine_config");
 const enemy_m = require("heroine_enemy");
+const items_m = require("heroine_items");
 const mapscript_m = require("heroine_mapscript");
 const mazemap_m = require("heroine_mazemap");
 const minimap_m = require("heroine_minimap");
-
-// used by the combat powers below, not ported yet
-const ENEMY_POWER_ATTACK = enemy_m.ENEMY_POWER_ATTACK;
-const ENEMY_POWER_SCORCH = enemy_m.ENEMY_POWER_SCORCH;
-const ENEMY_POWER_HPDRAIN = enemy_m.ENEMY_POWER_HPDRAIN;
-const ENEMY_POWER_MPDRAIN = enemy_m.ENEMY_POWER_MPDRAIN;
 
 const TILE_DUNGEON_DOOR = 3;
 const TILE_DUNGEON_CEILING = 5;
 const TILE_SKULL_PILE = 16;
 const TILE_LOCKED_DOOR = 18;
 
-//---- Ported ----------------------------------------------------------
+//---- Heal, and spells on the map ---------------------------------------
 
 exports.heal = function(ctx) {
   const avatar = ctx.avatar;
@@ -106,270 +101,217 @@ exports.map_unlock = function(ctx) {
   }
 };
 
-//---- Not ported yet (combat, M5): verbatim from the original ---------
+//---- Combat ----------------------------------------------------------
 
-/* eslint-disable */
-function power_hero_attack() {
+// random whole number from min to max, like the original
+function roll(min, max) {
+  return Math.round(Math.random() * (max - min)) + min;
+}
+
+function weapon_range(avatar) {
+  const weapon = items_m.weapons[avatar.weapon];
+  return {
+    min: weapon.atk_min + avatar.bonus_atk,
+    max: weapon.atk_max + avatar.bonus_atk,
+  };
+}
+
+// damage done to the heroine, after her armor absorbs some
+function hurt_hero(ctx, attack_damage) {
+  attack_damage -= items_m.armors[ctx.avatar.armor].def;
+  if (attack_damage <= 0) attack_damage = 1;
+  ctx.avatar.hp -= attack_damage;
+  ctx.combat.defense_result = attack_damage + " damage";
+  ctx.combat.hero_hurt = true;
+  return attack_damage;
+}
+
+exports.hero_attack = function(ctx) {
+  const combat = ctx.combat;
 
   combat.offense_action = "Attack!";
 
   // special: override hero action if the boss has bone shield up
-  if (boss.boneshield_active) {
-    boss_boneshield_heroattack();
-    return;
-  }
+  // FIXME port boss (M6): boss_boneshield_heroattack()
 
   // check miss
-  var hit_chance = Math.random();
-  if (hit_chance < 0.20) {
+  if (Math.random() < 0.20) {
     combat.offense_result = "Miss!";
-    //sounds_play(SFX_MISS);
+    //sounds_play(SFX_MISS);  // FIXME port feedback (M9)
     return;
   }
 
   // Hit: calculate damage
-  var atk_min = info.weapons[avatar.weapon].atk_min + avatar.bonus_atk;
-  var atk_max = info.weapons[avatar.weapon].atk_max + avatar.bonus_atk;
-  var attack_damage = Math.round(Math.random() * (atk_max - atk_min)) + atk_min;
+  const atk = weapon_range(ctx.avatar);
+  var attack_damage = roll(atk.min, atk.max);
 
   // check crit
   // hero crits add max damage
-  var crit_chance = Math.random();
-  if (crit_chance < 0.10) {
-    attack_damage += atk_max;
+  if (Math.random() < 0.10) {
+    attack_damage += atk.max;
     combat.offense_action = "Critical!";
-    //sounds_play(SFX_CRITICAL);
+    //sounds_play(SFX_CRITICAL);  // FIXME port feedback (M9)
   }
   else {
-    //sounds_play(SFX_ATTACK);
+    //sounds_play(SFX_ATTACK);  // FIXME port feedback (M9)
   }
 
   combat.enemy.hp -= attack_damage;
   combat.offense_result = attack_damage + " damage";
 
   combat.enemy_hurt = true;
+};
 
-}
-
-
-/**
- * Choose a random power from the enemy's available powers
- */
-function power_enemy(enemy_id) {
-
-  // override for boss action
-  if (enemy_id == ENEMY_DEATH_SPEAKER) {
-    boss_power();
-    return;
-  }
-
-  var power_options = enemy.stats[enemy_id].powers.length;
-  var power_roll = Math.floor(Math.random() * power_options);
-  var power_choice = enemy.stats[enemy_id].powers[power_roll];
-
-  switch (power_choice) {
-    case ENEMY_POWER_ATTACK:
-      power_enemy_attack();
-      return;
-    case ENEMY_POWER_SCORCH:
-      power_scorch();
-      return;
-    case ENEMY_POWER_HPDRAIN:
-      power_hpdrain();
-      return;
-    case ENEMY_POWER_MPDRAIN:
-      power_mpdrain();
-      return;
-  }
-}
-
-function power_enemy_attack() {
-  combat.defense_action = "Attack!";
-
-  // check miss
-  var hit_chance = Math.random();
-  if (hit_chance < 0.30) {
-    combat.defense_result = "Miss!";
-    //sounds_play(SFX_MISS);
-    return;
-  }
-
-  var atk_min = enemy.stats[combat.enemy.type].atk_min;
-  var atk_max = enemy.stats[combat.enemy.type].atk_max;
-  var attack_damage = Math.round(Math.random() * (atk_max - atk_min)) + atk_min;
-
-  // check crit
-  // enemy crits add min damage
-  var crit_chance = Math.random();
-  if (crit_chance < 0.05) {
-    attack_damage += atk_min;
-    combat.defense_action = "Critical!";
-    //sounds_play(SFX_CRITICAL);
-  }
-  else {
-    //sounds_play(SFX_ATTACK);
-  }
-
-  // armor absorb
-  attack_damage -= info.armors[avatar.armor].def;
-  if (attack_damage <= 0) attack_damage = 1;
-
-  avatar.hp -= attack_damage;
-  combat.defense_result = attack_damage + " damage";
-
-  combat.hero_hurt = true;
-}
-
-function power_burn() {
-  if (avatar.mp == 0) return;
+exports.burn = function(ctx) {
+  const combat = ctx.combat;
+  if (ctx.avatar.mp == 0) return;
 
   combat.offense_action = "Burn!";
 
-  var atk_min = (info.weapons[avatar.weapon].atk_min + avatar.bonus_atk);
-  var atk_max = (info.weapons[avatar.weapon].atk_max + avatar.bonus_atk);
-  var attack_damage = Math.round(Math.random() * (atk_max - atk_min)) + atk_min;
+  const atk = weapon_range(ctx.avatar);
+  var attack_damage = roll(atk.min, atk.max);
 
   // against undead, burn does 2x crit
-  if (combat.enemy.category == ENEMY_CATEGORY_UNDEAD) {
-    attack_damage += atk_max + atk_max;
+  if (combat.enemy.category == enemy_m.ENEMY_CATEGORY_UNDEAD) {
+    attack_damage += atk.max + atk.max;
   }
   // against most creatures burn does 1x crit
-  else if (combat.enemy.category != ENEMY_CATEGORY_DEMON) {
-    attack_damage += atk_max;
+  else if (combat.enemy.category != enemy_m.ENEMY_CATEGORY_DEMON) {
+    attack_damage += atk.max;
   }
   // against demons, burn does regular weapon damage.
 
-  avatar.mp--;
-  //sounds_play(SFX_FIRE);
+  ctx.avatar.mp--;
+  //sounds_play(SFX_FIRE);  // FIXME port feedback (M9)
 
   combat.enemy.hp -= attack_damage;
   combat.offense_result = attack_damage + " damage";
 
   combat.enemy_hurt = true;
 
-  if (boss.boneshield_active) {
-    boss.boneshield_active = false;  
-  }
-}
+  // FIXME port boss (M6): burn breaks the bone shield
+};
 
-function power_run() {
-
-  combat.offense_action = "Run!";
-  //sounds_play(SFX_RUN);
-
-  var chance_run = Math.random();
-  if (chance_run < 0.66) {
-    combat.run_success = true;
-    combat.offense_result = "";
-    return;
-  }
-  else {
-    combat.offense_result = "Blocked!";
-    return;
-  }
-}
-
-function power_unlock() {
-  if (avatar.mp == 0) return;
+exports.unlock = function(ctx) {
+  const combat = ctx.combat;
+  if (ctx.avatar.mp == 0) return;
   combat.offense_action = "Unlock!";
 
-  var atk_min = (info.weapons[avatar.weapon].atk_min + avatar.bonus_atk);
-  var atk_max = (info.weapons[avatar.weapon].atk_max + avatar.bonus_atk);
-  var attack_damage = Math.round(Math.random() * (atk_max - atk_min)) + atk_min;
+  const atk = weapon_range(ctx.avatar);
+  var attack_damage = roll(atk.min, atk.max);
 
   // unlock can only be cast against Automatons
   // so apply the full damage
-  attack_damage += atk_max + atk_max;
+  attack_damage += atk.max + atk.max;
 
-  avatar.mp--;
+  ctx.avatar.mp--;
   combat.enemy.hp -= attack_damage;
   combat.offense_result = attack_damage + " damage";
 
   combat.enemy_hurt = true;
-  //sounds_play(SFX_UNLOCK);
+  //sounds_play(SFX_UNLOCK);  // FIXME port feedback (M9)
+};
 
+exports.run = function(ctx) {
+  const combat = ctx.combat;
+
+  combat.offense_action = "Run!";
+  //sounds_play(SFX_RUN);  // FIXME port feedback (M9)
+
+  if (Math.random() < 0.66) {
+    combat.run_success = true;
+    combat.offense_result = "";
+  }
+  else {
+    combat.offense_result = "Blocked!";
+  }
+};
+
+// Enemy powers
+
+function enemy_attack(ctx) {
+  const combat = ctx.combat;
+  const stats = enemy_m.enemy.stats[combat.enemy.type];
+
+  combat.defense_action = "Attack!";
+
+  // check miss
+  if (Math.random() < 0.30) {
+    combat.defense_result = "Miss!";
+    //sounds_play(SFX_MISS);  // FIXME port feedback (M9)
+    return;
+  }
+
+  var attack_damage = roll(stats.atk_min, stats.atk_max);
+
+  // check crit
+  // enemy crits add min damage
+  if (Math.random() < 0.05) {
+    attack_damage += stats.atk_min;
+    combat.defense_action = "Critical!";
+    //sounds_play(SFX_CRITICAL);  // FIXME port feedback (M9)
+  }
+  else {
+    //sounds_play(SFX_ATTACK);  // FIXME port feedback (M9)
+  }
+
+  hurt_hero(ctx, attack_damage);
 }
 
-
-// Enemy special powers
-
 // evil enemy version of burn
-function power_scorch() {
+function scorch(ctx) {
+  const combat = ctx.combat;
+  const stats = enemy_m.enemy.stats[combat.enemy.type];
 
   combat.defense_action = "Scorch!";
 
   // check miss
-  var hit_chance = Math.random();
-  if (hit_chance < 0.30) {
+  if (Math.random() < 0.30) {
     combat.defense_result = "Miss!";
-    //sounds_play(SFX_MISS);
+    //sounds_play(SFX_MISS);  // FIXME port feedback (M9)
     return;
   }
 
-  sounds_play(SFX_FIRE);
-
-  var atk_min = enemy.stats[combat.enemy.type].atk_min;
-  var atk_max = enemy.stats[combat.enemy.type].atk_max;
-  var attack_damage = Math.round(Math.random() * (atk_max - atk_min)) + atk_min;
+  //sounds_play(SFX_FIRE);  // FIXME port feedback (M9)
 
   // scorch works like an enemy crit
-  attack_damage += atk_min;
-
-  // armor absorb
-  attack_damage -= info.armors[avatar.armor].def;
-  if (attack_damage <= 0) attack_damage = 1;
-
-  avatar.hp -= attack_damage;
-  combat.defense_result = attack_damage + " damage";
-
-  combat.hero_hurt = true;
-
+  hurt_hero(ctx, roll(stats.atk_min, stats.atk_max) + stats.atk_min);
 }
 
-function power_hpdrain() {
+function hpdrain(ctx) {
+  const combat = ctx.combat;
+  const stats = enemy_m.enemy.stats[combat.enemy.type];
 
   combat.defense_action = "HP Drain!";
 
   // check miss
-  var hit_chance = Math.random();
-  if (hit_chance < 0.30) {
+  if (Math.random() < 0.30) {
     combat.defense_result = "Miss!";
-    //sounds_play(SFX_MISS);
+    //sounds_play(SFX_MISS);  // FIXME port feedback (M9)
     return;
   }
 
-  //sounds_play(SFX_HPDRAIN);
+  //sounds_play(SFX_HPDRAIN);  // FIXME port feedback (M9)
 
-  var atk_min = enemy.stats[combat.enemy.type].atk_min;
-  var atk_max = enemy.stats[combat.enemy.type].atk_max;
-  var attack_damage = Math.round(Math.random() * (atk_max - atk_min)) + atk_min;
-
-  // armor absorb
-  attack_damage -= info.armors[avatar.armor].def;
-  if (attack_damage <= 0) attack_damage = 1;
-
-  avatar.hp -= attack_damage;
-  combat.enemy.hp += attack_damage;
-
-  combat.defense_result = attack_damage + " damage";
-  combat.hero_hurt = true;
+  // the enemy heals by the damage done
+  combat.enemy.hp += hurt_hero(ctx, roll(stats.atk_min, stats.atk_max));
 }
 
-function power_mpdrain() {
+function mpdrain(ctx) {
+  const combat = ctx.combat;
   combat.defense_action = "MP Drain!";
 
   // check miss
-  var hit_chance = Math.random();
-  if (hit_chance < 0.30) {
+  if (Math.random() < 0.30) {
     combat.defense_result = "Miss!";
-    //sounds_play(SFX_MISS);
+    //sounds_play(SFX_MISS);  // FIXME port feedback (M9)
     return;
   }
 
-  //sounds_play(SFX_MPDRAIN);
+  //sounds_play(SFX_MPDRAIN);  // FIXME port feedback (M9)
 
-  if (avatar.mp > 0) {
-    avatar.mp--;
+  if (ctx.avatar.mp > 0) {
+    ctx.avatar.mp--;
     combat.defense_result = "-1 MP";
   }
   else {
@@ -379,4 +321,24 @@ function power_mpdrain() {
   combat.hero_hurt = true;
 }
 
-/* eslint-enable */
+/**
+ * Choose a random power from the enemy's available powers
+ */
+exports.enemy = function(ctx) {
+  // FIXME port boss (M6): the Death Speaker chooses with boss_power()
+  const powers = enemy_m.enemy.stats[ctx.combat.enemy.type].powers;
+  switch (powers[Math.floor(Math.random() * powers.length)]) {
+    case enemy_m.ENEMY_POWER_ATTACK:
+      enemy_attack(ctx);
+      return;
+    case enemy_m.ENEMY_POWER_SCORCH:
+      scorch(ctx);
+      return;
+    case enemy_m.ENEMY_POWER_HPDRAIN:
+      hpdrain(ctx);
+      return;
+    case enemy_m.ENEMY_POWER_MPDRAIN:
+      mpdrain(ctx);
+      return;
+  }
+};

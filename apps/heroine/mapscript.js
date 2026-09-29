@@ -181,7 +181,26 @@ function remember(ctx, list, x, y) {
 
 // a specific enemy is on this tile
 function enemy(ctx, x, y, enemy_id, status) {
-  // FIXME port combat (M5): start the fight unless loading or already won
+  var avatar = ctx.avatar;
+
+  // don't spawn the enemy if just loading
+  if (ctx.loading) return false;
+
+  // if heroine is at the enemy location
+  if (avatar.x == x && avatar.y == y) {
+
+    // if heroine has not already defeated this enemy
+    if (status != "") {
+      if (avatar.campaign.indexOf(status) > -1) {
+        return false;
+      }
+    }
+
+    // required here, not at the top: combat requires power,
+    // which requires this module
+    require("heroine_combat").start(ctx, enemy_id, status);
+    return true;
+  }
   return false;
 }
 

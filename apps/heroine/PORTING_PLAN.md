@@ -332,6 +332,35 @@ new `anim.js`, `explore.js`.
 Acceptance: win and lose a fight on Monastery Trail; run away; gold and HP
 correct after restart; peak memory in combat recorded.
 
+Status: **done**. Notes from doing it:
+- The animation driver lives in `app.js` (`animate()`), not a separate
+  `anim.js`: while `ctx.animating` it sends `{tick: frames}` at 10 fps,
+  frames being 60 fps frames since the last tick, so every phase takes
+  as long as in the original whatever the real frame rate. Combat
+  timers only count down on ticks and use `<=`/`== 0` after clamping.
+  Explore and Info ignore stray ticks. Frame rate on a real watch is
+  unmeasured (64 ms per combat render in the emulator says nothing).
+- Controls: swipe up attacks, swipe down runs, swipes left/right step
+  through Attack, Run and the known spells, a tap uses the selection.
+  Victory and defeat continue on any input; the original's defeat screen
+  waits for a page reload, which respawns, so any input respawns here.
+  The heroine is saved dead at defeat, like the original.
+- `combat` and `power` load on the first fight (lazy requires in
+  explore, gamestate and mapscript); `mapscript` requires combat inside
+  `enemy()`, after the loading guard (`ctx.loading`), to avoid a cycle.
+- The shake moves the enemy (hit) or only the tiles (hero hurt), like the
+  original; combat drawing is clipped to the game area.
+- Mimics come back every time (they have no campaign flag, like the
+  original). The Death Speaker fights as a normal enemy until M6.
+- Respawning clears `avatar.moved`: after a defeat in a fight met on a
+  step, the respawn would otherwise "rest" on the Serf Quarters hay bale
+  (a side effect of M3's position-before-map order).
+- Tests: every test turns random encounters off after loading; combat
+  tests replace `setInterval`, drive ticks by hand and feed
+  `Math.random` from a queue; one test runs the real driver. The suite
+  passed three runs in a row. Restarts are covered after a victory, after
+  a respawn, and in the middle of a fight (the close handler saves then).
+
 ### M6 — Boss (v0.21)
 Files: new `boss.js`, `power.js`, `mapscript.js`.
 - Death Speaker on Dead Walkways (11,5) with `dspeak` flag; boss power table
@@ -392,3 +421,4 @@ under `release/images/`. Still to convert: `backgrounds/title.png`,
 | M2 | 6582 free / 12000 after loading a save on the Monastery | — | — |
 | M3 | — | explore, Cedar Village after the gold chest | 6019 |
 | M4 | 7456 free / 12000 after load (tiles as bytes: atlas 2426 → 773 blocks) | info, 3 spells | 7429 (7301 back in explore) |
+| M5 | 7372 free after load | combat, after a victory and a defeat | 6842 |

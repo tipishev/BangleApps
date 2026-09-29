@@ -133,9 +133,11 @@ exports.respawn = function(ctx) {
   var avatar = ctx.avatar;
   // previously died. restart at last sleep point
   // (position first: the new map's scripts run for where she stands;
-  // the original set the map first, which could open a chest there)
+  // the original set the map first, which could open a chest there.
+  // Not a step, so she doesn't rest on arrival either)
   avatar.x = avatar.sleeploc[1];
   avatar.y = avatar.sleeploc[2];
+  avatar.moved = false;
   mazemap_m.set(ctx, avatar.sleeploc[0]);
 
   avatar.hp = avatar.max_hp;
