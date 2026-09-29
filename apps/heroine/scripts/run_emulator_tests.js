@@ -1,26 +1,32 @@
 #!/usr/bin/env node
 /* eslint-env node */
 /*
-Run heroine's test.json in the emulator:
+Run all of heroine's emulator tests:
 
   node apps/heroine/scripts/run_emulator_tests.js [-v] [--testindex N]
 
-Same as `node bin/runapptests.js --id heroine`, except that:
-- files are uploaded in chunks like the web App Loader does. The node App
-  Loader in core/lib/apploader.js doesn't set Const.UPLOAD_CHUNKSIZE, so
-  it sends each file as one command, and heroine_tileset (~150 KB)
-  doesn't fit in the emulator's RAM that way.
-- without --testindex, every test runs in its own process: runapptests.js
-  gives all tests of an app 60 s together, not enough for this app.
+`test.json` holds the few tests CI runs (bin/runapptests.js gives all of
+an app's tests 60 s together); `test_more.json` holds the rest. This runs
+both, every test in its own process so each gets the 60 s.
 
 Needs EspruinoWebIDE cloned next to this repository, see bin/runapptests.js.
 */
 
 const BASE_DIR = __dirname + "/../../..";
+const APP_DIR = __dirname + "/..";
+const fs = require("fs");
+
+function all_tests() {
+  const read = (file) => JSON.parse(fs.readFileSync(APP_DIR + "/" + file, "utf8"));
+  return {
+    app: "heroine",
+    tests: read("test.json").tests.concat(read("test_more.json").tests),
+  };
+}
 
 if (!process.argv.includes("--testindex")) {
   const {spawnSync} = require("child_process");
-  const tests = require(__dirname + "/../test.json").tests;
+  const tests = all_tests().tests;
   const failed = [];
   tests.forEach((test, index) => {
     const args = [__filename, "--testindex", String(index)]
@@ -40,9 +46,14 @@ if (!process.argv.includes("--testindex")) {
   process.exit(failed.length ? 1 : 0);
 }
 
-// loads core/lib/apploader.js, which (re)defines global.Const
-require(BASE_DIR + "/core/lib/apploader.js");
-global.Const.UPLOAD_CHUNKSIZE = 1024; // the value in core/js/utils.js
+// show runapptests.js both files as its test.json
+const read_file = fs.readFileSync;
+fs.readFileSync = function(path) {
+  if (String(path).endsWith("/apps/heroine/test.json")) {
+    return Buffer.from(JSON.stringify(all_tests()));
+  }
+  return read_file.apply(this, arguments);
+};
 
 if (!process.argv.includes("--id")) process.argv.push("--id", "heroine");
 require(BASE_DIR + "/bin/runapptests.js");

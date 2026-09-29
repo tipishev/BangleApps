@@ -51,5 +51,5 @@ The game is saved when it matters (changing map, resting, chests, fights, shops,
 ## Development
 
 - `scripts/generate_bitfont.py`, `scripts/generate_images.py`: convert the original's font and art (see each script)
-- `node apps/heroine/scripts/run_emulator_tests.js`: runs `test.json` in the emulator (needs EspruinoWebIDE next to this repository)
+- `node apps/heroine/scripts/run_emulator_tests.js`: runs all emulator tests, `test.json` (the few that CI runs within its 60 s) and `test_more.json` (needs EspruinoWebIDE next to this repository)
 - `PORTING_PLAN.md`: how the port was done

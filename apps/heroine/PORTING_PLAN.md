@@ -465,11 +465,14 @@ All milestones are done (v0.24). Not verified on a real watch: frame
 rate and responsiveness of combat animations, the feel of the vibration
 patterns, and that a BTN1 long-press runs the save-on-close handler.
 
-CI on the fork fails for two reasons: the build job's sanitycheck
-because `apps/shooter` has no `metadata.json` (not heroine), and the
-functional-tests job because it runs the plain `bin/runapptests.js`,
-which runs out of memory uploading `heroine_tileset` (unchunked upload)
-and gives an app's whole `test.json` 60 s.
+CI (v0.25): `apps/shooter` was removed from the fork. The tile images
+moved from `tileset.js` (155 KB) into `tiles1.js`..`tiles11.js` (10–18 KB
+each), because the unmodified `bin/runapptests.js` uploads each file as
+one command and the emulator runs out of memory somewhere between 40 and
+60 KB; this also frees ~1250 blocks at start. `test.json` keeps 4 broad
+tests (hay bale/chest/restart, a fight, the Stonegate playthrough, font
+parity; 30 s with the plain runner against its 60 s per app), the other
+36 are in `test_more.json`; `scripts/run_emulator_tests.js` runs both.
 
 ## Asset conversion
 
