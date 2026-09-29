@@ -12,11 +12,14 @@ Bangle.drawWidgets();
 const action_m = require("heroine_action");
 const atlas_m = require("heroine_atlas");
 const avatar_m = require("heroine_avatar");
+const config_m = require("heroine_config");
 const explore_m = require("heroine_explore");
 const gamestate_m = require("heroine_gamestate");
 const info_m = require("heroine_info");
 const mazemap_m = require("heroine_mazemap");
 const minimap_m = require("heroine_minimap");
+const options_m = require("heroine_options");
+const title_m = require("heroine_title");
 
 // the whole game state, shared by all modules and mutated in place
 
@@ -26,10 +29,12 @@ const ctx = {
   redraw: false,
   animating: false,  // see animate()
   loading: true,  // no scripted fights while loading the game
-  options: {animation: true},  // FIXME port the options menu (M8)
+  options: options_m.load(),
 };
 
 ctx.atlas = atlas_m.atlas();
+// the title offers Continue if there was a saved game at start
+title_m.init(ctx, avatar_m.has_save());
 ctx.avatar = avatar_m.init();
 ctx.explore = explore_m.init();
 ctx.info = info_m.init();
@@ -83,7 +88,8 @@ render();
 
 // the position isn't saved on every step, so save when the app closes
 E.on("kill", function() {
-  avatar_m.save(ctx);
+  // a game that was never started isn't saved (no Continue next time)
+  if (ctx.state != config_m.STATE_TITLE) avatar_m.save(ctx);
 });
 
 // controls
@@ -93,7 +99,7 @@ Bangle.setUI({
   swipe: function(directionLR, directionUD) {
     // ignore diagonal swipes
     if (directionLR !== 0 && directionUD !== 0) return;
-    Bangle.buzz(50);
+    if (ctx.options.vibration) Bangle.buzz(50);
     handle_input({
       up: directionUD === -1,
       down: directionUD === 1,

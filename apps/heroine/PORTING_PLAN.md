@@ -416,6 +416,25 @@ Assets: `backgrounds/title.png`.
 Acceptance: fresh install shows Start → Nightmare → Serf Quarters; options
 persist across restarts.
 
+Status: **done**. Notes from doing it:
+- Like the original, the main menu has Continue when a save exists,
+  otherwise Start; there is no "new game" while a save exists (the
+  original has none either). "New game wipes save" from this plan was
+  therefore dropped; starting fresh means deleting `heroine.save.json`
+  (e.g. reinstalling the app).
+- Options: "Animations are on/off", "Vibration is on/off" (instead of
+  the original's music and sound), "Minimap is on/off" (off by default,
+  like the original), "Back". Saved to `heroine.options.json`
+  (metadata `data`) on every toggle. Vibration already gates the swipe
+  buzz.
+- The close handler doesn't save while the title is showing, so an
+  unstarted game doesn't turn into a Continue.
+- The title keeps "by Clint Bellanger 2013" and drops the music credit
+  (no music on the watch). The title image contains the "Heroine Dusk"
+  logo with the ™ sign, see the trademark note in the report of M1.
+- All of the original's modules are now ported; no file carries an
+  `eslint-disable` header any more.
+
 ### M9 — Feedback and polish (v0.24)
 Files: new `feedback.js`, callers of the original `sounds_play`.
 - Map each SFX (attack, critical, miss, heal, fire, run, blocked, coin,
@@ -446,3 +465,4 @@ under `release/images/`. Still to convert: `backgrounds/title.png`,
 | M5 | 7372 free after load | combat, after a victory and a defeat | 6842 |
 | M6 | — | Death Speaker fight, shield up | 6774 |
 | M7 | — | Cedar Arms after a purchase | 6721 |
+| M8 | — | explore, just after waking from the nightmare | 6654 |

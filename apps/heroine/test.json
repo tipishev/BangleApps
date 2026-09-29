@@ -9,6 +9,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "ctx.explore.encounter_increment=0",
           "text": "no random encounters in this test"
@@ -174,6 +186,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "ctx.explore.encounter_increment=0",
           "text": "no random encounters in this test"
@@ -286,6 +310,18 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
         },
         {
           "t": "cmd",
@@ -446,6 +482,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "ctx.explore.encounter_increment=0",
           "text": "no random encounters in this test"
@@ -531,6 +579,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "ctx.explore.encounter_increment=0",
           "text": "no random encounters in this test"
@@ -614,6 +674,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "ctx.explore.encounter_increment=0",
           "text": "no random encounters in this test"
@@ -676,6 +748,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "ctx.explore.encounter_increment=0",
           "text": "no random encounters in this test"
@@ -732,6 +816,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "ctx.explore.encounter_increment=0",
           "text": "no random encounters in this test"
@@ -749,6 +845,18 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
         },
         {
           "t": "cmd",
@@ -786,6 +894,18 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
         },
         {
           "t": "cmd",
@@ -1005,6 +1125,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "ctx.explore.encounter_increment=0",
           "text": "no random encounters in this test"
@@ -1043,6 +1175,18 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
         },
         {
           "t": "cmd",
@@ -1105,6 +1249,18 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
         },
         {
           "t": "cmd",
@@ -1196,6 +1352,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "ctx.explore.encounter_increment=0",
           "text": "no random encounters in this test"
@@ -1225,6 +1393,18 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
         },
         {
           "t": "cmd",
@@ -1335,6 +1515,18 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
         },
         {
           "t": "cmd",
@@ -1475,6 +1667,18 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
         },
         {
           "t": "cmd",
@@ -1724,6 +1928,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
           "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
@@ -1859,6 +2075,18 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
         },
         {
           "t": "cmd",
@@ -2058,6 +2286,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
           "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
@@ -2148,6 +2388,18 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
         },
         {
           "t": "cmd",
@@ -2248,6 +2500,18 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
         },
         {
           "t": "cmd",
@@ -2352,6 +2616,18 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
         },
         {
           "t": "cmd",
@@ -2600,6 +2876,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
           "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
@@ -2716,6 +3004,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
           "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
@@ -2770,6 +3070,18 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
         },
         {
           "t": "cmd",
@@ -2892,6 +3204,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
           "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
@@ -3006,6 +3330,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "ctx.explore.encounter_increment=0"
         },
@@ -3028,6 +3364,18 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
         },
         {
           "t": "cmd",
@@ -3086,6 +3434,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
           "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
@@ -3121,6 +3481,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "ctx.explore.encounter_increment=0"
         },
@@ -3145,6 +3517,18 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
         },
         {
           "t": "cmd",
@@ -3384,6 +3768,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
           "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
@@ -3506,6 +3902,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "ctx.explore.encounter_increment=0"
         },
@@ -3530,6 +3938,18 @@
         {
           "t": "load",
           "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
         },
         {
           "t": "cmd",
@@ -3819,6 +4239,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "ctx.explore.encounter_increment=0",
           "text": "no random encounters in this test"
@@ -4096,6 +4528,18 @@
           "fn": "heroine.app.js"
         },
         {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4",
+          "text": "the app starts on the title"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.state=0;ctx.options.minimap=true;render()",
+          "text": "skip the title like Continue (which redraws), minimap on (tested separately)"
+        },
+        {
           "t": "cmd",
           "js": "ctx.explore.encounter_increment=0",
           "text": "no random encounters in this test"
@@ -4192,6 +4636,555 @@
           "t": "assert",
           "js": "ctx.avatar.x == 2 && ctx.avatar.y == 14",
           "is": "true"
+        }
+      ]
+    },
+    {
+      "description": "A new game: title, nightmare, wake up",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "4"
+        },
+        {
+          "t": "assert",
+          "js": "JSON.stringify(ctx.title.menu)",
+          "is": "equal",
+          "to": "\"[\\\"Start\\\",\\\"Options\\\"]\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.title.select",
+          "is": "equal",
+          "to": "0"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            1
+          ]
+        },
+        {
+          "t": "assert",
+          "js": "ctx.title.select",
+          "is": "equal",
+          "to": "1"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            1
+          ],
+          "text": "no further down"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.title.select",
+          "is": "equal",
+          "to": "1"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "assert",
+          "js": "ctx.title.select",
+          "is": "equal",
+          "to": "0"
+        },
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.title.menu[0]",
+          "is": "equal",
+          "to": "\"Start\"",
+          "text": "closing the app on the title didn't save a game"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"Storage\").read(\"heroine.save.json\")",
+          "is": "equal",
+          "to": "undefined"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tap"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "3",
+          "text": "the nightmare dialog"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.title",
+          "is": "equal",
+          "to": "\"A Nightmare\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[0].msg1",
+          "is": "equal",
+          "to": "\"Darkness has overtaken\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[1].msg2",
+          "is": "equal",
+          "to": "\"longer safe.\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[2].msg1",
+          "is": "equal",
+          "to": "\"Wake up\""
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tap"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "0",
+          "text": "awake"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id == 0 && ctx.avatar.x == 1 && ctx.avatar.y == 1",
+          "is": "true",
+          "text": "in the Serf Quarters"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.minimap.map_id",
+          "is": "equal",
+          "to": "null",
+          "text": "the minimap is off while exploring by default, like the original"
+        },
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.title.menu[0]",
+          "is": "equal",
+          "to": "\"Continue\"",
+          "text": "closing the app after starting saved the game"
+        }
+      ]
+    },
+    {
+      "description": "Continue a saved game",
+      "steps": [
+        {
+          "t": "jsonfile",
+          "name": "heroine.save.json",
+          "json": {
+            "x": 6,
+            "y": 6,
+            "facing": "west",
+            "map_id": 1
+          }
+        },
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.title.menu[0]",
+          "is": "equal",
+          "to": "\"Continue\""
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tap"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "0"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id == 1 && ctx.avatar.x == 6 && ctx.avatar.facing == \"west\"",
+          "is": "true"
+        }
+      ]
+    },
+    {
+      "description": "Options",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tap"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.title.menu.length",
+          "is": "equal",
+          "to": "4"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.title.menu[0]",
+          "is": "equal",
+          "to": "\"Animations are on\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.title.menu[1]",
+          "is": "equal",
+          "to": "\"Vibration is on\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.title.menu[2]",
+          "is": "equal",
+          "to": "\"Minimap is off\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.title.menu[3]",
+          "is": "equal",
+          "to": "\"Back\""
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tap"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.title.menu[0]",
+          "is": "equal",
+          "to": "\"Animations are off\""
+        },
+        {
+          "t": "assert",
+          "js": "require(\"Storage\").readJSON(\"heroine.options.json\",true).animation",
+          "is": "equal",
+          "to": "false",
+          "text": "saved"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tap"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.title.menu[1]",
+          "is": "equal",
+          "to": "\"Vibration is off\""
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tap"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.title.menu[2]",
+          "is": "equal",
+          "to": "\"Minimap is on\""
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({btn: true})",
+          "text": "press the button"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.title.menu[0]",
+          "is": "equal",
+          "to": "\"Start\"",
+          "text": "the button goes back"
+        },
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "assert",
+          "js": "!ctx.options.animation && !ctx.options.vibration && ctx.options.minimap",
+          "is": "true",
+          "text": "kept after a restart"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tap"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tap"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.title.menu[0]",
+          "is": "equal",
+          "to": "\"Start\"",
+          "text": "Back"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tap"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tap"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "assert",
+          "js": "ctx.minimap.map_id",
+          "is": "equal",
+          "to": "0",
+          "text": "with the option on, the minimap is shown while exploring"
+        }
+      ]
+    },
+    {
+      "description": "Combat without animations",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0;ctx.state=0;ctx.options.animation=false"
+        },
+        {
+          "t": "cmd",
+          "js": "require(\"heroine_combat\").start(ctx,0,\"\")"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 1})"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.phase",
+          "is": "equal",
+          "to": "require(\"heroine_combat\").PHASE_INPUT",
+          "text": "the intro ends on the first tick"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.timer",
+          "is": "equal",
+          "to": "1"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 1})"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.phase",
+          "is": "equal",
+          "to": "require(\"heroine_combat\").PHASE_DEFENSE",
+          "text": "one tick per phase"
         }
       ]
     },

@@ -12,7 +12,7 @@ const info_m = require("heroine_info");
 // exports
 
 exports.init = function() {
-  return config_m.STATE_EXPLORE;
+  return config_m.STATE_TITLE;
 };
 
 exports.logic = function(ctx) {
@@ -30,7 +30,9 @@ exports.logic = function(ctx) {
     case config_m.STATE_DIALOG:
       require("heroine_dialog").logic(ctx);
       break;
-    // not ported yet: title (M8)
+    case config_m.STATE_TITLE:
+      require("heroine_title").logic(ctx);
+      break;
   }
 };
 
@@ -51,6 +53,8 @@ exports.render = function(ctx) {
     case config_m.STATE_DIALOG:
       require("heroine_dialog").render(ctx);
       break;
-    // not ported yet: title (M8)
+    case config_m.STATE_TITLE:
+      require("heroine_title").render(ctx);
+      break;
   }
 };

@@ -81,6 +81,11 @@ MODULES = {
         'names': ['Attack', 'Run', 'Heal', 'Burn', 'Unlock', 'Light',
                   'Freeze', 'Reflect', 'selection frame', 'Buy', 'Exit'],
     },
+    'title_images.js': {
+        'doc': 'Title screen background, 160x120, see title.js',
+        'images': lambda root: [Image.open(root / 'backgrounds/title.png')],
+        'names': ['title'],
+    },
 }
 
 

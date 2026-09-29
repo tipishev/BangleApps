@@ -120,9 +120,9 @@ exports.render = function(ctx) {
 
   //info_render_button();  // FIXME port info (M4)
 
-  //if (OPTIONS.minimap) {  // FIXME port options (M8)
+  if (ctx.options.minimap) {
     minimap_m.render(ctx);
-  //}
+  }
 
   // if a map event has rewarded gold to the player
   // display it on the ground here
