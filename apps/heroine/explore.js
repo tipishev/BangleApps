@@ -61,6 +61,17 @@ exports.logic = function (ctx) {
     }
   }
 
+  // check shop
+  if (ctx.avatar.moved) {
+    var shop_id = mazemap_m.check_shop(ctx);
+    if (shop_id >= 0) {
+      // required on the first visit
+      require("heroine_dialog").open(ctx, shop_id);
+      avatar_m.save(ctx);
+      return;
+    }
+  }
+
   // check special script
   if (ctx.avatar.moved) {
     if (mapscript_m.exec(ctx, ctx.mazemap.current_id)) {
@@ -68,18 +79,6 @@ exports.logic = function (ctx) {
       return;
     }
   }
-
-  /*
-  // check shop  // FIXME port shops (M7)
-  if (avatar.moved) {
-    if (mazemap_check_shop()) {
-      gamestate = STATE_DIALOG;
-      redraw = true;
-      avatar_save();
-      return;
-    }
-  }
-  */
 
   // check random encounter
   var enemies = ctx.atlas.maps[ctx.mazemap.current_id].enemies;

@@ -3525,6 +3525,677 @@
       ]
     },
     {
+      "description": "Buying weapons at Cedar Arms",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.gold=40"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.x=6;ctx.avatar.y=5;require(\"heroine_mazemap\").set(ctx,5);ctx.avatar.facing=\"north\""
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "into Cedar Arms"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "3",
+          "text": "dialog"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.title",
+          "is": "equal",
+          "to": "\"Cedar Arms\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.x == 6 && ctx.avatar.y == 5",
+          "is": "true",
+          "text": "put back outside"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"Storage\").readJSON(\"heroine.save.json\",true).x",
+          "is": "equal",
+          "to": "6",
+          "text": "entering saves"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[0].msg1",
+          "is": "equal",
+          "to": "\"Buy Iron Knife\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[0].msg2",
+          "is": "equal",
+          "to": "\"for 50 gold\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[0].button",
+          "is": "equal",
+          "to": "0",
+          "text": "not enough gold"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[2].msg1",
+          "is": "equal",
+          "to": "\"Exit\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.select",
+          "is": "equal",
+          "to": "2",
+          "text": "Exit is selected"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "up: nothing usable above"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.select",
+          "is": "equal",
+          "to": "2"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({btn: true})",
+          "text": "press the button"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "0",
+          "text": "the button leaves"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.gold=300"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "in again"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[0].button",
+          "is": "equal",
+          "to": "1"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "up twice: Bronze Mace, Iron Knife"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.select",
+          "is": "equal",
+          "to": "0"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tap"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.weapon",
+          "is": "equal",
+          "to": "2"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.gold",
+          "is": "equal",
+          "to": "250"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"Storage\").readJSON(\"heroine.save.json\",true).weapon",
+          "is": "equal",
+          "to": "2",
+          "text": "buying saves"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[0].msg2",
+          "is": "equal",
+          "to": "\"(You own this)\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[0].button",
+          "is": "equal",
+          "to": "0"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.select",
+          "is": "equal",
+          "to": "2",
+          "text": "back on Exit after buying, like the original"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.select",
+          "is": "equal",
+          "to": "1",
+          "text": "up: the mace"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tap"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.weapon",
+          "is": "equal",
+          "to": "3"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.gold",
+          "is": "equal",
+          "to": "50"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[0].msg2",
+          "is": "equal",
+          "to": "\"(Yours is better)\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[1].msg2",
+          "is": "equal",
+          "to": "\"(You own this)\""
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            1
+          ],
+          "text": "down to Exit"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tap"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "0",
+          "text": "Exit leaves"
+        }
+      ]
+    },
+    {
+      "description": "The inn, the sage and the clothier",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.gold=150"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.x=9;ctx.avatar.y=8;require(\"heroine_mazemap\").set(ctx,5);ctx.avatar.facing=\"west\""
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "into The Pilgrim Inn"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.title",
+          "is": "equal",
+          "to": "\"The Pilgrim Inn\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[0].msg1",
+          "is": "equal",
+          "to": "\"We saw dead walking\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[0].msg2",
+          "is": "equal",
+          "to": "\"from the Canal Boneyard.\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[1].msg2",
+          "is": "equal",
+          "to": "\"(You are well rested)\""
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({btn: true})",
+          "text": "press the button"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.hp=5;ctx.avatar.mp=1"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "in again, hurt"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[1].msg1",
+          "is": "equal",
+          "to": "\"Buy Room for the night\""
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tap"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.hp == 25 && ctx.avatar.mp == 4 && ctx.avatar.gold == 140",
+          "is": "true"
+        },
+        {
+          "t": "assert",
+          "js": "JSON.stringify(ctx.avatar.sleeploc)",
+          "is": "equal",
+          "to": "\"[5,9,8]\"",
+          "text": "sleeps outside the inn"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({btn: true})",
+          "text": "press the button"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.x=2;ctx.avatar.y=8;require(\"heroine_mazemap\").set(ctx,5);ctx.avatar.facing=\"west\""
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "to Sage Therel"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[1].msg1",
+          "is": "equal",
+          "to": "\"Buy Spellbook: Burn\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[1].msg2",
+          "is": "equal",
+          "to": "\"(Too advanced)\"",
+          "text": "doesn't know Heal yet"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({btn: true})",
+          "text": "press the button"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.spellbook=1"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[1].msg2",
+          "is": "equal",
+          "to": "\"for 100 gold\""
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tap"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.spellbook == 2 && ctx.avatar.gold == 40",
+          "is": "true"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[1].msg2",
+          "is": "equal",
+          "to": "\"(You know this)\""
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({btn: true})",
+          "text": "press the button"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.x=6;ctx.avatar.y=7;require(\"heroine_mazemap\").set(ctx,5);ctx.avatar.facing=\"south\""
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "into Simmons Fine Clothier"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[0].msg1",
+          "is": "equal",
+          "to": "\"Buy Travel Cloak\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[0].button",
+          "is": "equal",
+          "to": "0",
+          "text": "40 gold isn't enough"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.gold=1000"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({btn: true})",
+          "text": "press the button"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tap"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.armor == 2 && ctx.avatar.gold == 950",
+          "is": "true"
+        }
+      ]
+    },
+    {
+      "description": "The Woodsman and the end of the demo",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0",
+          "text": "no random encounters in this test"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.x=5;ctx.avatar.y=12;require(\"heroine_mazemap\").set(ctx,4);ctx.avatar.facing=\"south\""
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "to the Woodsman"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.title",
+          "is": "equal",
+          "to": "\"Woodsman\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[0].msg1 == \"\" && ctx.dialog.option[0].button == 0",
+          "is": "true",
+          "text": "nothing in the first slot"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[1].msg1",
+          "is": "equal",
+          "to": "\"I'm staying right here\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.items_for_sale",
+          "is": "equal",
+          "to": "false",
+          "text": "no gold shown"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ],
+          "text": "tap"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "0",
+          "text": "tap on Exit leaves"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.x=2;ctx.avatar.y=14;require(\"heroine_mazemap\").set(ctx,10);ctx.avatar.facing=\"south\""
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "to Stonegate"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.title",
+          "is": "equal",
+          "to": "\"Stonegate Entrance\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[1].msg1",
+          "is": "equal",
+          "to": "\"(The demo ends here.\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.dialog.option[1].msg2",
+          "is": "equal",
+          "to": "\"Thanks for playing!)\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.x == 2 && ctx.avatar.y == 14",
+          "is": "true"
+        }
+      ]
+    },
+    {
       "description": "Font pixel parity with the original",
       "steps": [
         {

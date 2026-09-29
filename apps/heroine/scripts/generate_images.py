@@ -71,13 +71,15 @@ MODULES = {
         'names': ARMOR_NAMES + WEAPON_NAMES,
     },
     'interface_images.js': {
-        'doc': 'Action buttons 16x16 (0-7) and the selection frame 20x20 (8)'
-               ', see action.js',
+        'doc': 'Action buttons 16x16 (0-7), the selection frame 20x20 (8)'
+               ' and dialog buttons 16x16 (9-10), see action.js, dialog.js',
         'images': lambda root: sheet(root / 'interface/action_buttons.png',
                                      (16, 16), 8)
-                               + [Image.open(root / 'interface/select.png')],
+                               + [Image.open(root / 'interface/select.png')]
+                               + sheet(root / 'interface/dialog_buttons.png',
+                                       (16, 16), 2),
         'names': ['Attack', 'Run', 'Heal', 'Burn', 'Unlock', 'Light',
-                  'Freeze', 'Reflect', 'selection frame'],
+                  'Freeze', 'Reflect', 'selection frame', 'Buy', 'Exit'],
     },
 }
 

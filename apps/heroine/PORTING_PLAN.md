@@ -393,6 +393,18 @@ Assets: `interface/dialog_buttons.png` (buy/exit icons), `interior` and
 Acceptance: buy Iron Knife at Cedar Arms, rest at Pilgrim Inn, read all
 message shops.
 
+Status: **done**. Notes from doing it:
+- `shop.js` holds the 9 shops and fills `ctx.dialog`; `dialog.js` is
+  the screen and requires shop, not the other way round. Both load on
+  the first visit.
+- Explore checks exits, then shops, then map scripts, like the
+  original; entering a shop puts the heroine back outside and saves.
+  Purchases save too (the original only saved on entering).
+- Controls: swipes up/down move between the usable options (Exit is
+  selected first and again after each purchase, like the original), a
+  tap uses one, the button is Exit.
+- Buy and Exit icons appended to `interface_images.js` (9, 10).
+
 ### M8 — Title, options, new game (v0.23)
 Files: `title.js` (rewrite), `gamestate.js`, `app.js`.
 Assets: `backgrounds/title.png`.
@@ -433,3 +445,4 @@ under `release/images/`. Still to convert: `backgrounds/title.png`,
 | M4 | 7456 free / 12000 after load (tiles as bytes: atlas 2426 → 773 blocks) | info, 3 spells | 7429 (7301 back in explore) |
 | M5 | 7372 free after load | combat, after a victory and a defeat | 6842 |
 | M6 | — | Death Speaker fight, shield up | 6774 |
+| M7 | — | Cedar Arms after a purchase | 6721 |
