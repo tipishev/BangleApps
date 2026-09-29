@@ -13,6 +13,7 @@
 const action_m = require("heroine_action");
 const avatar_m = require("heroine_avatar");
 const bitfont_m = require("heroine_bitfont");
+const boss_m = require("heroine_boss");
 const config_m = require("heroine_config");
 const enemy_m = require("heroine_enemy");
 const info_m = require("heroine_info");
@@ -78,7 +79,7 @@ function set_enemy(ctx, enemy_id) {
   combat.enemy.type = enemy_id;
   combat.enemy.hp = enemy_m.enemy.stats[enemy_id].hp;
   combat.enemy.category = enemy_m.enemy.stats[enemy_id].category;
-  //boss_reset();  // FIXME port boss (M6)
+  boss_m.reset(ctx);
   combat.victory_status = "";
   //sounds_play(SFX_MISS);  // FIXME port feedback (M9)
 }
@@ -265,7 +266,8 @@ function determine_reward(ctx) {
 function render_enemy(ctx) {
   const combat = ctx.combat;
   enemy_m.enemy_render(combat.enemy.type, combat.enemy_offset.x, combat.enemy_offset.y);
-  //boss_boneshield_render();  // FIXME port boss (M6)
+  // optional enemy overlays
+  boss_m.boneshield_render(ctx);
 }
 
 function render_name(combat) {
@@ -355,6 +357,8 @@ exports.init = function() {
     enemy_hurt: false,
     hero_hurt: false,
     run_success: false,
+    boneshield_active: false,
+    boneshield_count: 0,
   };
 };
 

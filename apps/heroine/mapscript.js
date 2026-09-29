@@ -252,7 +252,7 @@ exports.exec = function(ctx, map_id) {
 
     case 9: // Dead Walkways
       bone_pile_load(ctx, 9);
-      //boss_alter_map();  // FIXME port boss (M6)
+      require("heroine_boss").alter_map(ctx);
       result = enemy(ctx, 4, 9, enemy_m.ENEMY_MIMIC, "");
       result = result || enemy(ctx, 11, 5, enemy_m.ENEMY_DEATH_SPEAKER, "dspeak");
       return result;

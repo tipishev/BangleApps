@@ -3140,6 +3140,391 @@
       ]
     },
     {
+      "description": "The Death Speaker's bone shield",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
+          "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.spellbook=2;ctx.avatar.mp=2"
+        },
+        {
+          "t": "cmd",
+          "js": "require(\"heroine_combat\").start(ctx,7,\"dspeak\")"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.enemy.hp",
+          "is": "equal",
+          "to": "84"
+        },
+        {
+          "t": "cmd",
+          "js": "RQ=[0.1, 0.9, 0.5]"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "miss; the boss doesn't attack (0.9) and raises its shield (0.5)"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.defense_action",
+          "is": "equal",
+          "to": "\"Bone Shield!\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.defense_result",
+          "is": "equal",
+          "to": "\"+Def Up!\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.boneshield_active && ctx.combat.boneshield_count == 1",
+          "is": "true"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.hp == 25 && !ctx.combat.hero_hurt",
+          "is": "true",
+          "text": "the shield doesn't hurt"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "RQ=[0.9, 0.1, 0.1]"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "attack the shield; then the boss scorches (shield already up) and misses"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.offense_action",
+          "is": "equal",
+          "to": "\"Attack!\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.offense_result",
+          "is": "equal",
+          "to": "\"Absorbed!\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.enemy.hp == 84 && !ctx.combat.enemy_hurt",
+          "is": "true"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.defense_action",
+          "is": "equal",
+          "to": "\"Scorch!\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.defense_result",
+          "is": "equal",
+          "to": "\"Miss!\""
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.boneshield_count",
+          "is": "equal",
+          "to": "1"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ]
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            1,
+            0
+          ],
+          "text": "select Burn"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.action.select",
+          "is": "equal",
+          "to": "\"burn\""
+        },
+        {
+          "t": "cmd",
+          "js": "RQ=[0.5, 0.5, 0.5, 0.5, 0.5]"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ]
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.offense_result",
+          "is": "equal",
+          "to": "\"3 damage\"",
+          "text": "burn does plain damage to a demon"
+        },
+        {
+          "t": "assert",
+          "js": "!ctx.combat.boneshield_active",
+          "is": "true",
+          "text": "burn breaks the shield"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.defense_result",
+          "is": "equal",
+          "to": "\"10 damage\"",
+          "text": "attack 12 (8-15) minus 2"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.combat.boneshield_count=3;RQ=[0.1, 0.9, 0.9, 0.1]"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "miss; the boss would raise a shield but has used 3"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.defense_action",
+          "is": "equal",
+          "to": "\"Scorch!\""
+        }
+      ]
+    },
+    {
+      "description": "Defeating the Death Speaker clears its tile",
+      "steps": [
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "global.setInterval=function(){return 1;};global.clearInterval=function(){};global.RQ=[];Math.random=function(){return RQ.length?RQ.shift():0.5;};ctx.explore.encounter_increment=0",
+          "text": "ticks by hand, Math.random from the queue RQ (0.5 when empty), no random encounters"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.avatar.x=10;ctx.avatar.y=5;require(\"heroine_mazemap\").set(ctx,9);ctx.avatar.facing=\"east\""
+        },
+        {
+          "t": "assert",
+          "js": "require(\"heroine_mazemap\").get_tile(ctx.mazemap,11,5)",
+          "is": "equal",
+          "to": "19",
+          "text": "the Death Speaker stands there"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "step onto it"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "1"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.enemy.type",
+          "is": "equal",
+          "to": "7"
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.combat.enemy.hp=1"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ]
+        },
+        {
+          "t": "cmd",
+          "js": "handle_input({tick: 100})",
+          "text": "let the animation run to its end"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.combat.phase",
+          "is": "equal",
+          "to": "require(\"heroine_combat\").PHASE_VICTORY"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.gold >= 225 && ctx.avatar.gold <= 275",
+          "is": "true"
+        },
+        {
+          "t": "emit",
+          "event": "touch",
+          "paramsArray": [
+            1,
+            {
+              "x": 88,
+              "y": 88
+            }
+          ]
+        },
+        {
+          "t": "assert",
+          "js": "ctx.avatar.campaign.indexOf(\"dspeak\") > -1",
+          "is": "true"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            1
+          ],
+          "text": "step back"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"heroine_mazemap\").get_tile(ctx.mazemap,11,5)",
+          "is": "equal",
+          "to": "6",
+          "text": "its tile is grass now"
+        },
+        {
+          "t": "emit",
+          "event": "swipe",
+          "paramsArray": [
+            0,
+            -1
+          ],
+          "text": "step onto it again"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.state",
+          "is": "equal",
+          "to": "0",
+          "text": "no second fight"
+        },
+        {
+          "t": "load",
+          "fn": "heroine.app.js"
+        },
+        {
+          "t": "cmd",
+          "js": "ctx.explore.encounter_increment=0"
+        },
+        {
+          "t": "assert",
+          "js": "ctx.mazemap.current_id",
+          "is": "equal",
+          "to": "9"
+        },
+        {
+          "t": "assert",
+          "js": "require(\"heroine_mazemap\").get_tile(ctx.mazemap,11,5)",
+          "is": "equal",
+          "to": "6",
+          "text": "still grass after a restart"
+        }
+      ]
+    },
+    {
       "description": "Font pixel parity with the original",
       "steps": [
         {

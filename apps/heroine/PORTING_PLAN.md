@@ -369,6 +369,16 @@ Files: new `boss.js`, `power.js`, `mapscript.js`.
 - After victory the boss tile becomes grass (`boss_alter_map`).
 Acceptance: defeat the boss (debug stats allowed), tile gone after restart.
 
+Status: **done**. Notes from doing it:
+- `boss.js` decides (`choose_power` returns "attack", "scorch" or
+  "boneshield", drawing its random numbers in the original's order) and
+  `power.enemy()` acts, so boss doesn't require power (power requires
+  boss). The shield state is in `ctx.combat`, new for every fight.
+- Attacks on the raised shield are "Absorbed!" (no miss roll, like the
+  original); Burn drops it; at most 3 shields per fight.
+- `mapscript` calls `boss.alter_map` for Dead Walkways (required there
+  lazily); `combat` resets the boss for every fight like the original.
+
 ### M7 — Shops and dialog (v0.22)
 Files: new `dialog.js`, new `shop.js`, `explore.js`, `mazemap.js`
 (`check_shop`).
@@ -422,3 +432,4 @@ under `release/images/`. Still to convert: `backgrounds/title.png`,
 | M3 | — | explore, Cedar Village after the gold chest | 6019 |
 | M4 | 7456 free / 12000 after load (tiles as bytes: atlas 2426 → 773 blocks) | info, 3 spells | 7429 (7301 back in explore) |
 | M5 | 7372 free after load | combat, after a victory and a defeat | 6842 |
+| M6 | — | Death Speaker fight, shield up | 6774 |

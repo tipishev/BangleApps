@@ -4,6 +4,7 @@
 
 // module imports
 const avatar_m = require("heroine_avatar");
+const boss_m = require("heroine_boss");
 const config_m = require("heroine_config");
 const enemy_m = require("heroine_enemy");
 const items_m = require("heroine_items");
@@ -132,7 +133,10 @@ exports.hero_attack = function(ctx) {
   combat.offense_action = "Attack!";
 
   // special: override hero action if the boss has bone shield up
-  // FIXME port boss (M6): boss_boneshield_heroattack()
+  if (combat.boneshield_active) {
+    boss_m.boneshield_heroattack(ctx);
+    return;
+  }
 
   // check miss
   if (Math.random() < 0.20) {
@@ -189,7 +193,10 @@ exports.burn = function(ctx) {
 
   combat.enemy_hurt = true;
 
-  // FIXME port boss (M6): burn breaks the bone shield
+  // burn breaks the bone shield
+  if (combat.boneshield_active) {
+    combat.boneshield_active = false;
+  }
 };
 
 exports.unlock = function(ctx) {
@@ -325,7 +332,22 @@ function mpdrain(ctx) {
  * Choose a random power from the enemy's available powers
  */
 exports.enemy = function(ctx) {
-  // FIXME port boss (M6): the Death Speaker chooses with boss_power()
+
+  // override for boss action
+  if (ctx.combat.enemy.type == enemy_m.ENEMY_DEATH_SPEAKER) {
+    switch (boss_m.choose_power(ctx)) {
+      case "attack":
+        enemy_attack(ctx);
+        return;
+      case "scorch":
+        scorch(ctx);
+        return;
+      case "boneshield":
+        boss_m.boneshield_activate(ctx);
+        return;
+    }
+  }
+
   const powers = enemy_m.enemy.stats[ctx.combat.enemy.type].powers;
   switch (powers[Math.floor(Math.random() * powers.length)]) {
     case enemy_m.ENEMY_POWER_ATTACK:
