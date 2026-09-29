@@ -8,6 +8,7 @@
 // module imports
 const avatar_m = require("heroine_avatar");
 const enemy_m = require("heroine_enemy");
+const feedback_m = require("heroine_feedback");
 const mazemap_m = require("heroine_mazemap");
 
 const BONE_PILES = [
@@ -63,7 +64,7 @@ function haybale(ctx, x, y) {
   if (avatar.x == x && avatar.y == y) {
     ctx.explore.message = "You rest for awhile.";
     avatar_m.sleep(ctx);
-    //sounds_play(SFX_COIN);  // FIXME port feedback (M9)
+    feedback_m.play(ctx, "coin");
     return true;
   }
   return false;
@@ -106,7 +107,7 @@ function grant_item(ctx, item, item_count) {
   var avatar = ctx.avatar;
   var explore = ctx.explore;
 
-  //sounds_play(SFX_COIN);  // FIXME port feedback (M9)
+  feedback_m.play(ctx, "coin");
 
   if (item_count == 1) {
     explore.message = "Found " + item + "!";

@@ -10,6 +10,7 @@
 const action_m = require("heroine_action");
 const bitfont_m = require("heroine_bitfont");
 const config_m = require("heroine_config");
+const feedback_m = require("heroine_feedback");
 const items_m = require("heroine_items");
 const mazemap_m = require("heroine_mazemap");
 const minimap_m = require("heroine_minimap");
@@ -90,7 +91,7 @@ exports.open = function(ctx) {
   clear_messages(ctx);
   action_m.reset(ctx);
   ctx.redraw = true;
-  //sounds_play(SFX_CLICK);  // FIXME port feedback (M9)
+  feedback_m.play(ctx, "click");
 };
 
 exports.logic = function(ctx) {
@@ -104,7 +105,7 @@ exports.logic = function(ctx) {
   if (input.btn) {
     ctx.state = config_m.STATE_EXPLORE;
     ctx.redraw = true;
-    //sounds_play(SFX_CLICK);  // FIXME port feedback (M9)
+    feedback_m.play(ctx, "click");
     return;
   }
 

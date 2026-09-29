@@ -7,6 +7,7 @@ const avatar_m = require("heroine_avatar");
 const boss_m = require("heroine_boss");
 const config_m = require("heroine_config");
 const enemy_m = require("heroine_enemy");
+const feedback_m = require("heroine_feedback");
 const items_m = require("heroine_items");
 const mapscript_m = require("heroine_mapscript");
 const mazemap_m = require("heroine_mazemap");
@@ -29,7 +30,7 @@ exports.heal = function(ctx) {
   avatar.hp = avatar.hp + heal_amount;
   if (avatar.hp > avatar.max_hp) avatar.hp = avatar.max_hp;
 
-  //sounds_play(SFX_HEAL);  // FIXME port feedback (M9)
+  feedback_m.play(ctx, "heal");
   avatar.mp--;
 
   if (ctx.state == config_m.STATE_COMBAT) {
@@ -74,7 +75,7 @@ exports.map_burn = function(ctx) {
     ctx.info.power_action = "Burn!";
     ctx.info.power_result = "Cleared Path!";
     avatar.mp--;
-    //sounds_play(SFX_FIRE);  // FIXME port feedback (M9)
+    feedback_m.play(ctx, "fire");
     avatar_m.save(ctx);
   }
   else {
@@ -94,11 +95,11 @@ exports.map_unlock = function(ctx) {
     ctx.info.power_result = "Door Opened!";
     avatar.mp--;
     avatar_m.save(ctx);
-    //sounds_play(SFX_UNLOCK);  // FIXME port feedback (M9)
+    feedback_m.play(ctx, "unlock");
   }
   else {
     ctx.info.power_action = "(No Target)";
-    //sounds_play(SFX_BLOCK);  // FIXME port feedback (M9)
+    feedback_m.play(ctx, "blocked");  // the original misspells SFX_BLOCKED here and plays nothing
   }
 };
 
@@ -141,7 +142,7 @@ exports.hero_attack = function(ctx) {
   // check miss
   if (Math.random() < 0.20) {
     combat.offense_result = "Miss!";
-    //sounds_play(SFX_MISS);  // FIXME port feedback (M9)
+    feedback_m.play(ctx, "miss");
     return;
   }
 
@@ -154,10 +155,10 @@ exports.hero_attack = function(ctx) {
   if (Math.random() < 0.10) {
     attack_damage += atk.max;
     combat.offense_action = "Critical!";
-    //sounds_play(SFX_CRITICAL);  // FIXME port feedback (M9)
+    feedback_m.play(ctx, "critical");
   }
   else {
-    //sounds_play(SFX_ATTACK);  // FIXME port feedback (M9)
+    feedback_m.play(ctx, "attack");
   }
 
   combat.enemy.hp -= attack_damage;
@@ -186,7 +187,7 @@ exports.burn = function(ctx) {
   // against demons, burn does regular weapon damage.
 
   ctx.avatar.mp--;
-  //sounds_play(SFX_FIRE);  // FIXME port feedback (M9)
+  feedback_m.play(ctx, "fire");
 
   combat.enemy.hp -= attack_damage;
   combat.offense_result = attack_damage + " damage";
@@ -216,14 +217,14 @@ exports.unlock = function(ctx) {
   combat.offense_result = attack_damage + " damage";
 
   combat.enemy_hurt = true;
-  //sounds_play(SFX_UNLOCK);  // FIXME port feedback (M9)
+  feedback_m.play(ctx, "unlock");
 };
 
 exports.run = function(ctx) {
   const combat = ctx.combat;
 
   combat.offense_action = "Run!";
-  //sounds_play(SFX_RUN);  // FIXME port feedback (M9)
+  feedback_m.play(ctx, "run");
 
   if (Math.random() < 0.66) {
     combat.run_success = true;
@@ -245,7 +246,7 @@ function enemy_attack(ctx) {
   // check miss
   if (Math.random() < 0.30) {
     combat.defense_result = "Miss!";
-    //sounds_play(SFX_MISS);  // FIXME port feedback (M9)
+    feedback_m.play(ctx, "miss");
     return;
   }
 
@@ -256,10 +257,10 @@ function enemy_attack(ctx) {
   if (Math.random() < 0.05) {
     attack_damage += stats.atk_min;
     combat.defense_action = "Critical!";
-    //sounds_play(SFX_CRITICAL);  // FIXME port feedback (M9)
+    feedback_m.play(ctx, "critical");
   }
   else {
-    //sounds_play(SFX_ATTACK);  // FIXME port feedback (M9)
+    feedback_m.play(ctx, "attack");
   }
 
   hurt_hero(ctx, attack_damage);
@@ -275,11 +276,11 @@ function scorch(ctx) {
   // check miss
   if (Math.random() < 0.30) {
     combat.defense_result = "Miss!";
-    //sounds_play(SFX_MISS);  // FIXME port feedback (M9)
+    feedback_m.play(ctx, "miss");
     return;
   }
 
-  //sounds_play(SFX_FIRE);  // FIXME port feedback (M9)
+  feedback_m.play(ctx, "fire");
 
   // scorch works like an enemy crit
   hurt_hero(ctx, roll(stats.atk_min, stats.atk_max) + stats.atk_min);
@@ -294,11 +295,11 @@ function hpdrain(ctx) {
   // check miss
   if (Math.random() < 0.30) {
     combat.defense_result = "Miss!";
-    //sounds_play(SFX_MISS);  // FIXME port feedback (M9)
+    feedback_m.play(ctx, "miss");
     return;
   }
 
-  //sounds_play(SFX_HPDRAIN);  // FIXME port feedback (M9)
+  feedback_m.play(ctx, "hpdrain");
 
   // the enemy heals by the damage done
   combat.enemy.hp += hurt_hero(ctx, roll(stats.atk_min, stats.atk_max));
@@ -311,11 +312,11 @@ function mpdrain(ctx) {
   // check miss
   if (Math.random() < 0.30) {
     combat.defense_result = "Miss!";
-    //sounds_play(SFX_MISS);  // FIXME port feedback (M9)
+    feedback_m.play(ctx, "miss");
     return;
   }
 
-  //sounds_play(SFX_MPDRAIN);  // FIXME port feedback (M9)
+  feedback_m.play(ctx, "mpdrain");
 
   if (ctx.avatar.mp > 0) {
     ctx.avatar.mp--;

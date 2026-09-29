@@ -444,6 +444,33 @@ Files: new `feedback.js`, callers of the original `sounds_play`.
 - Update README (controls table above, features), screenshots,
   `metadata.json` description; full playthrough to Stonegate.
 
+Status: **done**. Notes from doing it:
+- `feedback.js`: one vibration pattern per original sound (14), a new
+  pattern cuts off one still playing, nothing with Vibration off (the
+  swipe buzz follows the option too). The original's typo `SFX_BLOCK`
+  (Unlock without a target) played nothing; here it vibrates "blocked".
+- Red text: the original only uses its red font for "badly hurt", done
+  in M1; there is no red "disabled" text to port.
+- `scripts/walkthrough.py` writes the "Walk from the start to the end
+  of the demo at Stonegate" test: 98 steps from the title, found by a
+  breadth-first search over the maps. Stonegate is behind a bone pile,
+  so it fetches the Heal spellbook, buys Burn (the 100 gold are granted
+  by the test, standing in for fights) and burns the pile from Info.
+- README rewritten (controls, options, saving, differences), three new
+  screenshots in `metadata.json`.
+
+## Done
+
+All milestones are done (v0.24). Not verified on a real watch: frame
+rate and responsiveness of combat animations, the feel of the vibration
+patterns, and that a BTN1 long-press runs the save-on-close handler.
+
+CI on the fork fails for two reasons: the build job's sanitycheck
+because `apps/shooter` has no `metadata.json` (not heroine), and the
+functional-tests job because it runs the plain `bin/runapptests.js`,
+which runs out of memory uploading `heroine_tileset` (unchunked upload)
+and gives an app's whole `test.json` 60 s.
+
 ## Asset conversion
 
 Use the existing pipeline that produced `tileset.js` / `enemy.js`
@@ -466,3 +493,4 @@ under `release/images/`. Still to convert: `backgrounds/title.png`,
 | M6 | — | Death Speaker fight, shield up | 6774 |
 | M7 | — | Cedar Arms after a purchase | 6721 |
 | M8 | — | explore, just after waking from the nightmare | 6654 |
+| M9 | 7181 free / 12000 on the title after load | Death Speaker fight, shield up | 6330 |

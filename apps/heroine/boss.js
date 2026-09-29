@@ -9,6 +9,7 @@
 // module imports
 const config_m = require("heroine_config");
 const enemy_m = require("heroine_enemy");
+const feedback_m = require("heroine_feedback");
 const mazemap_m = require("heroine_mazemap");
 
 const DEAD_WALKWAYS = 9;
@@ -37,13 +38,13 @@ exports.boneshield_activate = function(ctx) {
   combat.defense_action = "Bone Shield!";
   combat.defense_result = "+Def Up!";
   combat.hero_hurt = false;
-  //sounds_play(SFX_BONESHIELD);  // FIXME port feedback (M9)
+  feedback_m.play(ctx, "boneshield");
 };
 
 // if the boss' bone shield is up, override the regular hero attack
 exports.boneshield_heroattack = function(ctx) {
   ctx.combat.offense_result = "Absorbed!";
-  //sounds_play(SFX_BLOCKED);  // FIXME port feedback (M9)
+  feedback_m.play(ctx, "blocked");
   ctx.combat.enemy_hurt = false;
 };
 

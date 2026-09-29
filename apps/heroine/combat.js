@@ -16,6 +16,7 @@ const bitfont_m = require("heroine_bitfont");
 const boss_m = require("heroine_boss");
 const config_m = require("heroine_config");
 const enemy_m = require("heroine_enemy");
+const feedback_m = require("heroine_feedback");
 const info_m = require("heroine_info");
 const mazemap_m = require("heroine_mazemap");
 const power_m = require("heroine_power");
@@ -81,7 +82,7 @@ function set_enemy(ctx, enemy_id) {
   combat.enemy.category = enemy_m.enemy.stats[enemy_id].category;
   boss_m.reset(ctx);
   combat.victory_status = "";
-  //sounds_play(SFX_MISS);  // FIXME port feedback (M9)
+  feedback_m.play(ctx, "miss");
 }
 
 /**** Logic **************************/
@@ -171,7 +172,7 @@ function logic_offense(ctx) {
     if (combat.enemy.hp <= 0) {
       combat.phase = COMBAT_PHASE_VICTORY;
       ctx.animating = false;
-      //sounds_play(SFX_COIN);  // FIXME port feedback (M9)
+      feedback_m.play(ctx, "coin");
       determine_reward(ctx);
     }
     // check for successfully running away
@@ -208,7 +209,7 @@ function logic_defense(ctx) {
       combat.phase = COMBAT_PHASE_DEFEAT;
       // saved dead: closing the app now still respawns next time
       avatar_m.save(ctx);
-      //sounds_play(SFX_DEFEAT);  // FIXME port feedback (M9)
+      feedback_m.play(ctx, "defeat");
     }
     else {
       combat.phase = COMBAT_PHASE_INPUT;

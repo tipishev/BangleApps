@@ -6,6 +6,7 @@
 // module imports
 const avatar_m = require("heroine_avatar");
 const config_m = require("heroine_config");
+const feedback_m = require("heroine_feedback");
 const items_m = require("heroine_items");
 
 const SHOP_WEAPON = 0;
@@ -116,7 +117,7 @@ function set_room(ctx, slot, room_cost) {
 
 function bought(ctx, cost, message) {
   ctx.avatar.gold -= cost;
-  //sounds_play(SFX_COIN);  // FIXME port feedback (M9)
+  feedback_m.play(ctx, "coin");
   ctx.dialog.message = message;
   exports.set(ctx, ctx.dialog.shop_id);
   // the original only saves on entering the shop
@@ -200,7 +201,7 @@ exports.set = function(ctx, shop_id) {
 exports.act = function(ctx, slot) {
   if (slot == 2) {
     // exit
-    //sounds_play(SFX_CLICK);  // FIXME port feedback (M9)
+    feedback_m.play(ctx, "click");
     ctx.state = config_m.STATE_EXPLORE;
     ctx.redraw = true;
     return;

@@ -4,6 +4,7 @@
 
 
 // module imports
+const feedback_m = require("heroine_feedback");
 const mazemap_m = require("heroine_mazemap");
 const storage_m = require("Storage");
 const tileset_m = require("heroine_tileset");
@@ -47,8 +48,7 @@ function move(ctx, dx, dy) {
     ctx.redraw = true;
   }
   else {
-    // TODO heroine_vibrate.js
-    //sounds_play(SFX_BLOCKED);
+    feedback_m.play(ctx, "blocked");
   }
 }
 
