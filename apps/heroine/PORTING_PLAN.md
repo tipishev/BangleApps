@@ -469,10 +469,11 @@ CI (v0.25): `apps/shooter` was removed from the fork. The tile images
 moved from `tileset.js` (155 KB) into `tiles1.js`..`tiles11.js` (10–18 KB
 each), because the unmodified `bin/runapptests.js` uploads each file as
 one command and the emulator runs out of memory somewhere between 40 and
-60 KB; this also frees ~1250 blocks at start. `test.json` keeps 4 broad
-tests (hay bale/chest/restart, a fight, the Stonegate playthrough, font
-parity; 30 s with the plain runner against its 60 s per app), the other
-36 are in `test_more.json`; `scripts/run_emulator_tests.js` runs both.
+60 KB; this also frees ~1250 blocks at start. `test.json` keeps 3 broad
+tests (a fight, the Stonegate playthrough, font parity): 4 tests took
+53 s of the runner's 60 s per app on GitHub's runner (30 s locally).
+The other 37 are in `test_more.json`; `scripts/run_emulator_tests.js`
+runs both.
 
 ## Asset conversion
 
